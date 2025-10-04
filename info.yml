@@ -4,7 +4,7 @@ project:
   teamId: 'LosIncompletos'
   identities: {}
   notifications:
-    email: 'Miguel.Lopez28@alu.uclm.es,Lucia.Cebrian2@alu.uclm.es,JoseLuis.Haro@alu.uclm.es'
+    email: 'Miguel.Lopez28@alu.uclm.es,Lucia.Cebrian2@alu.uclm.es,JoseLuis.Haro@alu.uclm.es, Ivan.Nieto@alu.uclm.es'
   members:
     member1:
       name: 'Miguel'
@@ -18,3 +18,7 @@ project:
       name: 'José Luis'
       surname: 'De Haro Córcoles' 
       githubUsername: 'Joseludhc'
+    member4:
+      name: 'Iván'
+      surname: 'Nieto Blesa' 
+      githubUsername: 'ivannnn12'
