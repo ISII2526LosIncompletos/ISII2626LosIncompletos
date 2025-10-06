@@ -4,20 +4,12 @@
    
     public class Herramienta
     {
-        public Herramienta()
-        {
-        }
+       
 
-        public Herramienta(string material,int nombre,double precio,string fabricante)
-        {
-        Material = material;
-        Nombre = nombre;
-        Precio = precio;
-        Fabricante = fabricante;
-        }
+        
 
     public int Id { get; set; }
-    public IList<AlquilarItems> AlquilarItems { get; set; }
+   
 
 
     [StringLength(50, ErrorMessage = "El material no puede tener mas de 30 caracteres")]
