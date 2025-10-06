@@ -9,12 +9,12 @@ public class Reparacion
     [StringLength(20, ErrorMessage = "Apellido no puede tener más de 20 caracteres ni menos de 1", MinimumLength = 1)]
     public string apellidoCliente { get; set; }
 
-    [DataType(DataType.Currency)]
-    [DisplayFormat(DtataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+    [DataType(DataType.Date)]
+    [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
     public DateTime fechaEntrega { get; set; }
 
-    [DataType(DataType.Currency)]
-    [DisplayFormat(DtataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+    [DataType(DataType.Date)]
+    [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
     public DateTime fechaRecogida { get; set; }
 
     [DataType(DataType.PhoneNumber)]
