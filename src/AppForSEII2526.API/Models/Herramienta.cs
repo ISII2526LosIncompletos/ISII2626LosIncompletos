@@ -16,10 +16,11 @@
         Fabricante = fabricante;
         }
 
-        public int Id { get; set; }
+    public int Id { get; set; }
+    public IList<AlquilarItems> AlquilarItems { get; set; }
 
 
-        [StringLength(50, ErrorMessage = "El material no puede tener mas de 30 caracteres")]
+    [StringLength(50, ErrorMessage = "El material no puede tener mas de 30 caracteres")]
         public string Material { get; set; }
 
         [DataType(System.ComponentModel.DataAnnotations.DataType.Currency)]
