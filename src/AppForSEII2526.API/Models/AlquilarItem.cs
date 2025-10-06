@@ -15,6 +15,8 @@
         IdHerramienta=idHerramienta
         }
 
+    [PrimaryKey(nameof(HerramientaId),
+    nameof(IdAlquiler))]
 
     public int Cantidad { get; set; }
 
