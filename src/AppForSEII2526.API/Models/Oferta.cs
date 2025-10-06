@@ -19,7 +19,7 @@
         [Display(Name = "Oferta dirigida a")]
         public TiposDirigidaOferta? TiposDirigidaOferta { get; set; }
         
-        //public IList<OfertaItem> OfertaItems { get; set; }
+        public IList<OfertaItem> OfertaItems { get; set; }
     }
 
     public enum MetodoPago
