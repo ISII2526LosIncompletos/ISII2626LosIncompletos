@@ -23,9 +23,12 @@
 
         }
 
-        public int Id { get; set; }
+    public int Id { get; set; }
+    public IList<AlquilarItem> AlquilarItems { get; set; }
+   
+   
 
-        public double PrecioTotal { get; set; }
+    public double PrecioTotal { get; set; }
 
         public DateTime FechaAlquiler { get; set; }
 
