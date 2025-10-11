@@ -5,10 +5,13 @@
     {
         [Required]
         public Herramienta Herramienta { get; set; }
+
         [Required]
         public int IdHerramienta { get; set; }
+
         [Required]
         public Oferta Oferta { get; set; }
+
         [Required]
         public int IdOferta { get; set; }
 
