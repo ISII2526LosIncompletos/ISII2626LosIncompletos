@@ -1,3 +1,4 @@
+
 namespace AppForSEII2526.API.Models
 {
     public class Reparacion
@@ -33,5 +34,7 @@ namespace AppForSEII2526.API.Models
             PayPal,
             Cash
         }
+
+
     }
 }
