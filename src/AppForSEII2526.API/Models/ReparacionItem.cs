@@ -13,7 +13,7 @@ public class ReparacionItem
         [Range(1, int.MaxValue, ErrorMessage = "La cantidad debe ser superior a 1.")]
         public int Cantidad { get; set; }
 
-        [StringLength(100, ErrorMessage = "La descripción no puede superar los 100 caracteres.")]
+        [StringLength(100, ErrorMessage = "La descripciÃ³n no puede superar los 100 caracteres.")]
         public string? Descripcion { get; set; }
 
         [Required]
