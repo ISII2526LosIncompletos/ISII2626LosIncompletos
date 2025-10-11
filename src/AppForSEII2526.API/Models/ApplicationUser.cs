@@ -6,21 +6,27 @@ public class ApplicationUser : IdentityUser
 {
     [Required]
     [Display(Name = "Nombre")]
-    public string Nombre { get; set; }
+    public string nombre { get; set; }
 
     [Required]
     [Display(Name = "Apellidos")]
-    public string Apellidos { get; set; }
+    public string apellidos { get; set; }
 
     [Required]
     [Display(Name = "Dirección de envío")]
-    public string DireccionEnvio { get; set; }
+    public string direccionEnvio { get; set; }
+
+    [Display(Name = "Correo electronico")]
+    public string? correoElectronico { get; set; }
+
+    [Display(Name = "Numero de telefono")]
+    public string? numeroTelefono { get; set; }
 
     [Display(Name = "Rol de usuario")]
-    public RolUsuario Rol { get; set; }
+    public RolUsuario rol { get; set; }
 
     [Display(Name = "Fecha de registro")]
-    public DateTime FechaRegistro { get; set; } = DateTime.Now;
+    public DateTime fechaRegistro { get; set; } = DateTime.Now;
 }
 
 public enum RolUsuario
