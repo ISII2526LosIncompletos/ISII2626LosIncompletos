@@ -1,4 +1,4 @@
-﻿namespace AppForSEII2526.API.Models
+namespace AppForSEII2526.API.Models
 {
     public class Herramienta
     {
@@ -21,7 +21,6 @@
         [Display(Name = "Nombre")]
         [Range(0, int.MaxValue, ErrorMessage = "Error nombre")]
         public int Nombre { get; set; }
-
 
         [Display(Name = "TiempoReparacion")]
         [Range(0, int.MaxValue, ErrorMessage = "Error tiempo reparacion ")]
