@@ -1,18 +1,12 @@
-﻿using System;
-
-
-   
+﻿namespace AppForSEII2526.API.Models
+{
     public class Herramienta
     {
-       
-
-        
-
-    public int Id { get; set; }
-   
+        public int Id { get; set; }
 
 
-    [StringLength(50, ErrorMessage = "El material no puede tener mas de 30 caracteres")]
+
+        [StringLength(50, ErrorMessage = "El material no puede tener mas de 30 caracteres")]
         public string Material { get; set; }
 
         [DataType(System.ComponentModel.DataAnnotations.DataType.Currency)]
@@ -33,5 +27,5 @@
         public IList<CompraItem> CompraItems { get; set; }
         public IList<OfertaItem> OfertaItems { get; set; }
         public IList<ItemReparacion> ItemsReparacion { get; set; }
-
+    }
 }
