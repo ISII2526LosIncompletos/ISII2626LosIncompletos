@@ -2,7 +2,6 @@
 
 public class Fabricante
 {
-
     [Key]
     public int id { get; set; }
     [Required]
