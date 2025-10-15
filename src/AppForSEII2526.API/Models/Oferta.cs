@@ -3,9 +3,11 @@
 {
     public class Oferta
     {
+        [Required]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime FechaInicio { get; set; }
 
+        [Required]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime FechaFinal { get; set; }
 
@@ -18,7 +20,7 @@
 
         [Display(Name = "Oferta dirigida a")]
         public TiposDirigidaOferta? TiposDirigidaOferta { get; set; }
-        
+
         public IList<OfertaItem> OfertaItems { get; set; }
     }
 
