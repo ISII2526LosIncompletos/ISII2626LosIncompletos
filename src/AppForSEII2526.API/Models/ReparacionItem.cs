@@ -1,6 +1,7 @@
 namespace AppForSEII2526.API.Models
 {
-    [PrimaryKey(nameof(IdHerramienta), nameof(IdReparacion))]
+  [PrimaryKey(nameof(IdHerramienta), nameof(IdReparacion))]
+
 public class ReparacionItem
     {
         public Herramienta Herramienta { get; set; }

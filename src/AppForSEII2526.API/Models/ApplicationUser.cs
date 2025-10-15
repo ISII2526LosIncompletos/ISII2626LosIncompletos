@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+
 
 namespace AppForSEII2526.API.Models;
 
@@ -6,21 +6,29 @@ public class ApplicationUser : IdentityUser
 {
     [Required]
     [Display(Name = "Nombre")]
-    public string Nombre { get; set; }
+    public string nombre { get; set; }
 
     [Required]
     [Display(Name = "Apellidos")]
-    public string Apellidos { get; set; }
+    public string apellidos { get; set; }
 
     [Required]
     [Display(Name = "Dirección de envío")]
-    public string DireccionEnvio { get; set; }
+    public string direccionEnvio { get; set; }
+
+    [Required]
+    [Display(Name = "Correo electrónico")]
+    public string corrElectronico { get; set; }
+
+    [Required]
+    [Display(Name = "Número de teléfono")]
+    public string numTelefono { get; set; }
 
     [Display(Name = "Rol de usuario")]
-    public RolUsuario Rol { get; set; }
+    public RolUsuario rol { get; set; }
 
     [Display(Name = "Fecha de registro")]
-    public DateTime FechaRegistro { get; set; } = DateTime.Now;
+    public DateTime fechaRegistro { get; set; } = DateTime.Now;
 }
 
 public enum RolUsuario
