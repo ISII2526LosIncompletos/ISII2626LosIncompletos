@@ -17,13 +17,14 @@ namespace AppForSEII2526.API.Models
 
         [Required]
         [Display(Name = "Payment Method")]
-        public PaymentMethodTypes MetodoPagos { get; set; }
+        public MetodosPago MetodoPagos { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
 
-    public enum MetodosPago
-    {
-        TargetaCredito,
-        PayPal,
-        Efectivo
+        public enum MetodosPago
+        {
+            TargetaCredito,
+            PayPal,
+            Efectivo
+        }
     }
 }
