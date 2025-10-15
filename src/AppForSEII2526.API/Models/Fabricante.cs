@@ -1,9 +1,5 @@
 ﻿namespace AppForSEII2526.API.Models { 
-
-
-
-
-
+﻿using System;
 
 public class Fabricante
 {
@@ -11,10 +7,7 @@ public class Fabricante
     public int id { get; set; }
     [Required]
     [StringLength(25, ErrorMessage = "Name can be neither longer than 25 characters nor shorter than 1.", MinimumLength = 1)]
-
-
     [StringLength(25, ErrorMessage = "Name can be neither longer than 25 characters nor shorter than 1.“, MinimumLength=1)]
-
     [RegularExpression(@"^[A-Z]+[a-zA-Z''-'\s]*$")]
         public string nombre { get; set; }
 
