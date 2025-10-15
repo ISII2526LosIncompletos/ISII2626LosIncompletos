@@ -3,7 +3,7 @@
 public class Fabricante
 {
     [Key]
-    public int id { get; set; }
+        public int id { get; set; }
     [Required]
     [StringLength(25, ErrorMessage = "Name can be neither longer than 25 characters nor shorter than 1.", MinimumLength = 1)]
     [RegularExpression(@"^[A-Z]+[a-zA-Z''-'\s]*$")]
