@@ -2,8 +2,6 @@
 
     [PrimaryKey(nameof(idHerramienta), nameof(idCompra))]
 
-    [PrimaryKey(nameof(IdHerramienta), nameof(IdCompra))]
-
     public class CompraItem
     {   
         [Required]
