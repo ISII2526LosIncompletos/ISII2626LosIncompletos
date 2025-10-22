@@ -1,4 +1,6 @@
-﻿namespace AppForSEII2526.API.Controllers
+﻿using AppForSEII2526.API.DTOs.HerramientaDTOs;
+
+namespace AppForSEII2526.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -27,5 +29,25 @@
             decimal result = decimal.Round(op1 / op2, 2);
             return Ok(result);
         }
+
+        [HttpGet]
+        [Route("[action]")]
+        [ProducesResponseType(typeof(HerramientasDTO), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult> GetReparacion(string? nombre, string? material, string? fabricante,
+            float? precioReparacion, DateTime? tiempoReparacion, string? descripcion)
+        {
+            IList<HerramientasDTO> selectHerramientas = await _context.Reparaciones
+                .Include(r => r.Fabricante)
+                .Include(r => r.ReparacionItems)
+                    .ThenInclude(ri => ri.Reparacion)
+                .Where(r => (nombre == null || r.Nombre.Contains(nombre))
+                    && (tiempoReparacion == null || r.TiemoReparacion.Equals(tiempoReparacion)))
+                .OrderBy(r => r.Nombre)
+                .Select(r => new HerramientasDTO(r.HerramientaID, r.Nombre, r.Material,
+                    r.Fabricante, r.PrecioReparacion, r.TiempoReparacion, r.Descripcion))
+                .ToListAsync();
+            return Ok(selectHerramientas);
+        }
+
     }
 }

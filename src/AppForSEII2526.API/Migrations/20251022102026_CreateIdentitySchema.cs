@@ -30,6 +30,13 @@ namespace AppForSEII2526.API.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    nombre = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    apellidos = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    direccionEnvio = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    corrElectronico = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    numTelefono = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    rol = table.Column<int>(type: "int", nullable: false),
+                    fechaRegistro = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),

@@ -1,9 +1,8 @@
-﻿
-namespace AppForSEII2526.API.DTOs.ReparacionDTOs
+﻿namespace AppForSEII2526.API.DTOs.HerramientaDTOs
 {
-    public class RepararHerramientasDTO
+    public class HerramientasDTO
     {
-        public RepararHerramientasDTO(int herramientaID, string nombre, string material, string fabricante, float precioReparacion, DateTime tiempoReparacion, string descripcion="")
+        public HerramientasDTO(int herramientaID, string nombre, string material, string fabricante, float precioReparacion, DateTime tiempoReparacion, string descripcion="")
         {
             HerramientaID = herramientaID;
             Nombre = nombre;
@@ -24,7 +23,7 @@ namespace AppForSEII2526.API.DTOs.ReparacionDTOs
 
         public override bool Equals(object? obj)
         {
-            return obj is RepararHerramientasDTO dTO &&
+            return obj is HerramientasDTO dTO &&
                    HerramientaID == dTO.HerramientaID &&
                    Nombre == dTO.Nombre &&
                    Material == dTO.Material &&
