@@ -1,4 +1,7 @@
-﻿namespace AppForSEII2526.API.Controllers
+﻿using AppForSEII2526.API.DTOs.HerramientasDTOs.ISII2626LosIncompletos.API.DTOs.OfertaDTOs;
+using ISII2626LosIncompletos.API.DTOs.OfertaDTOs;
+
+namespace AppForSEII2526.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -17,15 +20,31 @@
         [Route("[action]")]
         [ProducesResponseType(typeof(decimal), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
-        public async Task<ActionResult> ComputeDivision(decimal op1, decimal op2)
+        public async Task<ActionResult> GetOfertas(DateTime? from, DateTime? to, string? nombre, string? material, string? fabricante, double? precio)
         {
-            if (op2 == 0)
+            if (from != null && to != null && from > to)
             {
-                _logger.LogError($"{DateTime.Now} Exception: op2=0, division by 0");
-                return BadRequest("op2 must be different from 0");
+                ModelState.AddModelError("from&to", "La fecha 'from' (desde) no puede ser posterior a la fecha 'to' (hasta)");
+                _logger.LogError($"{DateTime.Now} Error: La fecha 'from' ({from}) es posterior a 'to' ({to})");
+                return BadRequest(new ValidationProblemDetails(ModelState));
             }
-            decimal result = decimal.Round(op1 / op2, 2);
-            return Ok(result);
+
+            IList<HerramientasDTO> ofertas = await _context.Ofertas
+                .Include(o => o.OfertaItems)
+                    .ThenInclude(oi => oi.Herramienta)
+                        .ThenInclude(h => h.Fabricante)
+
+                .Where(o => (fabricante == null || o.Fabricante.Contains(fabricante) &&
+                      (precio == null || o.Precio.Equals(precio)))
+                    
+                )
+
+                .OrderByDescending(o => o.FechaOferta)
+
+                .Select(o => new HerramientasDTO(o.Id, o.FechaInicio, o.FechaFinal, o.FechaOferta, o.MetodoPago, o.DirigidaA))
+                .ToListAsync();
+
+            return Ok(ofertas);
         }
     }
 }
