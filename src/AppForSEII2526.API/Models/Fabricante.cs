@@ -1,16 +1,16 @@
 ﻿namespace AppForSEII2526.API.Models { 
 
-public class Fabricante
-{
-    [Key]
-        public int id { get; set; }
-    [Required]
-    [StringLength(25, ErrorMessage = "Name can be neither longer than 25 characters nor shorter than 1.", MinimumLength = 1)]
-    [RegularExpression(@"^[A-Z]+[a-zA-Z''-'\s]*$")]
-        public string nombre { get; set; }
+    public class Fabricante
+    {
+        public int Id { get; set; }
+    
+        [Required]
+        [StringLength(20, ErrorMessage = "Nombre no puede superar los 20 caracteres.")]
+        [RegularExpression(@"^[A-Z]+[a-zA-Z''-'\s]*$")]
+        public string Nombre { get; set; }
 
-    public ApplicationUser ApplicationUser { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
 
-    List<Herramienta> Herramienta { get; set; }
-  }
+        public List<Herramienta> Herramienta { get; set; }
+    }
 }

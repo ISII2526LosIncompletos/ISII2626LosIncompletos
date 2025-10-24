@@ -6,29 +6,40 @@ public class ApplicationUser : IdentityUser
 {
     [Required]
     [Display(Name = "Nombre")]
-    public string nombre { get; set; }
+    [StringLength(20, ErrorMessage = "Nombre no puede superar los 20 caracteres.")]
+    [RegularExpression(@"^[A-Z]+[a-zA-Z''-'\s]*$")]
+    public string Nombre { get; set; }
 
     [Required]
     [Display(Name = "Apellidos")]
-    public string apellidos { get; set; }
+    [StringLength(40, ErrorMessage = "Apellidos no puede superar los 40 caracteres.")]
+    [RegularExpression(@"^[A-Z]+[a-zA-Z''-'\s]*$")]
+    public string Apellidos { get; set; }
 
     [Required]
     [Display(Name = "Dirección de envío")]
-    public string direccionEnvio { get; set; }
+    [StringLength(50, ErrorMessage = "Dirección no puede superar los 50 caracteres.")]
+    [RegularExpression(@"^[A-Z]+[a-zA-Z''-'\s]*$")]
+    public string DireccionEnvio { get; set; }
 
     [Required]
     [Display(Name = "Correo electrónico")]
-    public string corrElectronico { get; set; }
+    [StringLength(50, ErrorMessage = "Corro electrónico no puede superar los 50 caracteres.")]
+    [RegularExpression(@"^[A-Z]+[a-zA-Z''-'\s]*$")]
+    public string CorreoElectronico { get; set; }
 
     [Required]
     [Display(Name = "Número de teléfono")]
-    public string numTelefono { get; set; }
+    [StringLength(9, ErrorMessage = "Número de telefono no puede superar los 9 caracteres.")]
+    [RegularExpression(@"^[0-9]*$")]
+    public string NumTelefono { get; set; }
 
     [Display(Name = "Rol de usuario")]
-    public RolUsuario rol { get; set; }
+    public RolUsuario Rol { get; set; }
 
-    [Display(Name = "Fecha de registro")]
-    public DateTime fechaRegistro { get; set; } = DateTime.Now;
+    [DataType(System.ComponentModel.DataAnnotations.DataType.Date), Display(Name = "Fecha de registro")]
+    [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+    public DateTime FechaRegistro { get; set; } = DateTime.Now;
 }
 
 public enum RolUsuario

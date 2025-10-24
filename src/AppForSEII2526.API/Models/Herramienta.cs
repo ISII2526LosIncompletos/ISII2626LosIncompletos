@@ -7,27 +7,27 @@ namespace AppForSEII2526.API.Models
 
 
         [Required]
-        [StringLength(50, ErrorMessage = "El material no puede tener mas de 30 caracteres")]
+        [StringLength(50, ErrorMessage = "El material no puede tener mas de 50 caracteres")]
+        [RegularExpression(@"^[A-Z]+[a-zA-Z''-'\s]*$")]
         public string Material { get; set; }
 
         [Required]
         [DataType(System.ComponentModel.DataAnnotations.DataType.Currency)]
-        [Range(0.5, float.MaxValue, ErrorMessage = "El precioMinimo es 1 ")]
-        [Display(Name = "Precio")]
-        [Precision(10, 2)]
+        [Display(Name = "Precio de la herramienta")]
+        [Precision(5, 2)]
         public decimal Precio { get; set; }
 
         [Required]
-        [Display(Name = "Nombre")]
-        [Range(0, int.MaxValue, ErrorMessage = "Error nombre")]
-        public int Nombre { get; set; }
+        [StringLength(50, ErrorMessage = "Title cannot be longer than 50 characters.")]
+        [RegularExpression(@"^[A-Z]+[a-zA-Z''-'\s]*$")]
+        public string Nombre { get; set; }
 
-        [Display(Name = "TiempoReparacion")]
-        [Range(0, int.MaxValue, ErrorMessage = "Error tiempo reparacion ")]
-        public int tiempoReparacion { get; set; }
+        [DataType(System.ComponentModel.DataAnnotations.DataType.Date), Display(Name = "Tiempo de reparación")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime TiempoReparacion { get; set; }
 
         [Required]
-        [StringLength(50, ErrorMessage = "El fabricante no puede tener mas de 30 caracteres")]
+        [StringLength(20, ErrorMessage = "El fabricante no puede tener mas de 20 caracteres")]
         public string Fabricante { get; set; }
 
         public IList<AlquilarItem> AlquilarItems { get; set; }
