@@ -37,11 +37,10 @@ namespace AppForSEII2526.API.Controllers
             float? precioReparacion, DateTime? tiempoReparacion, string? descripcion)
         {
             IList<HerramientasDTO> selectHerramientas = await _context.Reparaciones
-                .Include(r => r.Fabricante)
-                .Include(r => r.ReparacionItems)
-                    .ThenInclude(ri => ri.Reparacion)
-                .Where(r => (nombre == null || r.Nombre.Contains(nombre))
-                    && (tiempoReparacion == null || r.TiemoReparacion.Equals(tiempoReparacion)))
+                .Include(r => r.ReparacionItem)
+                    .ThenInclude(h => h.Herramienta)
+                .Where(h => (nombre == null || h.Nombre.Contains(nombre))
+                    && (tiempoReparacion == null || h.TiempoReparacion.Equals(tiempoReparacion)))
                 .OrderBy(r => r.Nombre)
                 .Select(r => new HerramientasDTO(r.HerramientaID, r.Nombre, r.Material,
                     r.Fabricante, r.PrecioReparacion, r.TiempoReparacion, r.Descripcion))

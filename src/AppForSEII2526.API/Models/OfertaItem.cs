@@ -16,12 +16,14 @@
         public int IdOferta { get; set; }
 
         [Required]
-        [Range(0, 100, ErrorMessage = "El porcentaje estara entre 0 y 100")]
+        [Display(Name = "Porcentaje de oferta")]
+        [Range(1, 100, ErrorMessage = "El porcentaje mínimo es 1 y el máximo es 100.")]
         public int Porcentaje { get; set; }
 
         [Required]
-        [Range(0.05, float.MaxValue, ErrorMessage = "El precio minimo es 0.05")]
-        [Precision(10, 2)]
+        [DataType(System.ComponentModel.DataAnnotations.DataType.Currency)]
+        [Display(Name = "Precio final oferta")]
+        [Precision(5, 2)]
         public decimal PrecioFinal { get; set; }
     }
 }
