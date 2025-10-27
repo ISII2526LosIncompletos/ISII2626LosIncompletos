@@ -1,7 +1,4 @@
-using AppForSEII2526.API.DTOs.CompraDTOs;
-using System.Data;
-using static AppForSEII2526.API.Models.Compra;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+﻿using AppForSEII2526.API.DTOs.HerramientaDTOs;
 
 namespace AppForSEII2526.API.Controllers
 {
@@ -35,5 +32,25 @@ namespace AppForSEII2526.API.Controllers
                 .ToListAsync();
             return Ok(selectHerramientas);
         }
+
+        [HttpGet]
+        [Route("[action]")]
+        [ProducesResponseType(typeof(HerramientasDTO), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult> GetReparacion(string? nombre, string? material, string? fabricante,
+            decimal? precio, DateTime? tiempoReparacion)
+        {
+            IList<HerramientasDTO> selectHerramientas = await _context.Herramientas
+                .Include(h => h.Fabricante)
+                .Include(h => h.ItemsReparacion)
+                    .ThenInclude(ri => ri.Reparacion)
+                .Where(h => (nombre == null || h.Nombre.Contains(nombre))
+                    && (tiempoReparacion == null || h.TiempoReparacion.Equals(tiempoReparacion)))
+                .OrderBy(h => h.Nombre)
+                .Select(h => new HerramientasDTO(h.Id, h.Nombre, h.Material,
+                    h.Fabricante, h.Precio, h.TiempoReparacion))
+                .ToListAsync();
+            return Ok(selectHerramientas);
+        }
+
     }
 }
