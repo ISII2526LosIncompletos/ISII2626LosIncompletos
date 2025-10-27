@@ -3,38 +3,31 @@ namespace AppForSEII2526.API.Models
 {
     public class Reparacion
     {
-        [Key]
         public int Id { get; set; }
 
         [Required]
         [DataType(System.ComponentModel.DataAnnotations.DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime fechaEntrega { get; set; }
+        public DateTime FechaEntrega { get; set; }
 
         [Required]
         [DataType(System.ComponentModel.DataAnnotations.DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime fechaRecogida { get; set; }
+        public DateTime FechaRecogida { get; set; }
 
         [Required]
+        [DataType(System.ComponentModel.DataAnnotations.DataType.Currency)]
+        [Display(Name = "Precio total reparación")]
         [Precision(5, 2)]
-        public float precioTotal { get; set; }
+        public decimal PrecioTotal { get; set; }
 
         [Required]
         [Display(Name = "Metodos de pago")]
-        public TiposMetodosPago metodoPago { get; set; }
+        public tiposMetodosPago MetodoPago { get; set; }
 
         public List<ReparacionItem> ReparacionItem { get; set; }
 
         public ApplicationUser ApplicationUser { get; set; }
-
-        public enum TiposMetodosPago
-        {
-            TarjetaCredito,
-            PayPal,
-            Cash
-        }
-
 
     }
 }
