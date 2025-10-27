@@ -34,16 +34,17 @@ namespace AppForSEII2526.API.Controllers
         [Route("[action]")]
         [ProducesResponseType(typeof(HerramientasDTO), (int)HttpStatusCode.OK)]
         public async Task<ActionResult> GetReparacion(string? nombre, string? material, string? fabricante,
-            float? precioReparacion, DateTime? tiempoReparacion, string? descripcion)
+            decimal? precio, DateTime? tiempoReparacion)
         {
-            IList<HerramientasDTO> selectHerramientas = await _context.Reparaciones
-                .Include(r => r.ReparacionItem)
-                    .ThenInclude(h => h.Herramienta)
+            IList<HerramientasDTO> selectHerramientas = await _context.Herramientas
+                .Include(h => h.Fabricante)
+                .Include(h => h.ItemsReparacion)
+                    .ThenInclude(ri => ri.Reparacion)
                 .Where(h => (nombre == null || h.Nombre.Contains(nombre))
                     && (tiempoReparacion == null || h.TiempoReparacion.Equals(tiempoReparacion)))
-                .OrderBy(r => r.Nombre)
-                .Select(r => new HerramientasDTO(r.HerramientaID, r.Nombre, r.Material,
-                    r.Fabricante, r.PrecioReparacion, r.TiempoReparacion, r.Descripcion))
+                .OrderBy(h => h.Nombre)
+                .Select(h => new HerramientasDTO(h.Id, h.Nombre, h.Material,
+                    h.Fabricante, h.Precio, h.TiempoReparacion))
                 .ToListAsync();
             return Ok(selectHerramientas);
         }
