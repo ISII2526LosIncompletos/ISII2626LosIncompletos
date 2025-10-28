@@ -4,6 +4,23 @@ namespace AppForSEII2526.API.Models
 
 public class ReparacionItem
     {
+
+        public ReparacionItem()
+        {
+        }
+
+        public ReparacionItem(Herramienta herramienta, int idHerramienta, Reparacion reparacion, 
+            int idReparacion, int cantidad, string? descripcion, decimal precio)
+        {
+            Herramienta = herramienta;
+            IdHerramienta = idHerramienta;
+            Reparacion = reparacion;
+            IdReparacion = idReparacion;
+            Cantidad = cantidad;
+            Descripcion = descripcion;
+            Precio = precio;
+        }
+
         public Herramienta Herramienta { get; set; }
         public int IdHerramienta { get; set; }
 
