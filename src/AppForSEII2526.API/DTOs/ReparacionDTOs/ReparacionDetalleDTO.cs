@@ -7,7 +7,7 @@ namespace AppForSEII2526.API.DTOs.ReparacionDTOs
     {
         public ReparacionDetalleDTO(string nombreCliente, 
             string apellidoCliente, DateTime fechaEntrega, 
-            DateTime fechaRecogida, float precioTotal, 
+            DateTime fechaRecogida, decimal precioTotal, 
             IList<HerramientasDTO> reparacionItems)
         {
             NombreCliente = nombreCliente;
@@ -26,7 +26,7 @@ namespace AppForSEII2526.API.DTOs.ReparacionDTOs
 
         public DateTime FechaRecogida { get; set; }
         
-        public float PrecioTotal { get; set; }
+        public decimal PrecioTotal { get; set; }
 
         public IList<HerramientasDTO> ReparacionItems { get; set; }
 
