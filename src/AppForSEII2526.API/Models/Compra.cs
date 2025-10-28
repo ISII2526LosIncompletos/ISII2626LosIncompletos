@@ -4,36 +4,28 @@
     public class Compra
 
     {
-        [Key]
         public int Id { get; set; }
 
 
         [Required]
-        [DataType(System.ComponentModel.DataAnnotations.DataType.Date)]
+        [DataType(System.ComponentModel.DataAnnotations.DataType.Date), Display(Name = "Fecha de compra")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime fechaCompra { get; set; }
+        public DateTime FechaCompra { get; set; }
 
         [Required]
+        [DataType(System.ComponentModel.DataAnnotations.DataType.Currency)]
+        [Display(Name = "Precio total compra")]
         [Precision(5, 2)]
         public decimal PrecioTotal { get; set; }
 
 
         [Required]
-        [Display(Name = "Metodos de pago")]
-        public tiposMetodoPago metodoPago { get; set; }
-
-        [DataType(System.ComponentModel.DataAnnotations.DataType.EmailAddress)]
-        public string correoElectrónico { get; set; }
+        [Display(Name = "Tipos metodos de pago")]
+        public tiposMetodosPago MetodoPago { get; set; }
 
         public List<CompraItem> CompraItems { get; set; }
 
         public ApplicationUser ApplicationUser { get; set; }
 
-        public enum tiposMetodoPago
-        {
-            TarjetaCredito,
-            PayPal,
-            Efectivo
-        }
     }
 }

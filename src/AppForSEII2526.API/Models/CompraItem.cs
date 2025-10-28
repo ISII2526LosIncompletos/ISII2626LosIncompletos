@@ -1,6 +1,6 @@
 ﻿namespace AppForSEII2526.API.Models {
 
-    [PrimaryKey(nameof(idHerramienta), nameof(idCompra))]
+    [PrimaryKey(nameof(IdHerramienta), nameof(IdCompra))]
 
     public class CompraItem
     {   
@@ -9,17 +9,20 @@
         public int Cantidad { get; set; }
 
         [Required]
-        [StringLength(150, ErrorMessage = "Descripción no puede ser mas largo que 150 caracteres.")]
+        [StringLength(150, ErrorMessage = "Descripción no puede ser más largo que 150 caracteres.")]
+        [RegularExpression(@"^[A-Z]+[a-zA-Z''-'\s]*$")]
         public string Descripcion { get; set; }
 
         public Compra Compra { get; set; }
-        public int idCompra { get; set; }
+        public int IdCompra { get; set; }
 
         [Required]
+        [DataType(System.ComponentModel.DataAnnotations.DataType.Currency)]
+        [Display(Name = "Precio para compra")]
         [Precision(7,2)]
-        public float precio { get; set; }
+        public decimal Precio { get; set; }
 
         public Herramienta Herramienta { get; set; }
-        public int idHerramienta { get; set; }
+        public int IdHerramienta { get; set; }
     }
 }

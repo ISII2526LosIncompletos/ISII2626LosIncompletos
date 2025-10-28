@@ -18,7 +18,9 @@ public class ReparacionItem
         public string? Descripcion { get; set; }
 
         [Required]
+        [DataType(System.ComponentModel.DataAnnotations.DataType.Currency)]
+        [Display(Name = "Precio reparación")]
         [Precision(10, 2)]
-        public float precio { get; set; }
+        public decimal Precio { get; set; }
     }
 }
