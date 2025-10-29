@@ -3,7 +3,7 @@ using AppForSEII2526.API.DTOs.HerramientaDTOs;
 
 namespace AppForSEII2526.API.DTOs.ReparacionDTOs
 {
-    public class ReparacionDetalleDTO
+    public class ReparacionDetalleDTO : ReparacionCreacionDTO
     {
         public ReparacionDetalleDTO(string nombreCliente, 
             string apellidoCliente, DateTime fechaEntrega, 
