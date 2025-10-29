@@ -1,14 +1,13 @@
-﻿
-using AppForSEII2526.API.DTOs.HerramientaDTOs;
+﻿using AppForSEII2526.API.DTOs.HerramientaDTOs;
 
 namespace AppForSEII2526.API.DTOs.ReparacionDTOs
 {
-    public class ReparacionDetalleDTO
+    public class ReparacionDetalleDTO : ReparacionCreacionDTO
     {
-        public ReparacionDetalleDTO(string nombreCliente, 
-            string apellidoCliente, DateTime fechaEntrega, 
-            DateTime fechaRecogida, float precioTotal, 
-            IList<HerramientasDTO> reparacionItems)
+        public ReparacionDetalleDTO(string nombreCliente,
+            string apellidoCliente, DateTime fechaEntrega,
+            DateTime fechaRecogida, decimal precioTotal,
+            IList<ReparacionItem> reparacionItems)
         {
             NombreCliente = nombreCliente;
             ApellidoCliente = apellidoCliente;
@@ -25,10 +24,10 @@ namespace AppForSEII2526.API.DTOs.ReparacionDTOs
         public DateTime FechaEntrega { get; set; }
 
         public DateTime FechaRecogida { get; set; }
-        
-        public float PrecioTotal { get; set; }
 
-        public IList<HerramientasDTO> ReparacionItems { get; set; }
+        public decimal PrecioTotal { get; set; }
+
+        public IList<ReparacionItem> ReparacionItems { get; set; }
 
         public override bool Equals(object? obj)
         {
@@ -38,7 +37,7 @@ namespace AppForSEII2526.API.DTOs.ReparacionDTOs
                    FechaEntrega == dTO.FechaEntrega &&
                    FechaRecogida == dTO.FechaRecogida &&
                    PrecioTotal == dTO.PrecioTotal &&
-                   EqualityComparer<IList<HerramientasDTO>>.Default.Equals(ReparacionItems, dTO.ReparacionItems);
+                   EqualityComparer<IList<ReparacionItem>>.Default.Equals(ReparacionItems, dTO.ReparacionItems);
         }
 
         public override int GetHashCode()
