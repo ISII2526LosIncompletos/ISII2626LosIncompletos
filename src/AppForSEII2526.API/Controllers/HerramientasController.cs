@@ -15,35 +15,39 @@ namespace AppForSEII2526.API.Controllers
             _context = context;
             _logger = logger;
         }
+                
         [HttpGet]
         [Route("[action]")]
-        [ProducesResponseType(typeof(decimal), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
-        public async Task<ActionResult> ComputeDivision(decimal op1, decimal op2)
+        [ProducesResponseType(typeof(ComprarForCreateDTO), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult> GetCompras(string? nombre, string? material, string? fabricante, float precioCompra, string? descripcion)
         {
-            if (op2 == 0)
-            {
-                _logger.LogError($"{DateTime.Now} Exception: op2=0, division by 0");
-                return BadRequest("op2 must be different from 0");
-            }
-            decimal result = decimal.Round(op1 / op2, 2);
-            return Ok(result);
+            IList<ComprarForCreateDTO> selectHerramientas = await _context.Compras
+                .Include(r => r.Fabricante)
+                .Include(r => r.CompraItems)
+                    .ThenInclude(ri => ri.Compra)
+                .Where(r =>( material == null && r.Material.Contains(material)
+                && ( precioCompra == null && r.Precio.Equals(precioCompra))))
+                .OrderBy(r => r.Nombre)
+                .Select(r => new ComprarHerramientasDTO(r.Nombre, r.Material,r.Fabricante, r.Precio, r.cantidad, r.Descripcion))
+                .ToListAsync();
+            return Ok(selectHerramientas);
         }
 
         [HttpGet]
         [Route("[action]")]
         [ProducesResponseType(typeof(HerramientasDTO), (int)HttpStatusCode.OK)]
         public async Task<ActionResult> GetReparacion(string? nombre, string? material, string? fabricante,
-            float? precioReparacion, DateTime? tiempoReparacion, string? descripcion)
+            decimal? precio, DateTime? tiempoReparacion)
         {
-            IList<HerramientasDTO> selectHerramientas = await _context.Reparaciones
-                .Include(r => r.ReparacionItem)
-                    .ThenInclude(h => h.Herramienta)
+            IList<HerramientasDTO> selectHerramientas = await _context.Herramientas
+                .Include(h => h.Fabricante)
+                .Include(h => h.ItemsReparacion)
+                    .ThenInclude(ri => ri.Reparacion)
                 .Where(h => (nombre == null || h.Nombre.Contains(nombre))
                     && (tiempoReparacion == null || h.TiempoReparacion.Equals(tiempoReparacion)))
-                .OrderBy(r => r.Nombre)
-                .Select(r => new HerramientasDTO(r.HerramientaID, r.Nombre, r.Material,
-                    r.Fabricante, r.PrecioReparacion, r.TiempoReparacion, r.Descripcion))
+                .OrderBy(h => h.Nombre)
+                .Select(h => new HerramientasDTO(h.Id, h.Nombre, h.Material,
+                    h.Fabricante, h.Precio, h.TiempoReparacion))
                 .ToListAsync();
             return Ok(selectHerramientas);
         }
