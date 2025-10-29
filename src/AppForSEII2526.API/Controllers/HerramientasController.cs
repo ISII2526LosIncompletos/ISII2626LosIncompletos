@@ -1,5 +1,6 @@
 ﻿using AppForSEII2526.API.DTOs.HerramientaDTOs;
 
+
 namespace AppForSEII2526.API.Controllers
 {
     [Route("api/[controller]")]
@@ -26,8 +27,23 @@ namespace AppForSEII2526.API.Controllers
                 _logger.LogError($"{DateTime.Now} Exception: op2=0, division by 0");
                 return BadRequest("op2 must be different from 0");
             }
-            decimal result = decimal.Round(op1 / op2, 2);
-            return Ok(result);
+
+            IList<HerramientasDTO> ofertas = await _context.Ofertas
+                .Include(o => o.OfertaItems)
+                    .ThenInclude(oi => oi.Herramienta)
+                        .ThenInclude(h => h.Fabricante)
+
+                .Where(o => (fabricante == null || o.Fabricante.Contains(fabricante) &&
+                      (precio == null || o.Precio.Equals(precio)))
+                    
+                )
+
+                .OrderByDescending(o => o.FechaOferta)
+
+                .Select(o => new HerramientasDTO(o.Id, o.FechaInicio, o.FechaFinal, o.FechaOferta, o.MetodoPago, o.DirigidaA))
+                .ToListAsync();
+
+            return Ok(ofertas);
         }
 
         [HttpGet]

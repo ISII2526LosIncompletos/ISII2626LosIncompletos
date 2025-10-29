@@ -27,6 +27,10 @@
         public TiposDirigidaOferta? TiposDirigidaOferta { get; set; }
 
         public IList<OfertaItem> OfertaItems { get; set; }
+        public object Precio { get; internal set; }
+        public object Fabricante { get; internal set; }
+        public object Items { get; internal set; }
+        public object DirigidaA { get; internal set; }
     }
 
     public enum TiposDirigidaOferta

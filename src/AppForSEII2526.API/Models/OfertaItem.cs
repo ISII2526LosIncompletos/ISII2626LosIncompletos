@@ -25,6 +25,7 @@
         [Display(Name = "Precio final oferta")]
         [Precision(5, 2)]
         public decimal PrecioFinal { get; set; }
+        public int HerramientaId { get; internal set; }
     }
 }
 
