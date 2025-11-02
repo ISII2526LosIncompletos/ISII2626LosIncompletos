@@ -46,7 +46,7 @@ namespace AppForSEII2526.API.Models
         public string Nombre { get; set; }
 
         [Display(Name = "Tiempo que tarda en repararse la herramienta")]
-        [Range(1, int.MaxValue, ErrorMessage = "El mínimo número de días es 1")]
+        [Range(1, int.MaxValue, ErrorMessage = "El mÃ­nimo nÃºmero de dÃ­as es 1")]
         public int TiempoReparacion { get; set; }
 
         [Required]
