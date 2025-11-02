@@ -4,10 +4,10 @@ namespace AppForSEII2526.API.DTOs.ReparacionDTOs
 {
     public class ReparacionDetalleDTO : ReparacionCreacionDTO
     {
-        public ReparacionDetalleDTO(string nombreCliente,
-            string apellidoCliente, DateTime fechaEntrega,
-            DateTime fechaRecogida, decimal precioTotal,
-            IList<ReparacionItem> reparacionItems)
+        public ReparacionDetalleDTO(string nombreCliente, 
+            string apellidoCliente, DateTime fechaEntrega, 
+            DateTime fechaRecogida, decimal precioTotal, 
+            IList<ReparacionItemDTO> reparacionItems)
         {
             NombreCliente = nombreCliente;
             ApellidoCliente = apellidoCliente;
@@ -24,10 +24,10 @@ namespace AppForSEII2526.API.DTOs.ReparacionDTOs
         public DateTime FechaEntrega { get; set; }
 
         public DateTime FechaRecogida { get; set; }
-
+        
         public decimal PrecioTotal { get; set; }
 
-        public IList<ReparacionItem> ReparacionItems { get; set; }
+        public IList<ReparacionItemDTO> ReparacionItems { get; set; }
 
         public override bool Equals(object? obj)
         {
@@ -37,7 +37,7 @@ namespace AppForSEII2526.API.DTOs.ReparacionDTOs
                    FechaEntrega == dTO.FechaEntrega &&
                    FechaRecogida == dTO.FechaRecogida &&
                    PrecioTotal == dTO.PrecioTotal &&
-                   EqualityComparer<IList<ReparacionItem>>.Default.Equals(ReparacionItems, dTO.ReparacionItems);
+                   EqualityComparer<IList<ReparacionItemDTO>>.Default.Equals(ReparacionItems, dTO.ReparacionItems);
         }
 
         public override int GetHashCode()
