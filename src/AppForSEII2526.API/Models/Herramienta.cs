@@ -2,6 +2,9 @@ namespace AppForSEII2526.API.Models
 {
     public class Herramienta
     {
+        internal readonly int Cantidad;
+        internal readonly string Descripcion;
+
         [Key]
         public int Id { get; set; }
 

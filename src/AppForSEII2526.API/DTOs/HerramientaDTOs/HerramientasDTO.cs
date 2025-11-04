@@ -2,15 +2,15 @@ namespace AppForSEII2526.API.DTOs.HerramientaDTOs
 {
     public class HerramientasDTO
     {
-        public HerramientasDTO(int herramientaID, string nombre, string material, string fabricante, decimal precio, string descripcion="")
+        public HerramientasDTO(int herramientaID, string nombre, string material, string fabricante, decimal precio,int cantidad, string descripcion="")
         {
             HerramientaID = herramientaID;
             Nombre = nombre;
             Material = material;
             Fabricante = fabricante;
             Precio = precio;
-            Descripcion = descripcion;
             Cantidad = Cantidad;
+            Descripcion = descripcion;
         }
 
         public int HerramientaID { get; set; }
@@ -24,17 +24,18 @@ namespace AppForSEII2526.API.DTOs.HerramientaDTOs
         public override bool Equals(object? obj)
         {
             return obj is HerramientasDTO dTO &&
+                   HerramientaID == dTO.HerramientaID &&
                    Nombre == dTO.Nombre &&
                    Material == dTO.Material &&
                    Fabricante == dTO.Fabricante &&
                    Precio == dTO.Precio &&
-                   Descripcion == dTO.Descripcion &&
-                   Cantidad == dTO.Cantidad;
+                   Cantidad == dTO.Cantidad &&
+                   Descripcion == dTO.Descripcion;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Nombre, Material, Fabricante, Precio, Descripcion, Cantidad);
+            return HashCode.Combine(HerramientaID, Nombre, Material, Fabricante, Precio, Cantidad, Descripcion);
         }
     }
 }
