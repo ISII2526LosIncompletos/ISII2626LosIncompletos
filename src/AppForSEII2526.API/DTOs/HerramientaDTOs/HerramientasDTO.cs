@@ -2,24 +2,24 @@ namespace AppForSEII2526.API.DTOs.HerramientaDTOs
 {
     public class HerramientasDTO
     {
-        public HerramientasDTO(int herramientaID, string nombre, string material, string fabricante, float precioReparacion, DateTime tiempoReparacion, string descripcion="")
+        public HerramientasDTO(int herramientaID, string nombre, string material, string fabricante, decimal precio, string descripcion="")
         {
             HerramientaID = herramientaID;
             Nombre = nombre;
             Material = material;
             Fabricante = fabricante;
-            PrecioReparacion = precioReparacion;
-            TiempoReparacion = tiempoReparacion;
+            Precio = precio;
             Descripcion = descripcion;
+            Cantidad = Cantidad;
         }
 
         public int HerramientaID { get; set; }
         public string Nombre { get; set; }
         public string Material { get; set; }
         public string Fabricante { get; set; }
-        public float PrecioReparacion { get; set; }
-        public DateTime TiempoReparacion { get; set; }
+        public decimal Precio { get; set; }
         public string? Descripcion { get; set; }
+        public int Cantidad {  get; set; }
 
         public override bool Equals(object? obj)
         {
