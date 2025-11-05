@@ -4,6 +4,21 @@
 
     public class CompraItem
     {   
+        public CompraItem()
+        {
+
+        }
+        public CompraItem(Herramienta herramienta, int idHerramienta, Compra compra,
+            int idCompra, int cantidad, string? descripcion, decimal precio)
+        {
+            Herramienta = herramienta;
+            IdHerramienta = idHerramienta;
+            Compra = compra;
+            IdCompra = idCompra;
+            Cantidad= cantidad;
+            Descripcion = descripcion;
+            Precio = precio;
+        }
         [Required]
         [Range(1, int.MaxValue, ErrorMessage = "Cantidad mínima de compra es 1")]
         public int Cantidad { get; set; }
