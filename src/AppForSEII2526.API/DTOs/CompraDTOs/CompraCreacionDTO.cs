@@ -72,7 +72,7 @@ namespace AppForSEII2526.API.DTOs.CompraDTOs
                    MetodoPago == dTO.MetodoPago &&
                    NumTelefono == dTO.NumTelefono &&
                    FechaCompra == dTO.FechaCompra &&
-                   EqualityComparer<IList<CompraItemDTO>>.Default.Equals(CompraItems, dTO.CompraItems) &&
+                   CompraItems.SequenceEqual(dTO.CompraItems) &&
                    PrecioTotal == dTO.PrecioTotal;
         }
     }
