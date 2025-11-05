@@ -26,6 +26,5 @@
         public List<CompraItem> CompraItems { get; set; }
 
         public ApplicationUser ApplicationUser { get; set; }
-
     }
 }
