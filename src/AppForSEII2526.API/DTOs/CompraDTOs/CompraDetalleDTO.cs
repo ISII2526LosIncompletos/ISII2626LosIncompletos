@@ -1,4 +1,4 @@
-﻿using AppForSEII2526.API.DTOs.HerramientaDTOs;
+using AppForSEII2526.API.DTOs.HerramientaDTOs;
 using AppForSEII2526.API.Models;
 
 namespace AppForSEII2526.API.DTOs.CompraDTOs
@@ -24,6 +24,7 @@ namespace AppForSEII2526.API.DTOs.CompraDTOs
         public override bool Equals(object? obj)
         {
             return obj is CompraDetalleDTO dTO &&
+                   base.Equals(obj) &&
                    NombreCliente == dTO.NombreCliente &&
                    ApellidoCliente == dTO.ApellidoCliente &&
                    DireccionEnvio == dTO.DireccionEnvio &&

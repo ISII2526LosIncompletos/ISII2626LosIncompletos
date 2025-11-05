@@ -1,4 +1,4 @@
-﻿using AppForSEII2526.API.Models;
+using AppForSEII2526.API.Models;
 using AppForSEII2526.API.DTOs.HerramientaDTOs;
 
 namespace AppForSEII2526.API.DTOs.CompraDTOs
