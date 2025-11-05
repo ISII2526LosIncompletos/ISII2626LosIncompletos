@@ -1,15 +1,15 @@
-﻿namespace AppForSEII2526.API.DTOs.HerramientaDTOs
+namespace AppForSEII2526.API.DTOs.HerramientaDTOs
 {
     public class HerramientasDTO
     {
-        public HerramientasDTO(int herramientaID, string nombre, string material, string fabricante, float precioReparacion, DateTime tiempoReparacion, string descripcion="")
+        public HerramientasDTO(int herramientaID, string nombre, string material, string fabricante, decimal precio,int cantidad, string descripcion="")
         {
             HerramientaID = herramientaID;
             Nombre = nombre;
             Material = material;
             Fabricante = fabricante;
-            PrecioReparacion = precioReparacion;
-            TiempoReparacion = tiempoReparacion;
+            Precio = precio;
+            Cantidad = Cantidad;
             Descripcion = descripcion;
         }
 
@@ -17,9 +17,9 @@
         public string Nombre { get; set; }
         public string Material { get; set; }
         public string Fabricante { get; set; }
-        public float PrecioReparacion { get; set; }
-        public DateTime TiempoReparacion { get; set; }
+        public decimal Precio { get; set; }
         public string? Descripcion { get; set; }
+        public int Cantidad {  get; set; }
 
         public override bool Equals(object? obj)
         {
@@ -28,14 +28,14 @@
                    Nombre == dTO.Nombre &&
                    Material == dTO.Material &&
                    Fabricante == dTO.Fabricante &&
-                   PrecioReparacion == dTO.PrecioReparacion &&
-                   TiempoReparacion == dTO.TiempoReparacion &&
+                   Precio == dTO.Precio &&
+                   Cantidad == dTO.Cantidad &&
                    Descripcion == dTO.Descripcion;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(HerramientaID, Nombre, Material, Fabricante, PrecioReparacion, TiempoReparacion, Descripcion);
+            return HashCode.Combine(HerramientaID, Nombre, Material, Fabricante, Precio, Cantidad, Descripcion);
         }
     }
 }

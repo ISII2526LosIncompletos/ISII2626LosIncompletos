@@ -3,6 +3,23 @@ namespace AppForSEII2526.API.Models
 {
     public class Reparacion
     {
+
+        public Reparacion()
+        {
+            ReparacionItem = new List<ReparacionItem>();
+        }
+
+        public Reparacion(DateTime fechaEntrega, DateTime fechaRecogida, decimal precioTotal, 
+            tiposMetodosPago metodoPago, List<ReparacionItem> reparacionItem, ApplicationUser applicationUser)
+        {
+            FechaEntrega = fechaEntrega;
+            FechaRecogida = fechaRecogida;
+            PrecioTotal = precioTotal;
+            MetodoPago = metodoPago;
+            ReparacionItem = reparacionItem;
+            ApplicationUser = applicationUser;
+        }
+
         public int Id { get; set; }
 
         [Required]
