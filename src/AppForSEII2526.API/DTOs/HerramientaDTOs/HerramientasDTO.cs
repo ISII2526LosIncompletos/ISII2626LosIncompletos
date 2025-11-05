@@ -9,7 +9,7 @@ namespace AppForSEII2526.API.DTOs.HerramientaDTOs
             Material = material;
             Fabricante = fabricante;
             Precio = precio;
-            Cantidad = Cantidad;
+            Cantidad = cantidad;
             Descripcion = descripcion;
         }
 
