@@ -25,9 +25,9 @@ namespace AppForSEII2526.API.Models
         [RegularExpression(@"^[A-Z]+[a-zA-Z''-'\s]*$")]
         public string Nombre { get; set; }
 
-        [DataType(System.ComponentModel.DataAnnotations.DataType.Date), Display(Name = "Tiempo de reparaci�n")]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime TiempoReparacion { get; set; }
+        [Display(Name = "Tiempo que tarda en repararse la herramienta")]
+        [Range(1, int.MaxValue, ErrorMessage = "El mínimo número de días es 1")]
+        public int TiempoReparacion { get; set; }
 
         [Required]
         [StringLength(20, ErrorMessage = "El fabricante no puede tener mas de 20 caracteres")]
