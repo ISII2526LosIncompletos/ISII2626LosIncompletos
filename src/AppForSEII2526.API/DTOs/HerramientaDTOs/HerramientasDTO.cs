@@ -2,7 +2,7 @@
 {
     public class HerramientasDTO
     {
-        public HerramientasDTO(int herramientaID, string nombre, string material, string fabricante, decimal precio, DateTime tiempoReparacion)
+        public HerramientasDTO(int herramientaID, string nombre, string material, string fabricante, decimal precio, int tiempoReparacion)
         {
             HerramientaID = herramientaID;
             Nombre = nombre;
@@ -17,7 +17,7 @@
         public string Material { get; set; }
         public string Fabricante { get; set; }
         public decimal Precio { get; set; }
-        public DateTime TiempoReparacion { get; set; }
+        public int TiempoReparacion { get; set; }
         public string? Descripcion { get; set; }
 
         public override bool Equals(object? obj)

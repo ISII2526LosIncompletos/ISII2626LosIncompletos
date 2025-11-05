@@ -6,17 +6,17 @@ namespace AppForSEII2526.API.Models
 
         public Reparacion()
         {
-            ReparacionItem = new List<ReparacionItem>();
+            ItemsReparacion = new List<ReparacionItem>();
         }
 
         public Reparacion(DateTime fechaEntrega, DateTime fechaRecogida, decimal precioTotal, 
-            tiposMetodosPago metodoPago, List<ReparacionItem> reparacionItem, ApplicationUser applicationUser)
+            tiposMetodosPago metodoPago, List<ReparacionItem> itemsReparacion, ApplicationUser applicationUser)
         {
             FechaEntrega = fechaEntrega;
             FechaRecogida = fechaRecogida;
             PrecioTotal = precioTotal;
             MetodoPago = metodoPago;
-            ReparacionItem = reparacionItem;
+            ItemsReparacion = itemsReparacion;
             ApplicationUser = applicationUser;
         }
 
@@ -42,7 +42,7 @@ namespace AppForSEII2526.API.Models
         [Display(Name = "Metodos de pago")]
         public tiposMetodosPago MetodoPago { get; set; }
 
-        public List<ReparacionItem> ReparacionItem { get; set; }
+        public List<ReparacionItem> ItemsReparacion { get; set; }
 
         public ApplicationUser ApplicationUser { get; set; }
 

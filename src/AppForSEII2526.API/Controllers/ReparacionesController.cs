@@ -19,7 +19,7 @@ namespace AppForSEII2526.API.Controllers
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.Conflict)]
         public async Task<ActionResult> CreateReparacion(ReparacionCreacionDTO reparacionCreacion)
         {
-            if (reparacionCreacion.FechaRecogida >= DateTime.Today)
+            if (reparacionCreacion.FechaRecogida <= DateTime.Today)
                 ModelState.AddModelError("FechaEntrega", "Error! La fecha en la que se recogerá la herramienta reparada debe ser posterior a hoy");
 
             if (reparacionCreacion.FechaEntrega >= reparacionCreacion.FechaRecogida)
@@ -69,7 +69,7 @@ namespace AppForSEII2526.API.Controllers
                     {
                         numDias = herramienta.TiempoReparacion;
                     }
-                    reparacion.ReparacionItem.Add(new ReparacionItem
+                    reparacion.ItemsReparacion.Add(new ReparacionItem
                     {
                         Precio = herramienta.Precio * item.Cantidad,
                         Descripcion = descripcion,
@@ -80,7 +80,7 @@ namespace AppForSEII2526.API.Controllers
                     });
                 }
             }
-            reparacion.PrecioTotal = reparacion.ReparacionItem.Sum(ri => ri.Precio * numDias);
+            reparacion.PrecioTotal = reparacion.ItemsReparacion.Sum(ri => ri.Precio * numDias);
             //por si hemos modificado el número de días
             reparacion.FechaRecogida = reparacion.FechaEntrega.AddDays(numDias);
 
@@ -106,7 +106,7 @@ namespace AppForSEII2526.API.Controllers
 
             var detalleReparacion = new ReparacionDetalleDTO(usuario.Nombre, usuario.Apellidos,
                 reparacion.FechaEntrega, reparacion.FechaRecogida, reparacion.PrecioTotal,
-                reparacion.ReparacionItem.Select(ri => new ReparacionItemDTO(
+                reparacion.ItemsReparacion.Select(ri => new ReparacionItemDTO(
                     ri.Herramienta.Id, ri.Herramienta.Nombre, ri.Precio, ri.Cantidad, ri.Descripcion)).ToList()
             );
 
