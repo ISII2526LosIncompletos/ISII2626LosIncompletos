@@ -6,7 +6,7 @@ namespace AppForSEII2526.API.DTOs.ReparacionDTOs
     public class ReparacionCreacionDTO
     {
         public ReparacionCreacionDTO(string nombreCliente, string apellidoCliente, DateTime fechaEntrega, DateTime fechaRecogida,
-            tiposMetodosPago metodoPago, string? numTelefono, DateTime tiempoReparacion, IList<ReparacionItemDTO> reparacionItems)
+            tiposMetodosPago metodoPago, string? numTelefono, DateTime tiempoReparacion, IList<ReparacionItemDTO> itemsReparacion)
         {
             NombreCliente = nombreCliente;
             ApellidoCliente = apellidoCliente;
@@ -15,12 +15,12 @@ namespace AppForSEII2526.API.DTOs.ReparacionDTOs
             MetodoPago = metodoPago;
             NumTelefono = numTelefono;
             TiempoReparacion = tiempoReparacion;
-            ReparacionItems = reparacionItems;
+            ItemsReparacion = itemsReparacion;
         }
 
         public ReparacionCreacionDTO()
         {
-            ReparacionItems = new List<ReparacionItemDTO>();
+            ItemsReparacion = new List<ReparacionItemDTO>();
         }
 
         [Required]
@@ -59,7 +59,7 @@ namespace AppForSEII2526.API.DTOs.ReparacionDTOs
         public DateTime TiempoReparacion { get; set; }
 
         [Required]
-        public IList<ReparacionItemDTO> ReparacionItems { get; set; }
+        public IList<ReparacionItemDTO> ItemsReparacion { get; set; }
 
         private int NumeroDias
         {
@@ -76,7 +76,7 @@ namespace AppForSEII2526.API.DTOs.ReparacionDTOs
         {
             get
             {
-                return ReparacionItems.Sum(ri => ri.PrecioReparacion * NumeroDias);
+                return ItemsReparacion.Sum(ri => ri.PrecioReparacion * NumeroDias);
             }
         }
 
@@ -95,7 +95,7 @@ namespace AppForSEII2526.API.DTOs.ReparacionDTOs
                    MetodoPago == dTO.MetodoPago &&
                    NumTelefono == dTO.NumTelefono &&
                    TiempoReparacion == dTO.TiempoReparacion &&
-                   EqualityComparer<IList<ReparacionItemDTO>>.Default.Equals(ReparacionItems, dTO.ReparacionItems) &&
+                   ItemsReparacion.SequenceEqual(dTO.ItemsReparacion) &&
                    NumeroDias == dTO.NumeroDias &&
                    PrecioTotal == dTO.PrecioTotal;
         }

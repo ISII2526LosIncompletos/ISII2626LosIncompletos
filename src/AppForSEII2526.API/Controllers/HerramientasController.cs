@@ -49,7 +49,7 @@ namespace AppForSEII2526.API.Controllers
         [ProducesResponseType(typeof(HerramientasDTO), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         public async Task<ActionResult> GetReparacion(string? nombre, string? material, string? fabricante,
-          decimal? precio, int? tiempoReparacion)
+            decimal? precio, int? tiempoReparacion)
         {
           IList<HerramientasDTO> selectHerramientas = await _context.Herramientas
             .Include(h => h.Fabricante)
