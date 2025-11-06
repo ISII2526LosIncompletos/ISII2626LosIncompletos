@@ -4,6 +4,20 @@
     public class Compra
 
     {
+        public Compra(List<CompraItem> CompraItems)
+        {
+            CompraItems = new List<CompraItem>();
+        }
+        public Compra(DateTime fechaCompra, decimal precioTotal,tiposMetodosPago metodoPago, List<CompraItem> compraItems, ApplicationUser applicationUser )
+        {
+            FechaCompra = fechaCompra;
+            PrecioTotal = precioTotal;
+            MetodoPago = metodoPago;
+            CompraItems = compraItems;
+            ApplicationUser = applicationUser;
+
+
+        }
         public int Id { get; set; }
 
 
