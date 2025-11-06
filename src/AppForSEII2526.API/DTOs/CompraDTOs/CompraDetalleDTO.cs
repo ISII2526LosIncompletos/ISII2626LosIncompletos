@@ -30,7 +30,7 @@ namespace AppForSEII2526.API.DTOs.CompraDTOs
                    DireccionEnvio == dTO.DireccionEnvio &&
                    PrecioTotal == dTO.PrecioTotal &&
                    FechaCompra == dTO.FechaCompra &&
-                   EqualityComparer<IList<CompraItem>>.Default.Equals(CompraItems, dTO.CompraItems);
+                   CompraItems.SequenceEqual(dTO.CompraItems);
         }
 
         public override int GetHashCode()
