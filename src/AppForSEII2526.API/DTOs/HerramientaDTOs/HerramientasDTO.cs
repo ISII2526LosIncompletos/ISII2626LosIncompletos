@@ -2,6 +2,16 @@ namespace AppForSEII2526.API.DTOs.HerramientaDTOs
 {
     public class HerramientasDTO
     {
+        public HerramientasDTO(int herramientaID, string nombre, string material, string fabricante, decimal precio, int tiempoReparacion)
+        {
+            HerramientaID = herramientaID;
+            Nombre = nombre;
+            Material = material;
+            Fabricante = fabricante;
+            Precio = precio;
+            TiempoReparacion = tiempoReparacion;
+        }
+      
         public HerramientasDTO(int herramientaID, string nombre, string material, string fabricante, decimal precio,int cantidad, string descripcion="")
         {
             HerramientaID = herramientaID;
@@ -9,7 +19,7 @@ namespace AppForSEII2526.API.DTOs.HerramientaDTOs
             Material = material;
             Fabricante = fabricante;
             Precio = precio;
-            Cantidad = Cantidad;
+            Cantidad = cantidad;
             Descripcion = descripcion;
         }
 
@@ -18,6 +28,7 @@ namespace AppForSEII2526.API.DTOs.HerramientaDTOs
         public string Material { get; set; }
         public string Fabricante { get; set; }
         public decimal Precio { get; set; }
+        public int TiempoReparacion { get; set; }
         public string? Descripcion { get; set; }
         public int Cantidad {  get; set; }
 
@@ -29,13 +40,15 @@ namespace AppForSEII2526.API.DTOs.HerramientaDTOs
                    Material == dTO.Material &&
                    Fabricante == dTO.Fabricante &&
                    Precio == dTO.Precio &&
-                   Cantidad == dTO.Cantidad &&
+                   TiempoReparacion == dTO.TiempoReparacion &&
+                   Cantidad == dTO.cantidad &&
                    Descripcion == dTO.Descripcion;
+
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(HerramientaID, Nombre, Material, Fabricante, Precio, Cantidad, Descripcion);
+            return HashCode.Combine(HerramientaID, Nombre, Material, Fabricante, Precio, TiempoReparacion, Descipcion, Cantidad);
         }
     }
 }
