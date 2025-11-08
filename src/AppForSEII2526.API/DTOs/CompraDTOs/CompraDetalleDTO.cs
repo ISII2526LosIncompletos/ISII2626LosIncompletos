@@ -1,11 +1,9 @@
-using AppForSEII2526.API.DTOs.HerramientaDTOs;
-using AppForSEII2526.API.Models;
-
+﻿
 namespace AppForSEII2526.API.DTOs.CompraDTOs
 {
-    public class CompraDetalleDTO : CompraCreacionDTO
+    public class CompraDetalleDTO: CompraCreacionDTO
     {
-        public CompraDetalleDTO(string nombreCliente, string apellidoCliente, string direccionEnvio, decimal precioTotal, DateTime fechaCompra, IList<CompraItem> compraItems)
+        public CompraDetalleDTO(string nombreCliente, string apellidoCliente, string direccionEnvio, decimal precioTotal, DateTime fechaCompra, IList<CompraItemDTO> compraItems)
         {
             NombreCliente = nombreCliente;
             ApellidoCliente = apellidoCliente;
@@ -16,10 +14,10 @@ namespace AppForSEII2526.API.DTOs.CompraDTOs
         }
         public string NombreCliente {  get; set; }
         public string ApellidoCliente {  get; set; }
-        public string DireccionEnvio {  get; set; }
-        public decimal PrecioTotal { get; set; }
+        public string DireccionEnvio { get; set; }
+        public decimal PrecioTotal {  get; set; }
         public DateTime FechaCompra {  get; set; }
-        public IList<CompraItem> CompraItems {  get; set; }
+        public IList<CompraItemDTO> CompraItems { get; set; }
 
         public override bool Equals(object? obj)
         {
@@ -30,7 +28,7 @@ namespace AppForSEII2526.API.DTOs.CompraDTOs
                    DireccionEnvio == dTO.DireccionEnvio &&
                    PrecioTotal == dTO.PrecioTotal &&
                    FechaCompra == dTO.FechaCompra &&
-                   EqualityComparer<IList<CompraItem>>.Default.Equals(CompraItems, dTO.CompraItems);
+                   CompraItems.SequenceEqual(dTO.CompraItems);
         }
 
         public override int GetHashCode()

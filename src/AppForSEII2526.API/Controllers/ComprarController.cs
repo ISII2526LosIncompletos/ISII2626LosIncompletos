@@ -1,6 +1,7 @@
 ﻿using AppForSEII2526.API.DTOs.CompraDTOs;
 using AppForSEII2526.API.DTOs.HerramientaDTOs;
 using AppForSEII2526.API.DTOs.ReparacionDTOs;
+using AppForSEII2526.API.Models;
 
 namespace AppForSEII2526.API.Controllers
 {
@@ -9,43 +10,88 @@ namespace AppForSEII2526.API.Controllers
     public class ComprarController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly ILogger<ComprarController> _logger;
-        public ComprarController(ApplicationDbContext context, ILogger<ComprarController> logger)
-        {
-            _context = context;
-            _logger = logger;
-        }
-        [HttpGet]
+        private readonly ILogger<HerramientasController> _logger;
+
+        [HttpPost]
         [Route("[action]")]
-        [ProducesResponseType(typeof(CompraDetalleDTO), (int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<ActionResult> GetCompras(int id)
+        [ProducesResponseType(typeof(CompraDetalleDTO), (int)HttpStatusCode.Created)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.Conflict)]
+        public async Task<ActionResult> CreateCompra(CompraCreacionDTO compraCreacion)
         {
-            if (_context.Compras == null)
+            if (compraCreacion.CompraItems.Count == 0)
+                ModelState.AddModelError("CompraItems", "Error! Debe incluir al menos una herramienta para comprar");
+
+            var usuario = _context.ApplicationUsers.FirstOrDefault(au => au.UserName == compraCreacion.NombreCliente);
+            if (usuario == null)
+                ModelState.AddModelError("CompraApplicationUser", $"Error! El usuario {compraCreacion.NombreCliente} no estÃ¡ registrado");
+
+            if (ModelState.ErrorCount > 0)
+                return BadRequest(new ValidationProblemDetails(ModelState));
+
+            var nombreHerramienta = compraCreacion.CompraItems.Select(ri => ri.Nombre).ToList<string>();
+
+            var herramientas = _context.Herramientas
+                .Include(f => f.Fabricante)
+                .Include(m => m.CompraItems)
+                    .ThenInclude(ri => ri.Compra)
+                .Where(m => nombreHerramienta.Contains(m.Nombre))
+                .ToList();
+
+            Compra compra = new Compra(compraCreacion.FechaCompra, compraCreacion.PrecioTotal, compraCreacion.MetodoPago, new List<CompraItem>(), usuario);
+            compra.PrecioTotal = 0;
+
+            foreach (var item in compraCreacion.CompraItems)
             {
-                _logger.LogError("Error: Tabla Compras no existe");
-                return NotFound();
-            }
-            var compra = await _context.Compras
-           .Where(r => r.Id == id)
-               .Include(r => r.CompraItems)
-                  .ThenInclude(ri => ri.Herramienta)
-           .Select(r => new CompraDetalleDTO(r.ApplicationUser.Nombre,
-                  r.ApplicationUser.Apellidos, r.ApplicationUser.DireccionEnvio, r.PrecioTotal,r.FechaCompra, r.CompraItems
-                      .Select(ri => new CompraItem(ri.Herramienta, ri.Herramienta.Id,
-                              ri.Compra, ri.Compra.Id, ri.Cantidad,
-                              ri.Descripcion, ri.Precio))
-                      .ToList<CompraItem>()))
-           .FirstOrDefaultAsync();
+                var herramienta = herramientas.FirstOrDefault(m => m.Nombre == item.Nombre);
+                if (herramienta == null) //Si la herramienta no existe
+                {
+                    ModelState.AddModelError("CompraItems", $"Error! La herramienta {item.Nombre} no existe");
+                }
+                else
+                {
+                    string descripcion = null;
+                    if (item.Descripcion.Length > 0) descripcion = item.Descripcion;
 
-            if (compra == null)
+
+                    compra.CompraItems.Add(new CompraItem
+                    {
+                        Precio = herramienta.Precio * item.Cantidad,
+                        Descripcion = descripcion,
+                        Cantidad = item.Cantidad,
+                        Herramienta = herramienta,
+                        Compra = compra
+
+                    });
+                }
+            }
+
+            compra.PrecioTotal = compra.CompraItems.Sum(ri => ri.Precio);
+
+            if (ModelState.ErrorCount > 0)
             {
-                _logger.LogError($"Error: Rental with id {id} does not exist");
-                return NotFound();
+                return BadRequest(new ValidationProblemDetails(ModelState));
             }
 
+            _context.Add(compra);
+            try
+            {
+                //guardamos los cambios
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                ModelState.AddModelError("Reparacion", $"Error! Se ha producido un error al guardar su compra. Por favor, intentelo de nuevo");
+                return Conflict("Error" + ex.Message);
 
-            return Ok(compra);
+            }
+            var detalleCompra = new CompraDetalleDTO(usuario.Nombre, usuario.Apellidos, usuario.DireccionEnvio, compra.PrecioTotal
+                , compra.FechaCompra, compra.CompraItems.Select(ri => new CompraItemDTO(
+                   ri.Herramienta.Id, ri.Herramienta.Nombre, ri.Herramienta.Material, ri.Precio, ri.Cantidad, ri.Descripcion)).ToList()
+           );
+
+            return CreatedAtAction("GetCompra", new { id = compra.Id }, detalleCompra);
         }
     }
 }
