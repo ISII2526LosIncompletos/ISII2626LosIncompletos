@@ -2,9 +2,9 @@ namespace AppForSEII2526.API.DTOs.CompraDTOs
 {
     public class CompraItemDTO
     {
-        public CompraItemDTO(int herramientaID, string nombre, string material, decimal precioCompra, int cantidad, string? descripcion = "")
+        public CompraItemDTO(int herramientaid, string nombre, string material, decimal precioCompra, int cantidad, string descripcion = "")
         {
-            HerramientaID = herramientaID;
+            HerramientaID = herramientaid;
             Nombre = nombre;
             Material = material;
             PrecioCompra = precioCompra;
@@ -21,7 +21,7 @@ namespace AppForSEII2526.API.DTOs.CompraDTOs
         public override bool Equals(object? obj)
         {
             return obj is CompraItemDTO dTO &&
-                   HerramientaID == dTO.HerramientaID &&
+                   HerramientaID==dTO.HerramientaID &&
                    Nombre == dTO.Nombre &&
                    Material == dTO.Material &&
                    PrecioCompra == dTO.PrecioCompra &&

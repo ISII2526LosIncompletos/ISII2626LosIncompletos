@@ -213,16 +213,13 @@ namespace AppForSEII2526.API.Migrations
 
             modelBuilder.Entity("AppForSEII2526.API.Models.CompraItem", b =>
                 {
-                    b.Property<int>("IdHerramienta")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdCompra")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Cantidad")
+                    b.Property<int>("HerramientaId")
                         .HasColumnType("int");
 
                     b.Property<int>("CompraId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Cantidad")
                         .HasColumnType("int");
 
                     b.Property<string>("Descripcion")
@@ -230,18 +227,13 @@ namespace AppForSEII2526.API.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
-                    b.Property<int>("HerramientaId")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Precio")
                         .HasPrecision(7, 2)
                         .HasColumnType("decimal(7,2)");
 
-                    b.HasKey("IdHerramienta", "IdCompra");
+                    b.HasKey("HerramientaId", "CompraId");
 
                     b.HasIndex("CompraId");
-
-                    b.HasIndex("HerramientaId");
 
                     b.ToTable("CompraItems");
                 });
@@ -254,18 +246,12 @@ namespace AppForSEII2526.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Fabricantes");
                 });
@@ -278,12 +264,7 @@ namespace AppForSEII2526.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Fabricante")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<int?>("FabricanteId")
+                    b.Property<int>("FabricanteId")
                         .HasColumnType("int");
 
                     b.Property<string>("Material")
@@ -300,8 +281,8 @@ namespace AppForSEII2526.API.Migrations
                         .HasPrecision(5, 2)
                         .HasColumnType("decimal(5,2)");
 
-                    b.Property<DateTime>("TiempoReparacion")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("TiempoReparacion")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -318,6 +299,9 @@ namespace AppForSEII2526.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("DirigidaA")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("FechaFinal")
                         .HasColumnType("datetime2");
 
@@ -330,9 +314,6 @@ namespace AppForSEII2526.API.Migrations
                     b.Property<int>("MetodoPago")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TiposDirigidaOferta")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.ToTable("Ofertas");
@@ -340,16 +321,10 @@ namespace AppForSEII2526.API.Migrations
 
             modelBuilder.Entity("AppForSEII2526.API.Models.OfertaItem", b =>
                 {
-                    b.Property<int>("IdOferta")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdHerramienta")
+                    b.Property<int>("OfertaId")
                         .HasColumnType("int");
 
                     b.Property<int>("HerramientaId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OfertaId")
                         .HasColumnType("int");
 
                     b.Property<int>("Porcentaje")
@@ -359,11 +334,9 @@ namespace AppForSEII2526.API.Migrations
                         .HasPrecision(5, 2)
                         .HasColumnType("decimal(5,2)");
 
-                    b.HasKey("IdOferta", "IdHerramienta");
+                    b.HasKey("OfertaId", "HerramientaId");
 
                     b.HasIndex("HerramientaId");
-
-                    b.HasIndex("OfertaId");
 
                     b.ToTable("OfertaItems");
                 });
@@ -402,10 +375,10 @@ namespace AppForSEII2526.API.Migrations
 
             modelBuilder.Entity("AppForSEII2526.API.Models.ReparacionItem", b =>
                 {
-                    b.Property<int>("IdHerramienta")
+                    b.Property<int>("HerramientaId")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdReparacion")
+                    b.Property<int>("ReparacionId")
                         .HasColumnType("int");
 
                     b.Property<int>("Cantidad")
@@ -415,19 +388,11 @@ namespace AppForSEII2526.API.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("HerramientaId")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Precio")
                         .HasPrecision(10, 2)
                         .HasColumnType("decimal(10,2)");
 
-                    b.Property<int>("ReparacionId")
-                        .HasColumnType("int");
-
-                    b.HasKey("IdHerramienta", "IdReparacion");
-
-                    b.HasIndex("HerramientaId");
+                    b.HasKey("HerramientaId", "ReparacionId");
 
                     b.HasIndex("ReparacionId");
 
@@ -625,22 +590,15 @@ namespace AppForSEII2526.API.Migrations
                     b.Navigation("Herramienta");
                 });
 
-            modelBuilder.Entity("AppForSEII2526.API.Models.Fabricante", b =>
+            modelBuilder.Entity("AppForSEII2526.API.Models.Herramienta", b =>
                 {
-                    b.HasOne("AppForSEII2526.API.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId")
+                    b.HasOne("AppForSEII2526.API.Models.Fabricante", "Fabricante")
+                        .WithMany("Herramienta")
+                        .HasForeignKey("FabricanteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ApplicationUser");
-                });
-
-            modelBuilder.Entity("AppForSEII2526.API.Models.Herramienta", b =>
-                {
-                    b.HasOne("AppForSEII2526.API.Models.Fabricante", null)
-                        .WithMany("Herramienta")
-                        .HasForeignKey("FabricanteId");
+                    b.Navigation("Fabricante");
                 });
 
             modelBuilder.Entity("AppForSEII2526.API.Models.OfertaItem", b =>
@@ -682,7 +640,7 @@ namespace AppForSEII2526.API.Migrations
                         .IsRequired();
 
                     b.HasOne("AppForSEII2526.API.Models.Reparacion", "Reparacion")
-                        .WithMany("ReparacionItem")
+                        .WithMany("ItemsReparacion")
                         .HasForeignKey("ReparacionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -776,7 +734,7 @@ namespace AppForSEII2526.API.Migrations
 
             modelBuilder.Entity("AppForSEII2526.API.Models.Reparacion", b =>
                 {
-                    b.Navigation("ReparacionItem");
+                    b.Navigation("ItemsReparacion");
                 });
 #pragma warning restore 612, 618
         }

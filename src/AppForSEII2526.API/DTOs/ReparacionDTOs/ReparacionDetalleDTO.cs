@@ -1,19 +1,27 @@
-﻿using AppForSEII2526.API.DTOs.HerramientaDTOs;
+using AppForSEII2526.API.DTOs.HerramientaDTOs;
 
 namespace AppForSEII2526.API.DTOs.ReparacionDTOs
 {
     public class ReparacionDetalleDTO : ReparacionCreacionDTO
     {
-        public ReparacionDetalleDTO(string nombreCliente, 
-            string apellidoCliente, DateTime fechaEntrega, 
-            DateTime fechaRecogida, decimal precioTotal, 
+        public ReparacionDetalleDTO(string nombreCliente,
+            string apellidoCliente, DateTime fechaEntrega,
             IList<ReparacionItemDTO> itemsReparacion)
         {
             NombreCliente = nombreCliente;
             ApellidoCliente = apellidoCliente;
             FechaEntrega = fechaEntrega;
+            ItemsReparacion = itemsReparacion;
+        }
+
+        public ReparacionDetalleDTO(string nombreCliente, string apellidoCliente, DateTime fechaEntrega,
+            DateTime fechaRecogida, string? numTelefono, IList<ReparacionItemDTO> itemsReparacion)
+        {
+            NombreCliente = nombreCliente;
+            ApellidoCliente = apellidoCliente;
+            FechaEntrega = fechaEntrega;
             FechaRecogida = fechaRecogida;
-            PrecioTotal = precioTotal;
+            NumTelefono = numTelefono;
             ItemsReparacion = itemsReparacion;
         }
 
@@ -24,8 +32,8 @@ namespace AppForSEII2526.API.DTOs.ReparacionDTOs
         public DateTime FechaEntrega { get; set; }
 
         public DateTime FechaRecogida { get; set; }
-        
-        public decimal PrecioTotal { get; set; }
+
+        public string? NumTelefono { get; set; }
 
         public IList<ReparacionItemDTO> ItemsReparacion { get; set; }
 
@@ -36,13 +44,13 @@ namespace AppForSEII2526.API.DTOs.ReparacionDTOs
                    ApellidoCliente == dTO.ApellidoCliente &&
                    FechaEntrega == dTO.FechaEntrega &&
                    FechaRecogida == dTO.FechaRecogida &&
-                   PrecioTotal == dTO.PrecioTotal &&
+                   NumTelefono == dTO.NumTelefono &&
                    ItemsReparacion.SequenceEqual(dTO.ItemsReparacion);
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(NombreCliente, ApellidoCliente, FechaEntrega, FechaRecogida, PrecioTotal, ItemsReparacion);
+            return HashCode.Combine(NombreCliente, ApellidoCliente, FechaEntrega, FechaRecogida, NumTelefono, ItemsReparacion);
         }
     }
 }

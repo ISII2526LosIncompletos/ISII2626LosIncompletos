@@ -11,14 +11,16 @@ namespace AppForSEII2526.API.Models
             ItemsReparacion = new List<ReparacionItem>();
         }
 
-        public Herramienta(string material, decimal precio, string nombre, int tiempoReparacion, string fabricante,
+        public Herramienta(int id, string material, decimal precio, string nombre, int tiempoReparacion, Fabricante fabricante, int fabricanteId, 
             IList<AlquilarItem> alquilarItems, IList<CompraItem> compraItems, IList<OfertaItem> ofertaItems, IList<ReparacionItem> itemsReparacion)
         {
+            Id = id;
             Material = material;
             Precio = precio;
             Nombre = nombre;
             TiempoReparacion = tiempoReparacion;
             Fabricante = fabricante;
+            FabricanteId = fabricanteId;
             AlquilarItems = alquilarItems;
             CompraItems = compraItems;
             OfertaItems = ofertaItems;
@@ -46,12 +48,15 @@ namespace AppForSEII2526.API.Models
         public string Nombre { get; set; }
 
         [Display(Name = "Tiempo que tarda en repararse la herramienta")]
-        [Range(1, int.MaxValue, ErrorMessage = "El mínimo número de días es 1")]
+        [Range(1, int.MaxValue, ErrorMessage = "El m�nimo n�mero de d�as es 1")]
         public int TiempoReparacion { get; set; }
 
         [Required]
         [StringLength(20, ErrorMessage = "El fabricante no puede tener mas de 20 caracteres")]
-        public string Fabricante { get; set; }
+        public Fabricante Fabricante { get; set; }
+
+        [Required]
+        public int FabricanteId { get; set; }
 
         public IList<AlquilarItem> AlquilarItems { get; set; }
         public IList<CompraItem> CompraItems { get; set; }

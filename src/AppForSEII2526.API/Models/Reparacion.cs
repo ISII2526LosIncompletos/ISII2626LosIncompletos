@@ -9,7 +9,16 @@ namespace AppForSEII2526.API.Models
             ItemsReparacion = new List<ReparacionItem>();
         }
 
-        public Reparacion(DateTime fechaEntrega, DateTime fechaRecogida, decimal precioTotal, 
+        public Reparacion(DateTime fechaEntrega, tiposMetodosPago metodoPago,
+            List<ReparacionItem> itemsReparacion, ApplicationUser applicationUser)
+        {
+            FechaEntrega = fechaEntrega;
+            MetodoPago = metodoPago;
+            ItemsReparacion = itemsReparacion;
+            ApplicationUser = applicationUser;
+        }
+
+        public Reparacion(DateTime fechaEntrega, DateTime fechaRecogida, decimal precioTotal,
             tiposMetodosPago metodoPago, List<ReparacionItem> itemsReparacion, ApplicationUser applicationUser)
         {
             FechaEntrega = fechaEntrega;
@@ -34,7 +43,7 @@ namespace AppForSEII2526.API.Models
 
         [Required]
         [DataType(System.ComponentModel.DataAnnotations.DataType.Currency)]
-        [Display(Name = "Precio total reparación")]
+        [Display(Name = "Precio total reparaciÃ³n")]
         [Precision(5, 2)]
         public decimal PrecioTotal { get; set; }
 
@@ -45,6 +54,5 @@ namespace AppForSEII2526.API.Models
         public List<ReparacionItem> ItemsReparacion { get; set; }
 
         public ApplicationUser ApplicationUser { get; set; }
-
     }
 }

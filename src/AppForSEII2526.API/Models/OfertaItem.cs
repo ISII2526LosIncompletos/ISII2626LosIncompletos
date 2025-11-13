@@ -1,19 +1,33 @@
 ﻿namespace AppForSEII2526.API.Models
 {
-    [PrimaryKey(nameof(IdOferta), nameof(IdHerramienta))]
+    [PrimaryKey(nameof(OfertaId), nameof(HerramientaId))]
     public class OfertaItem
     {
+        public OfertaItem()
+        {
+        }
+        public OfertaItem(Herramienta herramienta, int herramientaId,
+            Oferta oferta, int ofertaId, int porcentaje, decimal precioFinal)
+        {
+            Herramienta = herramienta;
+            HerramientaId = herramientaId;
+            Oferta = oferta;
+            OfertaId = ofertaId;
+            Porcentaje = porcentaje;
+            PrecioFinal = precioFinal;
+        }
+
         [Required]
         public Herramienta Herramienta { get; set; }
 
         [Required]
-        public int IdHerramienta { get; set; }
+        public int HerramientaId { get; set; }
 
         [Required]
         public Oferta Oferta { get; set; }
 
         [Required]
-        public int IdOferta { get; set; }
+        public int OfertaId { get; set; }
 
         [Required]
         [Display(Name = "Porcentaje de oferta")]

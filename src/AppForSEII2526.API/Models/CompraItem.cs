@@ -1,21 +1,22 @@
-﻿namespace AppForSEII2526.API.Models {
+namespace AppForSEII2526.API.Models
+{
 
-    [PrimaryKey(nameof(IdHerramienta), nameof(IdCompra))]
+    [PrimaryKey(nameof(HerramientaId), nameof(CompraId))]
 
     public class CompraItem
-    {   
+    {
         public CompraItem()
         {
 
         }
-        public CompraItem(Herramienta herramienta, int idHerramienta, Compra compra,
-            int idCompra, int cantidad, string? descripcion, decimal precio)
+        public CompraItem(Herramienta herramienta, int herramientaId, Compra compra,
+            int compraId, int cantidad, string? descripcion, decimal precio)
         {
             Herramienta = herramienta;
-            IdHerramienta = idHerramienta;
+            HerramientaId = herramientaId;
             Compra = compra;
-            IdCompra = idCompra;
-            Cantidad= cantidad;
+            CompraId = compraId;
+            Cantidad = cantidad;
             Descripcion = descripcion;
             Precio = precio;
         }
@@ -29,15 +30,15 @@
         public string Descripcion { get; set; }
 
         public Compra Compra { get; set; }
-        public int IdCompra { get; set; }
+        public int CompraId { get; set; }
 
         [Required]
         [DataType(System.ComponentModel.DataAnnotations.DataType.Currency)]
         [Display(Name = "Precio para compra")]
-        [Precision(7,2)]
+        [Precision(7, 2)]
         public decimal Precio { get; set; }
 
         public Herramienta Herramienta { get; set; }
-        public int IdHerramienta { get; set; }
+        public int HerramientaId { get; set; }
     }
 }

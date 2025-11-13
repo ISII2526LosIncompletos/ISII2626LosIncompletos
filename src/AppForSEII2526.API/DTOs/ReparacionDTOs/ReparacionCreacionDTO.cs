@@ -1,20 +1,18 @@
-﻿using AppForSEII2526.API.Models;
+using AppForSEII2526.API.Models;
 using AppForSEII2526.API.DTOs.HerramientaDTOs;
 
 namespace AppForSEII2526.API.DTOs.ReparacionDTOs
 {
     public class ReparacionCreacionDTO
     {
-        public ReparacionCreacionDTO(string nombreCliente, string apellidoCliente, DateTime fechaEntrega, DateTime fechaRecogida,
-            tiposMetodosPago metodoPago, string? numTelefono, DateTime tiempoReparacion, IList<ReparacionItemDTO> itemsReparacion)
+        public ReparacionCreacionDTO(string nombreCliente, string apellidoCliente, string? numTelefono,
+            DateTime fechaEntrega, tiposMetodosPago metodoPago, IList<ReparacionItemDTO> itemsReparacion)
         {
             NombreCliente = nombreCliente;
             ApellidoCliente = apellidoCliente;
-            FechaEntrega = fechaEntrega;
-            FechaRecogida = fechaRecogida;
-            MetodoPago = metodoPago;
             NumTelefono = numTelefono;
-            TiempoReparacion = tiempoReparacion;
+            FechaEntrega = fechaEntrega;
+            MetodoPago = metodoPago;
             ItemsReparacion = itemsReparacion;
         }
 
@@ -35,50 +33,21 @@ namespace AppForSEII2526.API.DTOs.ReparacionDTOs
         [RegularExpression(@"^[A-Z]+[a-zA-Z''-'\s]*$")]
         public string ApellidoCliente { get; set; }
 
-        [Required]
-        [DataType(System.ComponentModel.DataAnnotations.DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime FechaEntrega { get; set; }
-
-        [Required]
-        [DataType(System.ComponentModel.DataAnnotations.DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime FechaRecogida { get; set; }
-
-        [Required]
-        public tiposMetodosPago MetodoPago { get; set; }
-
         [Display(Name = "Número de teléfono")]
         [StringLength(9, ErrorMessage = "Número de telefono no puede superar los 9 caracteres.")]
         [RegularExpression(@"^[0-9]*$")]
         public string? NumTelefono { get; set; }
 
         [Required]
-        [DataType(System.ComponentModel.DataAnnotations.DataType.Date), Display(Name = "Tiempo de reparación")]
+        [DataType(System.ComponentModel.DataAnnotations.DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime TiempoReparacion { get; set; }
+        public DateTime FechaEntrega { get; set; }
+
+        [Required]
+        public tiposMetodosPago MetodoPago { get; set; }
 
         [Required]
         public IList<ReparacionItemDTO> ItemsReparacion { get; set; }
-
-        private int NumeroDias
-        {
-            get
-            {
-                return (FechaRecogida - FechaEntrega).Days;
-            }
-        }
-
-        [Display(Name = "Precio total")]
-        [JsonPropertyName("PrecioTotal")]
-        [Precision(10, 2)]
-        public decimal PrecioTotal
-        {
-            get
-            {
-                return ItemsReparacion.Sum(ri => ri.PrecioReparacion * NumeroDias);
-            }
-        }
 
         protected bool CompararFechas(DateTime fecha1, DateTime fecha2)
         {
@@ -91,13 +60,9 @@ namespace AppForSEII2526.API.DTOs.ReparacionDTOs
                    NombreCliente == dTO.NombreCliente &&
                    ApellidoCliente == dTO.ApellidoCliente &&
                    FechaEntrega == dTO.FechaEntrega &&
-                   FechaRecogida == dTO.FechaRecogida &&
                    MetodoPago == dTO.MetodoPago &&
                    NumTelefono == dTO.NumTelefono &&
-                   TiempoReparacion == dTO.TiempoReparacion &&
-                   ItemsReparacion.SequenceEqual(dTO.ItemsReparacion) &&
-                   NumeroDias == dTO.NumeroDias &&
-                   PrecioTotal == dTO.PrecioTotal;
+                   ItemsReparacion.SequenceEqual(dTO.ItemsReparacion);
         }
 
     }

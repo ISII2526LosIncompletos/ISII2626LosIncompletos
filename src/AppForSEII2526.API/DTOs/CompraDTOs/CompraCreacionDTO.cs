@@ -1,18 +1,17 @@
-﻿using AppForSEII2526.API.Models;
-
 namespace AppForSEII2526.API.DTOs.CompraDTOs
 {
     public class CompraCreacionDTO
     {
         public CompraCreacionDTO(string nombreCliente, string apellidoCliente, string direccionEnvio,
-            tiposMetodosPago metodoPago, string numTelefono, DateTime fechaCompra, IList<CompraItemDTO> compraItems)
+            tiposMetodosPago metodoPago, string numTelefono, string correoElectronico, DateTime fechaCompra, IList<CompraItemDTO> compraItems)
         {
             NombreCliente = nombreCliente;
             ApellidoCliente = apellidoCliente;
             DireccionEnvio = direccionEnvio;
             MetodoPago = metodoPago;
             NumTelefono = numTelefono;
-            FechaCompra = fechaCompra;
+            CorreoElectronico = correoElectronico;
+            FechaCompra = fechaCompra;          
             CompraItems = compraItems;
         }
         public CompraCreacionDTO()
@@ -33,16 +32,20 @@ namespace AppForSEII2526.API.DTOs.CompraDTOs
         [Required]
         [Display(Name = "Direccion de envío")]
         [StringLength(50, ErrorMessage = "Apellidos no puede superar los 50 caracteres.")]
-        [RegularExpression(@"^[A-Z]+[a-zA-Z''-'\s]*$")]
+        [RegularExpression(@"^[\p{L}0-9\s\.,#\-]+$", ErrorMessage = "La dirección contiene caracteres no permitidos.")]
         public string DireccionEnvio { get; set; }
         [Required]
         public tiposMetodosPago MetodoPago { get; set; }
 
-        [Required]
+       
         [Display(Name = "Número de teléfono")]
         [StringLength(9, ErrorMessage = "Número de teléfono no puede superar los 9 números.")]
-        [RegularExpression(@"^[0-9]]*$")]
-        public string NumTelefono { get; set; }
+        [RegularExpression(@"^\d{9}$", ErrorMessage = "Número de teléfono debe tener 9 dígitos sin espacios ni signos.")]
+        public string? NumTelefono { get; set; }
+        [Display(Name = "Correo electrónico")]
+        [StringLength(50, ErrorMessage = "Correo electrónico no puede superar los 50 caracteres.")]
+        [EmailAddress(ErrorMessage = "Correo electrónico inválido.")]
+        public string CorreoElectronico { get; set; }
 
         [Required]
         [DataType(System.ComponentModel.DataAnnotations.DataType.Date), Display(Name = "Fecha de Compra")]
@@ -71,6 +74,7 @@ namespace AppForSEII2526.API.DTOs.CompraDTOs
                    DireccionEnvio == dTO.DireccionEnvio &&
                    MetodoPago == dTO.MetodoPago &&
                    NumTelefono == dTO.NumTelefono &&
+                   CorreoElectronico == dTO.CorreoElectronico &&
                    FechaCompra == dTO.FechaCompra &&
                    CompraItems.SequenceEqual(dTO.CompraItems) &&
                    PrecioTotal == dTO.PrecioTotal;

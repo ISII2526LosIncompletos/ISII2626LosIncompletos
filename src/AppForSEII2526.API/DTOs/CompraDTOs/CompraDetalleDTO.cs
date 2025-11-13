@@ -1,7 +1,6 @@
-﻿
 namespace AppForSEII2526.API.DTOs.CompraDTOs
 {
-    public class CompraDetalleDTO: CompraCreacionDTO
+    public class CompraDetalleDTO : CompraCreacionDTO
     {
         public CompraDetalleDTO(string nombreCliente, string apellidoCliente, string direccionEnvio, decimal precioTotal, DateTime fechaCompra, IList<CompraItemDTO> compraItems)
         {
@@ -12,11 +11,12 @@ namespace AppForSEII2526.API.DTOs.CompraDTOs
             FechaCompra = fechaCompra;
             CompraItems = compraItems;
         }
-        public string NombreCliente {  get; set; }
-        public string ApellidoCliente {  get; set; }
+
+        public string NombreCliente { get; set; }
+        public string ApellidoCliente { get; set; }
         public string DireccionEnvio { get; set; }
-        public decimal PrecioTotal {  get; set; }
-        public DateTime FechaCompra {  get; set; }
+        public decimal PrecioTotal { get; set; }
+        public DateTime FechaCompra { get; set; }
         public IList<CompraItemDTO> CompraItems { get; set; }
 
         public override bool Equals(object? obj)

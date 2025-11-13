@@ -1,5 +1,4 @@
-﻿
-namespace AppForSEII2526.API.Models { 
+namespace AppForSEII2526.API.Models {
 
     public class Fabricante
     {
@@ -8,21 +7,18 @@ namespace AppForSEII2526.API.Models {
             Herramienta = new List<Herramienta>();
         }
 
-        public Fabricante(string nombre, ApplicationUser applicationUser, List<Herramienta> herramienta)
+        public Fabricante(string nombre, List<Herramienta> herramienta)
         {
             Nombre = nombre;
-            ApplicationUser = applicationUser;
             Herramienta = herramienta;
         }
 
         public int Id { get; set; }
-    
+
         [Required]
         [StringLength(20, ErrorMessage = "Nombre no puede superar los 20 caracteres.")]
         [RegularExpression(@"^[A-Z]+[a-zA-Z''-'\s]*$")]
         public string Nombre { get; set; }
-
-        public ApplicationUser ApplicationUser { get; set; }
 
         public List<Herramienta> Herramienta { get; set; }
 
@@ -31,13 +27,12 @@ namespace AppForSEII2526.API.Models {
             return obj is Fabricante fabricante &&
                    Id == fabricante.Id &&
                    Nombre == fabricante.Nombre &&
-                   EqualityComparer<ApplicationUser>.Default.Equals(ApplicationUser, fabricante.ApplicationUser) && //¿Cambiar?
                    Herramienta.SequenceEqual(fabricante.Herramienta);
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Id, Nombre, ApplicationUser, Herramienta);
+            return HashCode.Combine(Id, Nombre, Herramienta);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using AppForSEII2526.API.DTOs.CompraDTOs;
+using AppForSEII2526.API.DTOs.CompraDTOs;
 using AppForSEII2526.API.DTOs.HerramientaDTOs;
 using AppForSEII2526.API.DTOs.ReparacionDTOs;
 using AppForSEII2526.API.Models;
@@ -10,7 +10,47 @@ namespace AppForSEII2526.API.Controllers
     public class ComprarController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly ILogger<HerramientasController> _logger;
+        private readonly ILogger<ComprarController> _logger;
+
+        public ComprarController(ApplicationDbContext context, ILogger<ComprarController> logger)
+        {
+            _context = context;
+            _logger = logger;
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        [ProducesResponseType(typeof(CompraDetalleDTO), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public async Task<ActionResult> GetDetalleCompras(int id)
+        {
+            if (_context.Compras == null)
+            {
+                _logger.LogError("Error: No existe Tabla de Compra");
+                return NotFound();
+            }
+            var compra = await _context.Compras
+           .Where(r => r.Id == id)
+               .Include(r=>r.ApplicationUser)
+               .Include(r => r.CompraItems)
+                  .ThenInclude(ri => ri.Herramienta)
+           .Select(r => new CompraDetalleDTO(r.ApplicationUser.Nombre,
+                  r.ApplicationUser.Apellidos, r.ApplicationUser.DireccionEnvio, r.PrecioTotal, r.FechaCompra, r.CompraItems
+                      .Select(ri => new CompraItemDTO(ri.Herramienta.Id,
+                              ri.Herramienta.Nombre, ri.Herramienta.Material, ri.Precio, ri.Cantidad,
+                              ri.Descripcion))
+                      .ToList<CompraItemDTO>()))
+           .FirstOrDefaultAsync();
+
+            if (compra == null)
+            {
+                _logger.LogError($"Error: Compra con id {id} no existe");
+                return NotFound();
+            }
+
+
+            return Ok(compra);
+        }
 
         [HttpPost]
         [Route("[action]")]
@@ -20,11 +60,26 @@ namespace AppForSEII2526.API.Controllers
         public async Task<ActionResult> CreateCompra(CompraCreacionDTO compraCreacion)
         {
             if (compraCreacion.CompraItems.Count == 0)
-                ModelState.AddModelError("CompraItems", "Error! Debe incluir al menos una herramienta para comprar");
+                ModelState.AddModelError("CompraItems", "Error! Debe incluir al menos una herramienta para comprar");           
 
-            var usuario = _context.ApplicationUsers.FirstOrDefault(au => au.UserName == compraCreacion.NombreCliente);
+            if (string.IsNullOrEmpty(compraCreacion.NombreCliente))
+            {
+                ModelState.AddModelError("Nombre", "El nombre no puede estar vacío");
+            }
+
+            if (string.IsNullOrEmpty(compraCreacion.ApellidoCliente))
+            {
+                ModelState.AddModelError("Apellido", "El apellido no puede estar vacío");
+            }
+
+            if (string.IsNullOrEmpty(compraCreacion.DireccionEnvio))
+            {
+                ModelState.AddModelError("Dirección de envio", "La dirección de envio no puede estar vacío");
+            }
+
+            var usuario = _context.ApplicationUsers.FirstOrDefault(au => au.Nombre == compraCreacion.NombreCliente);
             if (usuario == null)
-                ModelState.AddModelError("CompraApplicationUser", $"Error! El usuario {compraCreacion.NombreCliente} no estÃ¡ registrado");
+                ModelState.AddModelError("CompraApplicationUser", $"Error! El usuario no está registrado");
 
             if (ModelState.ErrorCount > 0)
                 return BadRequest(new ValidationProblemDetails(ModelState));
@@ -38,11 +93,28 @@ namespace AppForSEII2526.API.Controllers
                 .Where(m => nombreHerramienta.Contains(m.Nombre))
                 .ToList();
 
-            Compra compra = new Compra(compraCreacion.FechaCompra, compraCreacion.PrecioTotal, compraCreacion.MetodoPago, new List<CompraItem>(), usuario);
+            Compra compra = new Compra
+            {
+                FechaCompra = DateTime.Now,
+                MetodoPago = compraCreacion.MetodoPago,
+                ApplicationUser = usuario,
+                CompraItems = new List<CompraItem>()
+
+            };
             compra.PrecioTotal = 0;
 
             foreach (var item in compraCreacion.CompraItems)
             {
+                if (item.Cantidad <= 0)
+                {
+                    ModelState.AddModelError("Cantidad", $"Error! La cantida debe ser mayor que cero");
+                }
+                if (string.IsNullOrEmpty(item.Descripcion))
+                {
+                    ModelState.AddModelError("Descripción", "La descripción no puede estar vacia");
+                }
+                if (ModelState.ErrorCount > 0)
+                    return BadRequest(new ValidationProblemDetails(ModelState));
                 var herramienta = herramientas.FirstOrDefault(m => m.Nombre == item.Nombre);
                 if (herramienta == null) //Si la herramienta no existe
                 {
@@ -50,15 +122,12 @@ namespace AppForSEII2526.API.Controllers
                 }
                 else
                 {
-                    string descripcion = null;
-                    if (item.Descripcion.Length > 0) descripcion = item.Descripcion;
-
-
                     compra.CompraItems.Add(new CompraItem
                     {
-                        Precio = herramienta.Precio * item.Cantidad,
-                        Descripcion = descripcion,
+                        HerramientaId=item.HerramientaID,
                         Cantidad = item.Cantidad,
+                        Descripcion = item.Descripcion,
+                        Precio = herramienta.Precio * item.Cantidad,                       
                         Herramienta = herramienta,
                         Compra = compra
 
@@ -80,6 +149,7 @@ namespace AppForSEII2526.API.Controllers
                 await _context.SaveChangesAsync();
             }
             catch (Exception ex)
+
             {
                 _logger.LogError(ex.Message);
                 ModelState.AddModelError("Reparacion", $"Error! Se ha producido un error al guardar su compra. Por favor, intentelo de nuevo");
@@ -91,7 +161,7 @@ namespace AppForSEII2526.API.Controllers
                    ri.Herramienta.Id, ri.Herramienta.Nombre, ri.Herramienta.Material, ri.Precio, ri.Cantidad, ri.Descripcion)).ToList()
            );
 
-            return CreatedAtAction("GetCompra", new { id = compra.Id }, detalleCompra);
+            return CreatedAtAction(nameof(GetDetalleCompras), new { id = compra.Id }, detalleCompra);
         }
     }
 }

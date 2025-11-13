@@ -1,14 +1,14 @@
-﻿namespace AppForSEII2526.API.Models
+namespace AppForSEII2526.API.Models
 {
 
     public class Compra
 
     {
-        public Compra(List<CompraItem> CompraItems)
+        public Compra()
         {
             CompraItems = new List<CompraItem>();
         }
-        public Compra(DateTime fechaCompra, decimal precioTotal,tiposMetodosPago metodoPago, List<CompraItem> compraItems, ApplicationUser applicationUser )
+        public Compra(DateTime fechaCompra, decimal precioTotal, tiposMetodosPago metodoPago, List<CompraItem> compraItems, ApplicationUser applicationUser)
         {
             FechaCompra = fechaCompra;
             PrecioTotal = precioTotal;
