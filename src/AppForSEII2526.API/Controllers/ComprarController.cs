@@ -1,4 +1,4 @@
-﻿using AppForSEII2526.API.DTOs.CompraDTOs;
+using AppForSEII2526.API.DTOs.CompraDTOs;
 using AppForSEII2526.API.DTOs.HerramientaDTOs;
 using AppForSEII2526.API.DTOs.ReparacionDTOs;
 using AppForSEII2526.API.Models;
@@ -60,8 +60,7 @@ namespace AppForSEII2526.API.Controllers
         public async Task<ActionResult> CreateCompra(CompraCreacionDTO compraCreacion)
         {
             if (compraCreacion.CompraItems.Count == 0)
-                ModelState.AddModelError("CompraItems", "Error! Debe incluir al menos una herramienta para comprar");
-           
+                ModelState.AddModelError("CompraItems", "Error! Debe incluir al menos una herramienta para comprar");           
 
             if (string.IsNullOrEmpty(compraCreacion.NombreCliente))
             {

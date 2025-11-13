@@ -1,4 +1,4 @@
-﻿namespace AppForSEII2526.API.Models
+namespace AppForSEII2526.API.Models
 {
 
     public class Compra
@@ -40,6 +40,5 @@
         public List<CompraItem> CompraItems { get; set; }
 
         public ApplicationUser ApplicationUser { get; set; }
-
     }
 }

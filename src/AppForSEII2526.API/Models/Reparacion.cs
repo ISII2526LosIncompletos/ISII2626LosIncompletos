@@ -43,7 +43,7 @@ namespace AppForSEII2526.API.Models
 
         [Required]
         [DataType(System.ComponentModel.DataAnnotations.DataType.Currency)]
-        [Display(Name = "Precio total reparación")]
+        [Display(Name = "Precio total reparaciÃ³n")]
         [Precision(5, 2)]
         public decimal PrecioTotal { get; set; }
 
@@ -54,6 +54,5 @@ namespace AppForSEII2526.API.Models
         public List<ReparacionItem> ItemsReparacion { get; set; }
 
         public ApplicationUser ApplicationUser { get; set; }
-
     }
 }

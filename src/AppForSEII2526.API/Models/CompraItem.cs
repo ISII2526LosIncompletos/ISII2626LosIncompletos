@@ -1,4 +1,4 @@
-﻿namespace AppForSEII2526.API.Models
+namespace AppForSEII2526.API.Models
 {
 
     [PrimaryKey(nameof(HerramientaId), nameof(CompraId))]
@@ -40,7 +40,5 @@
 
         public Herramienta Herramienta { get; set; }
         public int HerramientaId { get; set; }
-
     }
-
 }

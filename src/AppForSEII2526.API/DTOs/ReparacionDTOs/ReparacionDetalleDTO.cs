@@ -1,4 +1,3 @@
-﻿
 using AppForSEII2526.API.DTOs.HerramientaDTOs;
 
 namespace AppForSEII2526.API.DTOs.ReparacionDTOs
@@ -54,5 +53,4 @@ namespace AppForSEII2526.API.DTOs.ReparacionDTOs
             return HashCode.Combine(NombreCliente, ApellidoCliente, FechaEntrega, FechaRecogida, NumTelefono, ItemsReparacion);
         }
     }
-
 }

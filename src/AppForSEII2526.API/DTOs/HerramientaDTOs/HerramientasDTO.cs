@@ -1,4 +1,3 @@
-﻿
 namespace AppForSEII2526.API.DTOs.HerramientaDTOs
 {
     public class HerramientasDTO
@@ -52,5 +51,4 @@ namespace AppForSEII2526.API.DTOs.HerramientaDTOs
             return HashCode.Combine(HerramientaID, Nombre, Material, Fabricante, Precio, TiempoReparacion, Descripcion, Cantidad);
         }
     }
-
 }
