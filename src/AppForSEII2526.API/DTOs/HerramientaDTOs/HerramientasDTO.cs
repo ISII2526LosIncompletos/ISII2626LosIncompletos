@@ -1,25 +1,37 @@
-﻿namespace AppForSEII2526.API.DTOs.HerramientaDTOs
+﻿
+namespace AppForSEII2526.API.DTOs.HerramientaDTOs
 {
     public class HerramientasDTO
     {
-        public HerramientasDTO(int herramientaID, string nombre, string material, string fabricante, float precioReparacion, DateTime tiempoReparacion, string descripcion="")
+        public HerramientasDTO(int id, string nombre, string material, Fabricante fabricante, decimal precio, int tiempoReparacion)
         {
-            HerramientaID = herramientaID;
+            HerramientaID = id;
             Nombre = nombre;
             Material = material;
             Fabricante = fabricante;
-            PrecioReparacion = precioReparacion;
+            Precio = precio;
             TiempoReparacion = tiempoReparacion;
-            Descripcion = descripcion;
+        }
+
+        //Constructor vacio
+        public HerramientasDTO()
+        {
         }
 
         public int HerramientaID { get; set; }
+
+        [StringLength(25, ErrorMessage = "El nombre no puede tener más de 25 caracteres.")]
         public string Nombre { get; set; }
         public string Material { get; set; }
-        public string Fabricante { get; set; }
-        public float PrecioReparacion { get; set; }
-        public DateTime TiempoReparacion { get; set; }
+        public Fabricante Fabricante { get; set; }
+
+        [DataType(System.ComponentModel.DataAnnotations.DataType.Currency)]
+        [Range(0.05, float.MaxValue, ErrorMessage = "El precio minimo es 0.05")]
+        [Precision(10, 2)]
+        public decimal Precio { get; set; }
+        public int TiempoReparacion { get; set; }
         public string? Descripcion { get; set; }
+        public int Cantidad { get; set; }
 
         public override bool Equals(object? obj)
         {
@@ -28,14 +40,17 @@
                    Nombre == dTO.Nombre &&
                    Material == dTO.Material &&
                    Fabricante == dTO.Fabricante &&
-                   PrecioReparacion == dTO.PrecioReparacion &&
+                   Precio == dTO.Precio &&
                    TiempoReparacion == dTO.TiempoReparacion &&
+                   Cantidad == dTO.Cantidad &&
                    Descripcion == dTO.Descripcion;
+
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(HerramientaID, Nombre, Material, Fabricante, PrecioReparacion, TiempoReparacion, Descripcion);
+            return HashCode.Combine(HerramientaID, Nombre, Material, Fabricante, Precio, TiempoReparacion, Descripcion, Cantidad);
         }
     }
+
 }
