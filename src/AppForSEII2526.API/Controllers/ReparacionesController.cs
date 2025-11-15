@@ -1,6 +1,8 @@
 using AppForSEII2526.API.DTOs.HerramientaDTOs;
 using AppForSEII2526.API.DTOs.ReparacionDTOs;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AppForSEII2526.API.Controllers
 {
@@ -9,9 +11,9 @@ namespace AppForSEII2526.API.Controllers
     public class ReparacionesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly ILogger<HerramientasController> _logger;
+        private readonly ILogger<ReparacionesController> _logger;
 
-        public ReparacionesController(ApplicationDbContext context, ILogger<HerramientasController> logger)
+        public ReparacionesController(ApplicationDbContext context, ILogger<ReparacionesController> logger)
         {
             _context = context;
             _logger = logger;
@@ -29,17 +31,29 @@ namespace AppForSEII2526.API.Controllers
                 return NotFound();
             }
 
-            var reparacion = await _context.Reparaciones
-             .Where(r => r.Id == id)
-             .Include(r => r.ItemsReparacion)
-                .ThenInclude(ri => ri.Herramienta)
-             .Select(r => new ReparacionDetalleDTO(r.ApplicationUser.Nombre, r.ApplicationUser.Apellidos,
-                        r.FechaEntrega, r.FechaRecogida, r.ApplicationUser.NumTelefono, r.ItemsReparacion
-                    .Select(ri => new ReparacionItemDTO(ri.Herramienta.Id,
-                        ri.Herramienta.Nombre, ri.Precio, (r.FechaRecogida - r.FechaEntrega).Days,
-                        ri.Cantidad, ri.Descripcion)
-                    ).ToList<ReparacionItemDTO>()))
-             .FirstOrDefaultAsync();
+            //fuerza evaluación en memoria antes de la proyección a DTOs (evita error de SQL APPLY en SQLite)
+            var reparacion = _context.Reparaciones //se ha quitado el await
+                .Where(r => r.Id == id)
+                .Include(r => r.ItemsReparacion)
+                    .ThenInclude(ri => ri.Herramienta)
+                .Include(r => r.ApplicationUser) //cargamos el usuario, evitamos null
+                .AsEnumerable() //forzar LINQ to Objects aquí
+                .Select(r => new ReparacionDetalleDTO(
+                    r.ApplicationUser.Nombre,
+                    r.ApplicationUser.Apellidos,
+                    r.FechaEntrega,  
+                    r.FechaRecogida, 
+                    r.ApplicationUser.NumTelefono, 
+                    r.ItemsReparacion
+                        .Select(ri => new ReparacionItemDTO(
+                            ri.Herramienta.Id, 
+                            ri.Herramienta.Nombre,
+                            ri.Precio, 
+                            (r.FechaRecogida - r.FechaEntrega).Days, 
+                            ri.Cantidad, 
+                            ri.Descripcion
+                        )).ToList<ReparacionItemDTO>()))
+                .FirstOrDefault(); //la consulta se ejecuta en memoria, ya no es async
 
             if (reparacion == null)
             {
@@ -83,7 +97,13 @@ namespace AppForSEII2526.API.Controllers
                 .Where(h => nombreHerramientas.Contains(h.Nombre))
                 .ToList();
 
-            Reparacion reparacion = new Reparacion(creacionReparacion.FechaEntrega, creacionReparacion.MetodoPago, new List<ReparacionItem>(), usuario);
+            Reparacion reparacion = new Reparacion //Para crear la reparación con los datos que tenemos por ahora
+            {
+                FechaEntrega = creacionReparacion.FechaEntrega,
+                MetodoPago = creacionReparacion.MetodoPago,
+                ItemsReparacion = new List<ReparacionItem>(),
+                ApplicationUser = usuario
+            };
 
             reparacion.PrecioTotal = 0m;
             int numDias = 0;

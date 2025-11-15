@@ -29,8 +29,8 @@
                 using var viewCommand = _context.Database.GetDbConnection().CreateCommand();
                 viewCommand.CommandText = @"
                 CREATE VIEW AllResources AS
-                SELECT Name
-                FROM Movies;";
+                SELECT Nombre
+                FROM Herramientas;";
                 viewCommand.ExecuteNonQuery();
             }
         }

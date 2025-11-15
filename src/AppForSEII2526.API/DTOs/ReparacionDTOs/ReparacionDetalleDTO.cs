@@ -4,15 +4,6 @@ namespace AppForSEII2526.API.DTOs.ReparacionDTOs
 {
     public class ReparacionDetalleDTO : ReparacionCreacionDTO
     {
-        public ReparacionDetalleDTO(string nombreCliente,
-            string apellidoCliente, DateTime fechaEntrega,
-            IList<ReparacionItemDTO> itemsReparacion)
-        {
-            NombreCliente = nombreCliente;
-            ApellidoCliente = apellidoCliente;
-            FechaEntrega = fechaEntrega;
-            ItemsReparacion = itemsReparacion;
-        }
 
         public ReparacionDetalleDTO(string nombreCliente, string apellidoCliente, DateTime fechaEntrega,
             DateTime fechaRecogida, string? numTelefono, IList<ReparacionItemDTO> itemsReparacion)
