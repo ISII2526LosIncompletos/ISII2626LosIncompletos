@@ -31,7 +31,7 @@ namespace AppForSEII2526.API.Controllers
                   && (h.TiempoReparacion == tiempoReparacion || tiempoReparacion == null))
               .OrderBy(h => h.Nombre)
               .Select(h => new HerramientasDTO(h.Id, h.Nombre, h.Material,
-                    h.Fabricante, h.Precio, h.TiempoReparacion))
+                    h.Fabricante.Nombre, h.Precio, h.TiempoReparacion))
               .ToListAsync();
             return Ok(selectHerramientas);
         }
@@ -48,7 +48,7 @@ namespace AppForSEII2526.API.Controllers
                 .Where(r => ((r.Material.Contains(material) || material == null)
                     && (r.Precio.Equals(precio)) || precio == null))
                 .OrderBy(r => r.Nombre)
-                .Select(r => new HerramientasDTO(r.Id, r.Nombre, r.Material, r.Fabricante, r.Precio, r.TiempoReparacion))
+                .Select(r => new HerramientasDTO(r.Id, r.Nombre, r.Material, r.Fabricante.Nombre, r.Precio, r.TiempoReparacion))
                 .ToListAsync();
             return Ok(selectHerramientas);
         }
@@ -62,7 +62,7 @@ namespace AppForSEII2526.API.Controllers
                 .Include(herramienta => herramienta.Fabricante)
                 .Where(h => (h.Fabricante.Nombre.Contains(fabricanteNombre) || fabricanteNombre == null)
                          && (h.Precio == precio || precio == null))
-                .Select(h => new HerramientasDTO(h.Id, h.Nombre, h.Material, h.Fabricante, h.Precio, h.TiempoReparacion))
+                .Select(h => new HerramientasDTO(h.Id, h.Nombre, h.Material, h.Fabricante.Nombre, h.Precio, h.TiempoReparacion))
                 .ToListAsync();
             return Ok(herramientas);
         }
