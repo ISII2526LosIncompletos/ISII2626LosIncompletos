@@ -4,6 +4,7 @@ namespace AppForSEII2526.API.Models {
     {
         public Fabricante()
         {
+            
         }
 
         public Fabricante(string nombre)

@@ -5,10 +5,11 @@ namespace AppForSEII2526.API.Models
 
         public Herramienta()
         {
+        
         }
 
-        public Herramienta(string material, decimal precio, string nombre, int tiempoReparacion, Fabricante fabricante, int fabricanteId)
-        {
+        public Herramienta( string material, decimal precio, string nombre, int tiempoReparacion, Fabricante fabricante, int fabricanteId)
+        {         
             Material = material;
             Precio = precio;
             Nombre = nombre;
