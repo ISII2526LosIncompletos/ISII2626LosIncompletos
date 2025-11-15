@@ -5,26 +5,16 @@ namespace AppForSEII2526.API.Models
 
         public Herramienta()
         {
-            AlquilarItems = new List<AlquilarItem>();
-            CompraItems = new List<CompraItem>();
-            OfertaItems = new List<OfertaItem>();
-            ItemsReparacion = new List<ReparacionItem>();
+        
         }
 
-        public Herramienta(int id, string material, decimal precio, string nombre, int tiempoReparacion, Fabricante fabricante, int fabricanteId, 
-            IList<AlquilarItem> alquilarItems, IList<CompraItem> compraItems, IList<OfertaItem> ofertaItems, IList<ReparacionItem> itemsReparacion)
-        {
-            Id = id;
+        public Herramienta( string material, decimal precio, string nombre, int tiempoReparacion, Fabricante fabricante, int fabricanteId)
+        {         
             Material = material;
             Precio = precio;
             Nombre = nombre;
             TiempoReparacion = tiempoReparacion;
             Fabricante = fabricante;
-            FabricanteId = fabricanteId;
-            AlquilarItems = alquilarItems;
-            CompraItems = compraItems;
-            OfertaItems = ofertaItems;
-            ItemsReparacion = itemsReparacion;
         }
 
         [Key]

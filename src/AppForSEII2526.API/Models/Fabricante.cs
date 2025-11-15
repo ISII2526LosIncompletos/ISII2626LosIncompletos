@@ -4,15 +4,15 @@ namespace AppForSEII2526.API.Models {
     {
         public Fabricante()
         {
-            Herramienta = new List<Herramienta>();
+            
         }
 
-        public Fabricante(string nombre, List<Herramienta> herramienta)
+        public Fabricante(string nombre)
         {
             Nombre = nombre;
-            Herramienta = herramienta;
         }
 
+        [Key]
         public int Id { get; set; }
 
         [Required]
