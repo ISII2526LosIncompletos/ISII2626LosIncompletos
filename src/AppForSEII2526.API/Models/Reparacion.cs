@@ -9,15 +9,6 @@ namespace AppForSEII2526.API.Models
             ItemsReparacion = new List<ReparacionItem>();
         }
 
-        public Reparacion(DateTime fechaEntrega, tiposMetodosPago metodoPago,
-            List<ReparacionItem> itemsReparacion, ApplicationUser applicationUser)
-        {
-            FechaEntrega = fechaEntrega;
-            MetodoPago = metodoPago;
-            ItemsReparacion = itemsReparacion;
-            ApplicationUser = applicationUser;
-        }
-
         public Reparacion(DateTime fechaEntrega, DateTime fechaRecogida, decimal precioTotal,
             tiposMetodosPago metodoPago, List<ReparacionItem> itemsReparacion, ApplicationUser applicationUser)
         {
