@@ -60,26 +60,26 @@ namespace AppForSEII2526.API.Controllers
         public async Task<ActionResult> CreateCompra(CompraCreacionDTO compraCreacion)
         {
             if (compraCreacion.CompraItems.Count == 0)
-                ModelState.AddModelError("CompraItems", "Error! Debe incluir al menos una herramienta para comprar");           
+                ModelState.AddModelError("CompraItems", "La compra debe contener al menos un item.");           
 
             if (string.IsNullOrEmpty(compraCreacion.NombreCliente))
             {
-                ModelState.AddModelError("Nombre", "El nombre no puede estar vacío");
+                ModelState.AddModelError("Nombre", "El nombre no puede estar vacio");
             }
 
             if (string.IsNullOrEmpty(compraCreacion.ApellidoCliente))
             {
-                ModelState.AddModelError("Apellido", "El apellido no puede estar vacío");
+                ModelState.AddModelError("Apellido", "El apellido no puede estar vacio");
             }
 
             if (string.IsNullOrEmpty(compraCreacion.DireccionEnvio))
             {
-                ModelState.AddModelError("Dirección de envio", "La dirección de envio no puede estar vacío");
+                ModelState.AddModelError("Dirección de envio", "La direccion de envio no puede estar vacio");
             }
 
             var usuario = _context.ApplicationUsers.FirstOrDefault(au => au.Nombre == compraCreacion.NombreCliente);
             if (usuario == null)
-                ModelState.AddModelError("CompraApplicationUser", $"Error! El usuario no está registrado");
+                ModelState.AddModelError("CompraApplicationUser", "El usuario no existe.");
 
             if (ModelState.ErrorCount > 0)
                 return BadRequest(new ValidationProblemDetails(ModelState));
@@ -95,7 +95,7 @@ namespace AppForSEII2526.API.Controllers
 
             Compra compra = new Compra
             {
-                FechaCompra = DateTime.Now,
+                FechaCompra = compraCreacion.FechaCompra,
                 MetodoPago = compraCreacion.MetodoPago,
                 ApplicationUser = usuario,
                 CompraItems = new List<CompraItem>()
@@ -107,18 +107,18 @@ namespace AppForSEII2526.API.Controllers
             {
                 if (item.Cantidad <= 0)
                 {
-                    ModelState.AddModelError("Cantidad", $"Error! La cantida debe ser mayor que cero");
+                    ModelState.AddModelError("Cantidad", "La cantidad debe ser mayor que cero.");
                 }
                 if (string.IsNullOrEmpty(item.Descripcion))
                 {
-                    ModelState.AddModelError("Descripción", "La descripción no puede estar vacia");
+                    ModelState.AddModelError("Descripción", "La descripcion no puede estar vacia");
                 }
                 if (ModelState.ErrorCount > 0)
                     return BadRequest(new ValidationProblemDetails(ModelState));
                 var herramienta = herramientas.FirstOrDefault(m => m.Nombre == item.Nombre);
                 if (herramienta == null) //Si la herramienta no existe
                 {
-                    ModelState.AddModelError("CompraItems", $"Error! La herramienta {item.Nombre} no existe");
+                    ModelState.AddModelError("CompraItems", $"La herramienta '{item.Nombre}' no existe.");
                 }
                 else
                 {
@@ -135,7 +135,7 @@ namespace AppForSEII2526.API.Controllers
                 }
             }
 
-            compra.PrecioTotal = compra.CompraItems.Sum(ri => ri.Precio);
+            compra.PrecioTotal = compra.CompraItems.Sum(ri => ri.Herramienta.Precio);
 
             if (ModelState.ErrorCount > 0)
             {
@@ -158,7 +158,7 @@ namespace AppForSEII2526.API.Controllers
             }
             var detalleCompra = new CompraDetalleDTO(usuario.Nombre, usuario.Apellidos, usuario.DireccionEnvio, compra.PrecioTotal
                 , compra.FechaCompra, compra.CompraItems.Select(ri => new CompraItemDTO(
-                   ri.Herramienta.Id, ri.Herramienta.Nombre, ri.Herramienta.Material, ri.Precio, ri.Cantidad, ri.Descripcion)).ToList()
+                   ri.Herramienta.Id, ri.Herramienta.Nombre, ri.Herramienta.Material, ri.Herramienta.Precio, ri.Cantidad, ri.Descripcion)).ToList()
            );
 
             return CreatedAtAction(nameof(GetDetalleCompras), new { id = compra.Id }, detalleCompra);
