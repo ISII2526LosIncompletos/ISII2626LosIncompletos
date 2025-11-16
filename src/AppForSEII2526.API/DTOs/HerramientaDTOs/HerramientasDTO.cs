@@ -2,7 +2,7 @@ namespace AppForSEII2526.API.DTOs.HerramientaDTOs
 {
     public class HerramientasDTO
     {
-        public HerramientasDTO(int id, string nombre, string material, Fabricante fabricante, decimal precio, int tiempoReparacion)
+        public HerramientasDTO(int id, string nombre, string material, string fabricante, decimal precio, int tiempoReparacion)
         {
             HerramientaID = id;
             Nombre = nombre;
@@ -22,7 +22,7 @@ namespace AppForSEII2526.API.DTOs.HerramientaDTOs
         [StringLength(25, ErrorMessage = "El nombre no puede tener más de 25 caracteres.")]
         public string Nombre { get; set; }
         public string Material { get; set; }
-        public Fabricante Fabricante { get; set; }
+        public string Fabricante { get; set; }
 
         [DataType(System.ComponentModel.DataAnnotations.DataType.Currency)]
         [Range(0.05, float.MaxValue, ErrorMessage = "El precio minimo es 0.05")]

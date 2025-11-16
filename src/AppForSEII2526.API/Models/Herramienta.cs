@@ -5,26 +5,15 @@ namespace AppForSEII2526.API.Models
 
         public Herramienta()
         {
-            AlquilarItems = new List<AlquilarItem>();
-            CompraItems = new List<CompraItem>();
-            OfertaItems = new List<OfertaItem>();
-            ItemsReparacion = new List<ReparacionItem>();
         }
 
-        public Herramienta(int id, string material, decimal precio, string nombre, int tiempoReparacion, Fabricante fabricante, int fabricanteId, 
-            IList<AlquilarItem> alquilarItems, IList<CompraItem> compraItems, IList<OfertaItem> ofertaItems, IList<ReparacionItem> itemsReparacion)
+        public Herramienta(string material, decimal precio, string nombre, int tiempoReparacion, Fabricante fabricante, int fabricanteId)
         {
-            Id = id;
             Material = material;
             Precio = precio;
             Nombre = nombre;
             TiempoReparacion = tiempoReparacion;
             Fabricante = fabricante;
-            FabricanteId = fabricanteId;
-            AlquilarItems = alquilarItems;
-            CompraItems = compraItems;
-            OfertaItems = ofertaItems;
-            ItemsReparacion = itemsReparacion;
         }
 
         [Key]
@@ -48,7 +37,7 @@ namespace AppForSEII2526.API.Models
         public string Nombre { get; set; }
 
         [Display(Name = "Tiempo que tarda en repararse la herramienta")]
-        [Range(1, int.MaxValue, ErrorMessage = "El m�nimo n�mero de d�as es 1")]
+        [Range(1, int.MaxValue, ErrorMessage = "El m nimo n mero de d as es 1")]
         public int TiempoReparacion { get; set; }
 
         [Required]
