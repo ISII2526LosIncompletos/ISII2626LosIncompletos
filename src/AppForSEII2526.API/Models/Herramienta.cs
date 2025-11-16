@@ -5,11 +5,10 @@ namespace AppForSEII2526.API.Models
 
         public Herramienta()
         {
-        
         }
 
-        public Herramienta( string material, decimal precio, string nombre, int tiempoReparacion, Fabricante fabricante, int fabricanteId)
-        {         
+        public Herramienta(string material, decimal precio, string nombre, int tiempoReparacion, Fabricante fabricante, int fabricanteId)
+        {
             Material = material;
             Precio = precio;
             Nombre = nombre;
@@ -38,7 +37,7 @@ namespace AppForSEII2526.API.Models
         public string Nombre { get; set; }
 
         [Display(Name = "Tiempo que tarda en repararse la herramienta")]
-        [Range(1, int.MaxValue, ErrorMessage = "El m�nimo n�mero de d�as es 1")]
+        [Range(1, int.MaxValue, ErrorMessage = "El m nimo n mero de d as es 1")]
         public int TiempoReparacion { get; set; }
 
         [Required]
