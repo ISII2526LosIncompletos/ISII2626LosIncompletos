@@ -1,11 +1,10 @@
-
-
 namespace AppForSEII2526.API.Models;
 
 public class ApplicationUser : IdentityUser
 {
     //Constructor vacío
-    public ApplicationUser() {
+    public ApplicationUser()
+    {
     }
 
     public ApplicationUser(string nombre, string apellidos, string direccionEnvio, string correoElectronico, string numTelefono, RolUsuario rol, DateTime fechaRegistro)

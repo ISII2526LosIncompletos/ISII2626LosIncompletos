@@ -1,10 +1,10 @@
-namespace AppForSEII2526.API.Models {
+namespace AppForSEII2526.API.Models
+{
 
     public class Fabricante
     {
         public Fabricante()
         {
-            
         }
 
         public Fabricante(string nombre)

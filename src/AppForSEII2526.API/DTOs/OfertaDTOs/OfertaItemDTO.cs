@@ -8,7 +8,7 @@ namespace AppForSEII2526.API.DTOs.OfertaDTOs
         {
         }
 
-        public OfertaItemDTO(int herramientaId, decimal porcentaje, string herramientaNombre, string herramientaMaterial, 
+        public OfertaItemDTO(int herramientaId, decimal porcentaje, string herramientaNombre, string herramientaMaterial,
             string fabricanteNombre, decimal precioOriginal, decimal precioFinal)
         {
             HerramientaId = herramientaId;
@@ -33,17 +33,26 @@ namespace AppForSEII2526.API.DTOs.OfertaDTOs
         public decimal PrecioOriginal { get; set; }
         public decimal PrecioFinal { get; set; }
 
-        
+
         public override bool Equals(object? obj)
         {
-            return obj is OfertaItemDTO dTO &&
-                   HerramientaId == dTO.HerramientaId &&
-                   Porcentaje == dTO.Porcentaje;
+            var dTO = obj as OfertaItemDTO;
+            if (dTO == null) return false;
+
+            return HerramientaId == dTO.HerramientaId &&
+                   Porcentaje == dTO.Porcentaje &&
+                   HerramientaNombre == dTO.HerramientaNombre &&
+                   HerramientaMaterial == dTO.HerramientaMaterial &&
+                   FabricanteNombre == dTO.FabricanteNombre &&
+                   PrecioOriginal == dTO.PrecioOriginal &&
+                   PrecioFinal == dTO.PrecioFinal;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(HerramientaId, Porcentaje);
+            return HashCode.Combine(HerramientaId, Porcentaje, HerramientaNombre,
+                                   HerramientaMaterial, FabricanteNombre,
+                                   PrecioOriginal, PrecioFinal);
         }
     }
 }
