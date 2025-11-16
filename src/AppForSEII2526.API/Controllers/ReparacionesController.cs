@@ -74,7 +74,6 @@ namespace AppForSEII2526.API.Controllers
             if (creacionReparacion.FechaEntrega < DateTime.Today)
             {
                 ModelState.AddModelError("FechaEntrega", "Error! La fecha en la que se entrega la herramienta debe ser, como mínimo, hoy");
-                return ValidationProblem(ModelState);
             }
 
             if (creacionReparacion.ItemsReparacion.Count == 0)
@@ -113,7 +112,7 @@ namespace AppForSEII2526.API.Controllers
                 var herramienta = herramientas.FirstOrDefault(h => h.Nombre == item.Nombre);
                 if (herramienta == null)
                 {
-                    ModelState.AddModelError("Herramienta", $"La herramienta {item.Nombre} no existe.");
+                    ModelState.AddModelError("Herramienta", $"Error! La herramienta {item.Nombre} no existe");
                 }
                 else
                 {

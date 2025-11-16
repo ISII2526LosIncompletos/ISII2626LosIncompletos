@@ -8,7 +8,7 @@ using AppForSEII2526.API.DTOs;
 using AppForSEII2526.API.DTOs.HerramientaDTOs;
 using Microsoft.EntityFrameworkCore;
 
-namespace AppForSEII2526.UT.HerramientasController_test
+namespace AppForSEII2526.UT.ReparacionesController_test
 {
     public class GetHerramientasParaReparar_test : AppForSEII25264SqliteUT
     {
