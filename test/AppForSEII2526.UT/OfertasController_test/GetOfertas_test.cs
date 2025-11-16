@@ -2,7 +2,7 @@
 using AppForSEII2526.API.Models;
 using AppForSEII2526.API.DTOs.HerramientaDTOs;
 
-namespace AppForSEII2526.UT.HerramientasController_test
+namespace AppForSEII2526.UT.OfertasController_test
 {
     public class GetOfertas_test : AppForSEII25264SqliteUT
     {
