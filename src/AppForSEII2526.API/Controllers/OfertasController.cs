@@ -92,7 +92,12 @@ namespace AppForSEII2526.API.Controllers
             {
                 return BadRequest("Método de pago inválido.");
             }
+
             TiposDirigidaOferta? dirigidaA = null;
+            if (!string.IsNullOrWhiteSpace(ofertaDTO.DirigidaA) && Enum.TryParse<TiposDirigidaOferta>(ofertaDTO.DirigidaA, ignoreCase: true, out var dirigidaAParsed))
+            {
+                dirigidaA = dirigidaAParsed;
+            }
 
             var newOferta = new Oferta
             {
