@@ -135,6 +135,18 @@ namespace AppForSEII2526.UT.OfertasController_test
                 },
                 "No se encontró la herramienta con ID 99."
             };
+
+            yield return new object[]
+            {
+                new OfertaForCreationDTO
+                {
+                    FechaInicio = DateTime.Today.AddDays(5),
+                    FechaFinal = DateTime.Today.AddDays(10),
+                    MetodoPago = "TarjetaCredito",
+                    Items = new List<OfertaItemDTO> { new OfertaItemDTO { HerramientaId = 1, Porcentaje = 10 } } 
+                },
+                "!Error¡ La oferta debe durar al menos una semana"
+            };
         }
     }
 }
