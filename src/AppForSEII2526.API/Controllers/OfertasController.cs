@@ -1,4 +1,5 @@
 ﻿using AppForSEII2526.API.DTOs.OfertaDTOs;
+using System.Data;
 
 namespace AppForSEII2526.API.Controllers
 {
@@ -85,6 +86,12 @@ namespace AppForSEII2526.API.Controllers
             if (ofertaDTO.FechaFinal <= ofertaDTO.FechaInicio)
             {
                 return BadRequest("La fecha final debe ser posterior a la fecha de inicio.");
+            }
+
+            // Nuevo Filtro De Examen Escrito
+            if (ofertaDTO.FechaFinal <= ofertaDTO.FechaInicio.AddDays(7))
+            {
+                return BadRequest("!Error¡ La oferta debe durar al menos una semana");
             }
 
             tiposMetodosPago metodoPagoParsed;
