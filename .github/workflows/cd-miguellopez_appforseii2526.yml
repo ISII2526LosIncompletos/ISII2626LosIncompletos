@@ -7,6 +7,9 @@ on:
   push:
     branches:
       - CD-MiguelLopez
+#      - development
+#    paths:
+#      - 'src/AppForSEII2526.API**'
   workflow_dispatch:
 
 jobs:
@@ -22,12 +25,20 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
+      - name: Restore dependencies
+        run: |
+           dotnet restore ${{ env.API }}
+           dotnet restore ${{ env.UT }}
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        run: |
+              dotnet build ${{ env.API }} --configuration Release
+              dotnet build ${{ env.UT }} --configuration Release
+      - name: Run unit tests with report
+        run: dotnet test ${{ env.UT }} --configuration Release --no-build --logger "trx;LogFileName=TestResults-trx"
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
+        run: dotnet publish ${{ env.API }} -c Release -o "${{env.DOTNET_ROOT}}/myapp"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -59,7 +70,8 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'appforseii2526'
+          app-name: 'appforseii2526-web'
           slot-name: 'Production'
           package: .
+
           
