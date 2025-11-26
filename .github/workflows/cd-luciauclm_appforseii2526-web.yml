@@ -6,10 +6,10 @@ name: Build and deploy ASP.Net Core app to Azure Web App - appforseii2526-web
 on:
   push:
     branches:
-      - CD-LuciaUCLM
-#      - development
-#    paths:
-#      - 'src/AppForSEII2526.API**'
+#      - CD-LuciaUCLM
+      - development
+    paths:
+      - 'src/AppForSEII2526.API**'
   workflow_dispatch:
 
 jobs:
@@ -80,3 +80,4 @@ jobs:
           package: .
 
           
+
