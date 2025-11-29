@@ -17,6 +17,9 @@ jobs:
     runs-on: windows-latest
     permissions:
       contents: read #This is required for actions/checkout
+    env:
+         API: ./src/AppForSEII2526.API/AppForSEII2526.API.csproj
+         UT: ./test/AppForSEII2526.UT/AppForSEII2526.UT.csproj
 
     steps:
       - uses: actions/checkout@v4
@@ -25,6 +28,7 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
+          
       - name: Restore dependencies
         run: |
            dotnet restore ${{ env.API }}
@@ -34,6 +38,7 @@ jobs:
         run: |
               dotnet build ${{ env.API }} --configuration Release
               dotnet build ${{ env.UT }} --configuration Release
+              
       - name: Run unit tests with report
         run: dotnet test ${{ env.UT }} --configuration Release --no-build --logger "trx;LogFileName=TestResults-trx"
 
@@ -70,8 +75,9 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'appforseii2526-web'
+          app-name: 'appforseii2526'
           slot-name: 'Production'
           package: .
 
           
+
