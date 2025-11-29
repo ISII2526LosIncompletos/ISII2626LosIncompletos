@@ -99,6 +99,9 @@ using (var scope = app.Services.CreateScope()) {
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()) {
+    var log = app.Services.GetRequiredService<ILogger<Program>>();
+    log.LogInformation("Habilitando Swagger: Environment={env}, EnableSwagger={enable}", app.Environment.EnvironmentName);
+
     app.UseSwagger();
     app.UseSwaggerUI(c => {
         //this facilitates to generate unique ids for the operations
