@@ -99,16 +99,17 @@ using (var scope = app.Services.CreateScope()) {
 
 // Configure the HTTP request pipeline.
 // ... después de construir 'app' y antes de app.UseSwagger():
-var enableSwagger = builder.Configuration.GetValue<bool>("EnableSwagger", false);
-if (app.Environment.IsDevelopment()) {
+//var enableSwagger = builder.Configuration.GetValue<bool>("EnableSwagger", false);
+//if (app.Environment.IsDevelopment() || enableSwagger)
+//{
     var log = app.Services.GetRequiredService<ILogger<Program>>();
-    log.LogInformation("Habilitando Swagger: Environment={env}, EnableSwagger={enable}", app.Environment.EnvironmentName, enableSwagger);
+    log.LogInformation("Habilitando Swagger: Environment={env}, EnableSwagger={enable}", app.Environment.EnvironmentName);
     app.UseSwagger();
     app.UseSwaggerUI(c => {
         //this facilitates to generate unique ids for the operations
         c.DisplayOperationId();
     });
-}
+//}
 
 app.UseHttpsRedirection();
 
