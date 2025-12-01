@@ -62,4 +62,6 @@ jobs:
           app-name: 'appforseii2526'
           slot-name: 'Production'
           package: .
-          
+             
+
+        
