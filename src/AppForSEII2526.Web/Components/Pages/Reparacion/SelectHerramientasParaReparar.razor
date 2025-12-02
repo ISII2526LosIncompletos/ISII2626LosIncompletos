@@ -1,9 +1,11 @@
 ﻿@page "/reparacion/selectherramentasparareparar"
 
 @using AppForSEII2526.API.DTOs.HerramientaDTOs
+@using AppForSEII2526.API.DTOs.ReparacionDTOs
 @using AppForSEII2526.Web.API
 @inject AppForSEII2526APIClient apiclient
 @inject ILogger<SelectHerramientasParaReparar> logger
+@inject RepararStateContainer reparacionState
 
 <h3>Select Herramientas Para Repara</h3>
 
@@ -53,6 +55,19 @@
     private string errors = "";
     private string herrNombre { get; set; }
     private string herrTiempoRep { get; set; }
+    private ReparacionCreacionDTO reparacion => reparacionState.Reparacion;
+    private bool ocultarCarritoReparar = true;
+
+    private void AddHerramienta(HerramientasDTO herramienta)
+    {
+        reparacionState.AddHerramientaParaReparar(herramienta);
+    }
+
+    private void RemoveReparacionItem(ReparacionItemDTO item)
+    {
+        reparacionState.RemoveReparacionItem(item);
+        if (reparacion.ItemsReparacion.Count == 0) ocultarCarritoReparar = true;
+    }
 
     public async void SearchHerramienta()
     {
