@@ -6,6 +6,7 @@
 @inject AppForSEII2526APIClient apiclient
 @inject ILogger<SelectHerramientasParaReparar> logger
 @inject RepararStateContainer reparacionState
+@inject NavigationManager navigation
 
 <h3>Select Herramientas Para Repara</h3>
 
@@ -61,7 +62,7 @@
                                             <td>@herr.Precio</td>
                                             <td>@herr.TiempoReparacion</td>
                                             <td>
-                                                <button class="btn btn-outline-secondary" id="herramientaReparar_@herr.Nombre" @onclick="@(() => AddHerramienta(herr))">Add</button>
+                                                <button class="btn btn-outline-secondary" id="herramientaReparar_@herr.Nombre" @onclick="@(() => AddHerramienta(herr))">Añadir</button>
                                             </td>
                                         </tr>
                                     }
@@ -71,21 +72,33 @@
                     }
                 </div>
             </div>
-            <div class="col-2">
-                <p>Aquí se mostrará el carrito de reparaciones</p>
+            <div class="col-2" hidden="@ocultarCarritoReparar">
+                <div class="row">
+                    <h3>Carrito de la compra</h3>
+                </div>
+                @foreach (ReparacionItemDTO item in reparacion.ItemsReparacion)
+                {
+                    <div class="row">
+                        <button type="button" class="btn btn-light" id="removeHerramienta_@item.Nombre" @onclick="@(() => RemoveReparacionItem(item))">x @item.Nombre - @item.PrecioReparacion€</button>
+                    </div>
+                }
+                <div class="row">
+                    <button type="button" class="btn btn-primary" id="compraHerramientaButton" @onclick=@RepararHerramienta>Reparar herramienta</button>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 @code {
+    private bool ocultarCarritoReparar { get { return reparacion.ItemsReparacion.Count == 0; } }
     private ICollection<HerramientasDTO> herramientas;
     private bool hideErrors { get { return errors.Length == 0; } }
     private string errors = "";
     private string herrNombre { get; set; }
     private string herrTiempoRep { get; set; }
     private ReparacionCreacionDTO reparacion => reparacionState.Reparacion;
-    private bool ocultarCarritoReparar = true;
+    private bool carritoRepararOculto = true;
 
     private void AddHerramienta(HerramientasDTO herramienta)
     {
@@ -95,7 +108,7 @@
     private void RemoveReparacionItem(ReparacionItemDTO item)
     {
         reparacionState.RemoveReparacionItem(item);
-        if (reparacion.ItemsReparacion.Count == 0) ocultarCarritoReparar = true;
+        if (reparacion.ItemsReparacion.Count == 0) carritoRepararOculto = true;
     }
 
     public async void SearchHerramienta()
@@ -112,4 +125,10 @@
         }
         StateHasChanged();
     }
+
+    private void RepararHerramienta()
+    {
+        navigation.NavigateTo("/reparacion/reparacioncrear");
+    }
+
 }
