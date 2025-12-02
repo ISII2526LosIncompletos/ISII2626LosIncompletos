@@ -1,17 +1,33 @@
 ﻿@page "/reparacion/selectherramentasparareparar"
+
+@using AppForSEII2526.API.DTOs.HerramientaDTOs
+@using AppForSEII2526.Web.API
+@inject AppForSEII2526APIClient apiclient
+@inject ILogger<SelectHerramientasParaReparar> logger
+
 <h3>Select Herramientas Para Repara</h3>
 
 <div class="container-fluid">
-    <div class="row">
+    <div class="row" hidden="@hideErrors">
         <p>Aquí se mostrarán los errores</p>
     </div>
     <div class="row">
         <div class="col-8">
             <div class="row">
                 <p>Aquí se mostrarán los filtros</p>
+                <div class="col">
+                    <button type="button" class="btn btn-primary" @onclick=@SearchHerramienta id="searchHerramienta">Buscar herramientas</button>
+                </div>
             </div>
             <div class="row">
-                <p>Aquí se mostrará la lista de herramientas</p>
+                @if (herramientas == null)
+                {
+                    <p>Cargando herramientas...</p>
+                }
+                else
+                {
+                    <p>Número de herramientas @herramientas.Count</p>
+                }
             </div>
         </div>
         <div class="col-2">
@@ -21,5 +37,23 @@
 </div>
 
 @code {
+    private ICollection<HerramientasDTO> herramientas;
+    private bool hideErrors { get { return errors.Length == 0; } }
+    private string errors = "";
+    private string herrNombre { get; set; }
+    private string herrTiempoRep { get; set; }
 
+    public async void SearchHerramienta()
+    {
+        try
+        {
+            herramientas = await apiclient.GetHerramientasParaRepararAsync(herrNombre, herrTiempoRep, null, null);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError($"{DateTime.Now} Error: {ex}");
+            errors = "Error al conectar con el sistema";
+        }
+        StateHasChanged();
+    }
 }
