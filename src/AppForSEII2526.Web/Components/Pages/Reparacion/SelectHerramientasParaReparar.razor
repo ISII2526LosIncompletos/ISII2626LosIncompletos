@@ -10,8 +10,8 @@
 <h3>Select Herramientas Para Repara</h3>
 
 <div class="container-fluid">
-    <div class="row" hidden="@hideErrors">
-        <p>Aquí se mostrarán los errores</p>
+    <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
+        <p id="ErrorsShown">Errores: @errors</p>
     </div>
     <div class="row">
         <div class="col-8">
@@ -102,7 +102,8 @@
     {
         try
         {
-            herramientas = await apiclient.GetHerramientasParaRepararAsync(herrNombre, herrTiempoRep, null, null);
+            herramientas = await apiclient.GetHerramientasParaRepararAsync(herrNombre, herrTiempoRep);
+            errors = "";
         }
         catch (Exception ex)
         {
