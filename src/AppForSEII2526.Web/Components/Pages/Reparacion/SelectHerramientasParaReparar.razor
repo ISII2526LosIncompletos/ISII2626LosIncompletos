@@ -38,7 +38,36 @@
                     }
                     else
                     {
-                        <p>Número de herramientas @herramientas.Count</p>
+                        <div class="mh-100 table-responsive">
+                            <table class="table table-condensed table-hover" id="TablaHerramientas">
+                                <thead>
+                                    <tr>
+                                        <th>ID herramienta</th>
+                                        <th>Nombre</th>
+                                        <th>Material</th>
+                                        <th>Fabricante</th>
+                                        <th>Precio</th>
+                                        <th>Tiempo reparación</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var herr in herramientas)
+                                    {
+                                        <tr id="HerramientaData_@herr.Nombre">
+                                            <td>@herr.HerramientaID</td>
+                                            <td>@herr.Nombre</td>
+                                            <td>@herr.Material</td>
+                                            <td>@herr.Fabricante</td>
+                                            <td>@herr.Precio</td>
+                                            <td>@herr.TiempoReparacion</td>
+                                            <td>
+                                                <button class="btn btn-outline-secondary" id="herramientaReparar_@herr.Nombre" @onclick="@(() => AddHerramienta(herr))">Add</button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
                     }
                 </div>
             </div>
