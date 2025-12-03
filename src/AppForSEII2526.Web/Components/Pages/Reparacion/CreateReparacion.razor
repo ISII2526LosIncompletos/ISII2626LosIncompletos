@@ -6,6 +6,8 @@
 @inject ILogger<CreateReparacion> logger
 @inject RepararStateContainer repararState
 
+<h3>Create Reparacion</h3>
+
 @* La reparación es el objeto que se editará gracias al formulario *@
 <EditForm Model="reparacion" OnValidSubmit="OpenDialog">
     <div class="row">
@@ -32,6 +34,18 @@
             </div>
         </div>
     </div>
+    <div class="row g-2">
+        <div class="col-md">
+            <div class="form-floating">
+                @*Menú desplegable para seleccionar el método de pago*@
+                <InputSelect class="form-select" @bind-Value="@reparacion.MetodoPago" id="MetodoPago">
+                    <option value="@TiposMetodosPago.TarjetaCredito" default> Tarjeta de crédito</option>
+                    <option value="@TiposMetodosPago.PayPal"> PayPal</option>
+                    <option value="@TiposMetodosPago.Efectivo"> Efectivo</option>
+                </InputSelect>
+                <label for="PaymentMethod">Payment Method</label>
+            </div>
+        </div>
         <div class="col-md">
             <div class="form-floating">
                 @* Este botón se utilizará para preguntar al usuario si desea proceder a la reparación de las herramientas *@
@@ -40,6 +54,7 @@
                 </button>
             </div>
         </div>
+    </div>
     <div class="mh-100 table-responsive">
         <table class="table table-condensed table-hover" id="TableOfItemsReparacion">
             <thead>
@@ -75,11 +90,8 @@
     </Dialog>
 }
 
-<h3>Create Reparacion</h3>
-
 @code {
     private bool DialogIsOpen;
-    private object? errors;
     private ReparacionCreacionDTO reparacion => repararState.Reparacion;
 
     private void OpenDialog()
