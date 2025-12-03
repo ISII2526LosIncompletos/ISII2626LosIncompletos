@@ -18,6 +18,29 @@
             </div>
         </div>
     </div>
+    <div class="mh-100 table-responsive">
+        <table class="table table-condensed table-hover" id="TableOfItemsReparacion">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Tiempo de reparación</th>
+                    <th>Precio de reparación</th>
+                    <th>Descripción</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in reparacion.ItemsReparacion)
+                {
+                    <tr id="MovieData_@item.Nombre">
+                        <td>@item.Nombre</td>
+                        <td>@item.TiempoReparacion</td>
+                        <td>@item.PrecioReparacion</td>
+                        <td><InputText @bind-Value="item.Descripcion" class="form-control" id="@($"description_{item.HerramientaID}")" /></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </EditForm>
 
 @*Un cuadro de diálogo emergente modal para verificar si el usuario desea continuar con la reparación*@
