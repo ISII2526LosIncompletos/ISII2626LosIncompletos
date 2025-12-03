@@ -1,6 +1,4 @@
-﻿using AppForSEII2526.API.DTOs.HerramientaDTOs;
-using AppForSEII2526.API.DTOs.ReparacionDTOs;
-using AppForSEII2526.Web.API;
+﻿using AppForSEII2526.Web.API;
 
 namespace AppForSEII2526.Web
 {
@@ -34,8 +32,15 @@ namespace AppForSEII2526.Web
             //Antes de añadir una herramienta, verificamos si ya está añadida.
             if (!Reparacion.ItemsReparacion.Any(ri => ri.HerramientaID == herramienta.HerramientaID))
                 //La añadimos si no está ya en la lista
-                Reparacion.ItemsReparacion.Add(new ReparacionItemDTO(herramienta.HerramientaID, herramienta.Nombre,
-                    herramienta.Precio, herramienta.TiempoReparacion, herramienta.Cantidad, herramienta.Descripcion)
+                Reparacion.ItemsReparacion.Add(new ReparacionItemDTO()
+                    {
+                        HerramientaID = herramienta.HerramientaID,
+                        Nombre = herramienta.Nombre,
+                        PrecioReparacion = herramienta.Precio,
+                        TiempoReparacion = herramienta.TiempoReparacion, 
+                        Cantidad = herramienta.Cantidad,
+                        Descripcion = herramienta.Descripcion
+                    }
                 );
         }
 
