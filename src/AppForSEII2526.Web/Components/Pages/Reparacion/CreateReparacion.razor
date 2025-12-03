@@ -5,8 +5,28 @@
 @inject ILogger<CreateReparacion> logger
 @inject RepararStateContainer repararState
 
+@* La reparación es el objeto que se editará gracias al formulario *@
+<EditForm Model="reparacion" OnValidSubmit="OpenDialog">
+    <div class="row">
+        <div class="col-md">
+            <div class="form-floating">
+                @* Este botón se utilizará para preguntar al usuario si desea proceder a la reparación de las herramientas *@
+                <button class="btn btn-primary" type="submit" id="Submit">
+                    Reparar herramientas
+                </button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
 <h3>Create Reparacion</h3>
 
 @code {
     private ReparacionCreacionDTO reparacion => repararState.Reparacion;
+
+    private void OpenDialog()
+    {
+
+    }
+
 }
