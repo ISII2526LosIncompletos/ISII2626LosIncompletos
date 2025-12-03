@@ -1,7 +1,12 @@
 ﻿@page "/reparacion/createreparacion"
 
-<h3>CreateReparacion</h3>
+@using AppForSEII2526.Web.API
+@inject AppForSEII2526APIClient apiclient
+@inject ILogger<CreateReparacion> logger
+@inject RepararStateContainer repararState
+
+<h3>Create Reparacion</h3>
 
 @code {
-
+    private ReparacionCreacionDTO reparacion => repararState.Reparacion;
 }
