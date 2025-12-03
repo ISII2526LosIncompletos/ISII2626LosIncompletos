@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="OpenAPIs\swagger.json" ClassName="AppForSEII2526APIClient" />
+    <None Include="OpenAPIs\swagger1.json" ClassName="AppForSEII2526APIClient" />
   </ItemGroup>
 
   <ItemGroup>
