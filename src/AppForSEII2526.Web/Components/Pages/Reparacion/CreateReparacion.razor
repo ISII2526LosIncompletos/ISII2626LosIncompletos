@@ -144,7 +144,7 @@
                 {
                     var reparado = await apiclient.CrearReparacionAsync(reparacion);
                     repararState.ReparacionProcessed();
-                    navigation.NavigateTo($"/reparacion/reparaciondetalle/?ReparacionID={reparado.Id}");
+                    navigation.NavigateTo($"/reparacion/reparaciondetalle/?ReparacionID={reparado.ReparacionId}");
                 }
                 catch (ApiException<ValidationProblemDetails> apiexceptionvalidation)
                 {
