@@ -8,7 +8,7 @@ namespace AppForSEII2526.API.DTOs.ReparacionDTOs
         public ReparacionDetalleDTO(int id, string nombreCliente, string apellidoCliente, DateTime fechaEntrega,
             DateTime fechaRecogida, string? numTelefono, IList<ReparacionItemDTO> itemsReparacion)
         {
-            Id = id;
+            ReparacionId = id;
             NombreCliente = nombreCliente;
             ApellidoCliente = apellidoCliente;
             FechaEntrega = fechaEntrega;
@@ -16,7 +16,7 @@ namespace AppForSEII2526.API.DTOs.ReparacionDTOs
             NumTelefono = numTelefono;
             ItemsReparacion = itemsReparacion;
         }
-        public int Id { get; set; }
+        public int ReparacionId { get; set; }
 
         public string NombreCliente { get; set; }
 

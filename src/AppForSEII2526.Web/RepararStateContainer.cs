@@ -33,14 +33,14 @@ namespace AppForSEII2526.Web
             if (!Reparacion.ItemsReparacion.Any(ri => ri.HerramientaID == herramienta.HerramientaID))
                 //La añadimos si no está ya en la lista
                 Reparacion.ItemsReparacion.Add(new ReparacionItemDTO()
-                    {
-                        HerramientaID = herramienta.HerramientaID,
-                        Nombre = herramienta.Nombre,
-                        PrecioReparacion = herramienta.Precio,
-                        TiempoReparacion = herramienta.TiempoReparacion, 
-                        Cantidad = herramienta.Cantidad,
-                        Descripcion = herramienta.Descripcion
-                    }
+                {
+                    HerramientaID = herramienta.HerramientaID,
+                    Nombre = herramienta.Nombre,
+                    PrecioReparacion = herramienta.Precio,
+                    TiempoReparacion = herramienta.TiempoReparacion,
+                    Cantidad = herramienta.Cantidad,
+                    Descripcion = herramienta.Descripcion
+                }
                 );
         }
 

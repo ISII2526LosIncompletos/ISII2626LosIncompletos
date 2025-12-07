@@ -993,7 +993,7 @@
           "metodoPago": {
             "$ref": "#/components/schemas/tiposMetodosPago"
           },
-          "id": {
+          "reparacionId": {
             "type": "integer",
             "format": "int32"
           },
