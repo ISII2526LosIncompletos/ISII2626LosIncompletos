@@ -73,7 +73,7 @@ namespace AppForSEII2526.UT.ReparacionesController_test
             ILogger<ReparacionesController> logger = mock.Object;
             var controller = new ReparacionesController(_context, logger);
 
-            var expectedReparacion = new ReparacionDetalleDTO("Lucia", "Cebrian Perez",
+            var expectedReparacion = new ReparacionDetalleDTO(1, "Lucia", "Cebrian Perez",
                 DateTime.Today, DateTime.Today.AddDays(1), "123456789", new List<ReparacionItemDTO>());
             
             expectedReparacion.ItemsReparacion.Add(new ReparacionItemDTO(1, "Taladro", 

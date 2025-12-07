@@ -64,6 +64,8 @@ builder.Services.AddSwaggerGen(options => {
         return apiDescription.TryGetMethodInfo(out MethodInfo methodInfo) ? methodInfo.Name : null;
     });
 
+    // Evita formatos personalizados problemáticos en el OpenAPI (ej. "currency")
+    options.MapType<decimal>(() => new Microsoft.OpenApi.Models.OpenApiSchema { Type = "number", Format = "double" });
 });
 
 
