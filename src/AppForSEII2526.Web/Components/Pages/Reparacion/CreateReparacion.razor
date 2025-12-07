@@ -157,6 +157,11 @@
                             messageError = string.Join("(*) ", messageError, string.Join(" (*) ", errors));
                     }
                 }
+                catch (ApiException apiexception)
+                {
+                    //Necesitamos informar al usuario que se produjeron otros errores al procesar la solicitud
+                    messageError = "Error al procesar su pedido. Por favor, intentelo más tarde";
+                }
             }
         }
     }
