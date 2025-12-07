@@ -17,6 +17,9 @@
         <DataAnnotationsValidator />
         <ValidationSummary class="row alert alert-danger" />
     </div>
+    <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
+        <p id="ErrorsShown">Errores: @messageError</p>
+    </div>
     <div class="row g-3">
         <div class="col-md">
             <div class="form-floating mb-3">
@@ -102,6 +105,8 @@
 }
 
 @code {
+    private string messageError = "";
+    private bool hideErrors { get { return messageError.Length == 0; } }
     private bool DialogIsOpen;
 
     private decimal PrecioTotal
@@ -133,6 +138,26 @@
         if (isOk)
         {
             // Process the data introduced by the user if they are valid
+            if (reparacion.ItemsReparacion.Count > 0)
+            {
+                try
+                {
+                    var reparado = await apiclient.CrearReparacionAsync(reparacion);
+                    repararState.ReparacionProcessed();
+                    navigation.NavigateTo($"/reparacion/reparaciondetalle/?ReparacionID={reparado.Id}");
+                }
+                catch (ApiException<ValidationProblemDetails> apiexceptionvalidation)
+                {
+
+                    if (apiexceptionvalidation.Result.Errors.Values != null)
+                    {
+                        messageError = "";
+                        foreach (var errors in apiexceptionvalidation.Result.Errors.Values)
+                            //https://learn.microsoft.com/en-us/dotnet/api/system.string.join?view=net-7.0
+                            messageError = string.Join("(*) ", messageError, string.Join(" (*) ", errors));
+                    }
+                }
+            }
         }
     }
 
