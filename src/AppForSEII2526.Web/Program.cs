@@ -43,11 +43,13 @@ string? URI2API = builder.Configuration.GetValue(typeof(string), "AppForSEII2526
 //We creaete the service for accessing the API from where .WEB project
 builder.Services.AddScoped<AppForSEII2526APIClient>(sp => new AppForSEII2526APIClient(URI2API, new HttpClient()));
 
-
 //Agregar un servicio de contenedor (el de reparaciones) de estado en memoria
 //https://learn.microsoft.com/en-us/aspnet/core/blazor/state-management/?view=aspnetcore-8.0#in-memory-state-container-service
 builder.Services.AddScoped<ComprarStateContainer>();
 
+//Agregar un servicio de contenedor (el de compras) de estado en memoria
+//https://learn.microsoft.com/en-us/aspnet/core/blazor/state-management/?view=aspnetcore-8.0#in-memory-state-container-service
+builder.Services.AddScoped<RepararStateContainer>();
 
 var app = builder.Build();
 

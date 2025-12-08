@@ -70,7 +70,7 @@ namespace AppForSEII2526.UT.ComprarController_test
             ILogger<ComprarController> logger = mock.Object;
             var controller = new ComprarController(_context, logger);
 
-            var expectedCompra = new CompraDetalleDTO("Miguel", "Lopez Parra", "C Ejemplo 1", 49.21m, DateTime.Today, new List<CompraItemDTO>());
+            var expectedCompra = new CompraDetalleDTO(1, "Miguel", "Lopez Parra", "C Ejemplo 1", 49.21m, DateTime.Today, new List<CompraItemDTO>());
             expectedCompra.CompraItems.Add(new CompraItemDTO(2, "Destornillador", "Acero", 49.21m, 3, "Descripcion ejemplo"));
             //Act
             var result = await controller.GetDetalleCompras(1);

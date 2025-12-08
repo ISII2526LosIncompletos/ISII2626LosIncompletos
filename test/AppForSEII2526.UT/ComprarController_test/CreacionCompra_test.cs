@@ -137,7 +137,7 @@ namespace AppForSEII2526.UT.ComprarController_test
                 _NumTelefono, _CorreoElectronico, DateTime.Today, new List<CompraItemDTO>());
             compraDTO.CompraItems.Add(new CompraItemDTO(2, _HerrNombre2, "Acero", 18.75m, 2, "Destornillador de calidad"));
 
-            var expectedCompra = new CompraDetalleDTO(_NombreUsuario, _ApellidoUsuario, _DireccionEnvio, compraDTO.PrecioTotal, compraDTO.FechaCompra, new List<CompraItemDTO>());
+            var expectedCompra = new CompraDetalleDTO(1, _NombreUsuario, _ApellidoUsuario, _DireccionEnvio, compraDTO.PrecioTotal, compraDTO.FechaCompra, new List<CompraItemDTO>());
             expectedCompra.CompraItems.Add(new CompraItemDTO(2, _HerrNombre2, "Acero", 18.75m, 2, "Destornillador de calidad"));
             //Act
             var result = await controller.CreateCompra(compraDTO);
