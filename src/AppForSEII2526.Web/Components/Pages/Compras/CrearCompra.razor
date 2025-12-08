@@ -1,7 +1,13 @@
 ﻿@page "/Compras/CrearCompra"
 
+@using AppForSEII2526.Web.API
+@inject AppForSEII2526APIClient apiclient
+@inject ILogger<CrearCompra> Logger
+@inject ComprarStateContainer comprarState
+
+
 <h3>CrearCompra</h3>
 
 @code {
-
+    private CompraCreacionDTO compra => comprarState.Compra;
 }
