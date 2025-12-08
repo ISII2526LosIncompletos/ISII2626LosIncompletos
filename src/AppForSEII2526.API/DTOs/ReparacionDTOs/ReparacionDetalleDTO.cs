@@ -33,6 +33,7 @@ namespace AppForSEII2526.API.DTOs.ReparacionDTOs
         public override bool Equals(object? obj)
         {
             return obj is ReparacionDetalleDTO dTO &&
+                   ReparacionId == dTO.ReparacionId &&
                    NombreCliente == dTO.NombreCliente &&
                    ApellidoCliente == dTO.ApellidoCliente &&
                    FechaEntrega == dTO.FechaEntrega &&
@@ -43,7 +44,7 @@ namespace AppForSEII2526.API.DTOs.ReparacionDTOs
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(NombreCliente, ApellidoCliente, FechaEntrega, FechaRecogida, NumTelefono, ItemsReparacion);
+            return HashCode.Combine(ReparacionId, NombreCliente, ApellidoCliente, FechaEntrega, FechaRecogida, NumTelefono, ItemsReparacion);
         }
     }
 }

@@ -62,7 +62,11 @@
         </div>
     </div>
     <h4>Detalles reparación</h4>
-    <p><b>Fecha entrega:</b> @reparacion.FechaEntrega.ToString("dd/MM/yyyy") <b>Fecha recogida:</b> @reparacion.FechaEntrega.AddDays(reparacion.ItemsReparacion.Max(r => r.TiempoReparacion)).ToString("dd/MM/yyyy")</p>
+    @{
+        var maxDias = (reparacion.ItemsReparacion != null && reparacion.ItemsReparacion.Any())
+        ? reparacion.ItemsReparacion.Max(r => r.TiempoReparacion) : 0;
+    }
+    <p><b>Fecha entrega:</b> @reparacion.FechaEntrega.ToString("dd/MM/yyyy") <b>Fecha recogida:</b> @reparacion.FechaEntrega.AddDays(maxDias).ToString("dd/MM/yyyy")</p>
     <p>
         <b>Precio total:</b> @PrecioTotal€
         <button class="btn btn-outline-primary" type="submit" @onclick="ModifyItemsReparacion" id="ModifyHerramientas">
@@ -113,6 +117,7 @@
     {
         get
         {
+            if (reparacion?.ItemsReparacion == null || !reparacion.ItemsReparacion.Any()) return 0m;
             int numDias = reparacion.ItemsReparacion.Max(item => item.TiempoReparacion); //recogida
             //int numDias = (reparacion.FechaEntrega.DateTime - reparacion.FechaEntrega.AddDays(recogida).DateTime).Days;
             double precio = reparacion.ItemsReparacion.Sum(ri => ri.PrecioReparacion * numDias);
