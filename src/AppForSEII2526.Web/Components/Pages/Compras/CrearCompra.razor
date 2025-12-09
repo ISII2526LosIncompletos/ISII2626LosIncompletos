@@ -10,11 +10,11 @@
 
 <h3>Crear Compra</h3>
 
-@* rental is the object that will be edited thanks to the form *@
+@* La compra es el objeto que se edita gracias al formulario *@
 <EditForm Model="compra" OnValidSubmit="OpenDialog">
     <div class="row">
         <DataAnnotationsValidator />
-        <ValidationSummary />
+        <ValidationSummary class="row alert alert-danger"/>
     </div>
     <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
         <p id="ErrorsShown">Errores: @messageError</p>
@@ -42,7 +42,7 @@
     <div class=" row g-2">
         <div class=" col-md">
             <div class="form-floating">
-            @*a dropdown for selecting the payment method*@
+            @*Un menú desplegable para seleccionar el método de pago*@
             <InputSelect class="form-select" @bind-Value="@compra.MetodoPago" id="MetodoPago">
                 <option value="@TiposMetodosPago.TarjetaCredito" default> Tarjeta de crédito</option>
                 <option value="@TiposMetodosPago.PayPal"> PayPal</option>
@@ -119,7 +119,7 @@
     }
     private void ModifyItemsCompra()
     {
-        navigation.NavigateTo("/compras/selectherramentasparacomprar");
+        navigation.NavigateTo("/compras/selectherramentasParaComprar");
     }
 
     private CompraCreacionDTO compra => comprarState.Compra;
@@ -142,7 +142,7 @@
                 {
                     var comprado = await apiclient.CreateCompraAsync(compra);
                     comprarState.FinalizarCompra();
-                    navigation.NavigateTo($"/compras/compraDetalles/?compraID={comprado.CompraId}");
+                    navigation.NavigateTo($"/compras/compradetalle/?compraID={comprado.CompraId}");
                 }
                 catch(ApiException<ValidationProblemDetails> apiexceptionvalidation)
                 {
