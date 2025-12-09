@@ -699,6 +699,10 @@
             "format": "email",
             "nullable": true
           },
+          "compraId": {
+            "type": "integer",
+            "format": "int32"
+          },
           "nombreCliente": {
             "type": "string",
             "nullable": true
@@ -938,6 +942,7 @@
           }
         },
         "additionalProperties": {}
+
       },
       "ReparacionCreacionDTO": {
         "required": [
@@ -1093,6 +1098,7 @@
           }
         },
         "additionalProperties": {}
+
       },
       "tiposMetodosPago": {
         "enum": [
