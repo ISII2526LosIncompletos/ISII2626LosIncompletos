@@ -5,57 +5,64 @@
 
 <h3>Reparacion Detalle</h3>
 
-<table class="table table-borderless table-sm">
-    <tr>
-        <th>Nombre y apellidos</th>
-        <td id="NombreApellidos">@reparacion.NombreCliente @reparacion.ApellidoCliente</td>
-    </tr>
-    <tr>
-        <th>Fecha de entrega</th>
-        <td id="FechaEntrega">@reparacion.FechaEntrega.ToString("dd/MM/yyyy")</td>
-    </tr>
-    <tr>
-        <th>Fecha de recogida</th>
-        <td id="FechaRecogida">@reparacion.FechaRecogida.ToString("dd/MM/yyyy")</td>
-    </tr>
-</table>
-
-<h4>Herramientas a reparar</h4>
-
-<table class="table" id="HerramientasReparadas">
-    <thead>
+@if (reparacion==null)
+{
+    <p>@error</p>
+}
+else
+{
+    <table class="table table-borderless table-sm">
         <tr>
-            <th scope="col">Nombre</th>
-            <th scope="col">Precio</th>
-            <th scope="col">Descripción</th>
-            <th scope="col">Cantidad</th>
+            <th>Nombre y apellidos</th>
+            <td id="NombreApellidos">@reparacion.NombreCliente @reparacion.ApellidoCliente</td>
         </tr>
-    </thead>
-    <tbody>
-        @foreach (ReparacionItemDTO item in reparacion.ItemsReparacion)
-        {
-            <tr id="ItemReparacion_@item.Nombre">
-                <td>@item.Nombre</td>
-                <td>@item.PrecioReparacion€</td>
-                <td>@item.Descripcion</td>
-                <td>@item.Cantidad</td>
-            </tr>
-        }
-    </tbody>
-    <tfoot>
-        @*tfoot define el pie de la tabla, info. de resumen*@
-        @*colspan se usa para indicar que hay 2 columnas colapsadas*@
-        <th scope="row" colspan="2" class="text-end">Precio total</th>
-        <td id="PrecioTotal">@PrecioTotal€</td>
-    </tfoot>
-</table>
+        <tr>
+            <th>Fecha de entrega</th>
+            <td id="FechaEntrega">@reparacion.FechaEntrega.ToString("dd/MM/yyyy")</td>
+        </tr>
+        <tr>
+            <th>Fecha de recogida</th>
+            <td id="FechaRecogida">@reparacion.FechaRecogida.ToString("dd/MM/yyyy")</td>
+        </tr>
+    </table>
 
+    <h4>Herramientas a reparar</h4>
+
+    <table class="table" id="HerramientasReparadas">
+        <thead>
+            <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Precio</th>
+                <th scope="col">Descripción</th>
+                <th scope="col">Cantidad</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ReparacionItemDTO item in reparacion.ItemsReparacion)
+            {
+                <tr id="ItemReparacion_@item.Nombre">
+                    <td>@item.Nombre</td>
+                    <td>@item.PrecioReparacion€</td>
+                    <td>@item.Descripcion</td>
+                    <td>@item.Cantidad</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            @*tfoot define el pie de la tabla, info. de resumen*@
+            @*colspan se usa para indicar que hay 2 columnas colapsadas*@
+            <th scope="row" colspan="2" class="text-end">Precio total</th>
+            <td id="PrecioTotal">@PrecioTotal€</td>
+        </tfoot>
+    </table>
+}
 
 @code {
     [Parameter]
     [SupplyParameterFromQuery]
     public int ReparacionID { get; set; }
     private ReparacionDetalleDTO reparacion;
+    private string error = "";
 
     private decimal PrecioTotal
     {
