@@ -156,7 +156,12 @@
                         }
                     }
                 }
+                catch (ApiException apiexception)
+                {
+                    //Necesitamos informar al usuario si se produjeron errores al procesar la solicitud
+                    messageError = "Error mientras se procesaba la compra, por favor, pruebe más tarde!";
 
+                }
             }
 
         }
