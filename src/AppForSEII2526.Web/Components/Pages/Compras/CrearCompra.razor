@@ -22,6 +22,29 @@
             </div>
         </div>
     </div>
+    <div class="mh-100 table-responsive">
+        <table class="table table-consdensed table-hover" id="TableOfItemsCompras">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Material</th>
+                    <th>Precio de compra</th>
+                    <th>Descripción</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in compra.CompraItems)
+                {
+                    <tr id="HerramientaData_@item.Nombre">
+                        <td>@item.Nombre</td>
+                        <td>@item.Material</td>
+                        <td>@item.PrecioCompra</td>
+                        <td><InputText @bind-Value="item.Descripcion" class="form-control" id="@($"description_{item.HerramientaID}")" /></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </EditForm>
 
 
