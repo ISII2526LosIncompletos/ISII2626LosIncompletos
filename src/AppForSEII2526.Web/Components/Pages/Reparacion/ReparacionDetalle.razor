@@ -20,8 +20,7 @@
     </tr>
     <tr>
         <th>Precio total</th>
-        @*Hay que calcular el precio total*@
-        <td id="PrecioTotal"> €</td>
+        <td id="PrecioTotal">@PrecioTotal€</td>
     </tr>
 </table>
 
@@ -38,5 +37,16 @@
     [SupplyParameterFromQuery]
     public int ReparacionID { get; set; }
     private ReparacionDetalleDTO reparacion;
+
+    private decimal PrecioTotal
+    {
+        get
+        {
+            if (reparacion?.ItemsReparacion == null || !reparacion.ItemsReparacion.Any()) return 0m;
+            int numDias = (reparacion.FechaEntrega.DateTime - reparacion.FechaRecogida.DateTime).Days;
+            double precio = reparacion.ItemsReparacion.Sum(ri => ri.PrecioReparacion * numDias);
+            return Convert.ToDecimal(precio);
+        }
+    }
 
 }
