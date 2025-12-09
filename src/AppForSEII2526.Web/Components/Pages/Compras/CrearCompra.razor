@@ -1,5 +1,6 @@
 ﻿@page "/Compras/CrearCompra"
 
+@using AppForSEII2526.Web.Components.Shared
 @using AppForSEII2526.Web.API
 @inject AppForSEII2526APIClient apiclient
 @inject ILogger<CrearCompra> Logger
@@ -23,12 +24,36 @@
     </div>
 </EditForm>
 
+
+@*Un cuadro de diálogo para preguntar al usuario si desea proceder con comprar herramientas*@
+@if (DialogIsOpen)
+{
+    <Dialog Caption="Comprar herramientas"
+            Message="Quieres proceder a la compra de las herramientas seleccionadas?"
+            OnClose="@OnDialogClose"
+            Type=Dialog.Category.SaveNot>
+    </Dialog>
+}
+
 @code {
+
+    private bool DialogIsOpen;
     private CompraCreacionDTO compra => comprarState.Compra;
 
     private void OpenDialog()
     {
+        DialogIsOpen = true;
+    }
 
+    private async Task OnDialogClose(bool isOk)
+    {
+
+        DialogIsOpen = false;
+        if (isOk)
+        {
+            // Process the data introduced by the user if they are valid
+
+        }
     }
 
 }
