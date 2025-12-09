@@ -18,10 +18,6 @@
         <th>Fecha de recogida</th>
         <td id="FechaRecogida">@reparacion.FechaRecogida.ToString("dd/MM/yyyy")</td>
     </tr>
-    <tr>
-        <th>Precio total</th>
-        <td id="PrecioTotal">@PrecioTotal€</td>
-    </tr>
 </table>
 
 <h4>Herramientas a reparar</h4>
@@ -46,7 +42,12 @@
             </tr>
         }
     </tbody>
-
+    <tfoot>
+        @*tfoot define el pie de la tabla, info. de resumen*@
+        @*colspan se usa para indicar que hay 2 columnas colapsadas*@
+        <th scope="row" colspan="2" class="text-end">Precio total</th>
+        <td id="PrecioTotal">@PrecioTotal€</td>
+    </tfoot>
 </table>
 
 
