@@ -75,4 +75,21 @@ else
         }
     }
 
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            reparacion = await apiclient.GetDetalleRepararAsync(ReparacionID);
+        }
+        catch (ApiException exception)
+        {
+            reparacion = null;
+        }
+        if (reparacion == null)
+        {
+            error = $"Error! No hay ninguna reparación con ID={ReparacionID}";
+        }
+    }
+
+
 }
