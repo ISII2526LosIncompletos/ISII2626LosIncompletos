@@ -8,6 +8,29 @@
 
 <h3>CrearCompra</h3>
 
+@* rental is the object that will be edited thanks to the form *@
+<EditForm Model="compra" OnValidSubmit="OpenDialog">
+    <div class="row">
+
+        <div class="col-md">
+            <div class="form-floating">
+                @*Este botón es para preguntar al usuario si quiere proceder a comprar una herramienta*@
+                <button class="btn btn-primary" type="submit" id="Submit">
+                    Comprar herramientas
+                </button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
 @code {
     private CompraCreacionDTO compra => comprarState.Compra;
+
+    private void OpenDialog()
+    {
+
+    }
+
 }
+
+   
