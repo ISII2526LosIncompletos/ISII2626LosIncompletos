@@ -1,5 +1,8 @@
 ﻿using AppForSEII2526.API.DTOs.OfertaDTOs;
-using System.Data;
+using AppForSEII2526.API.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace AppForSEII2526.API.Controllers
 {
@@ -41,7 +44,6 @@ namespace AppForSEII2526.API.Controllers
                      FechaOferta = o.FechaOferta,
                      MetodoPago = o.MetodoPago.ToString(),
                      DirigidaA = o.DirigidaA.ToString(),
-
                      Items = o.OfertaItems.Select(oi => new OfertaItemDTO(
                          oi.HerramientaId,
                          oi.Porcentaje,
@@ -54,10 +56,8 @@ namespace AppForSEII2526.API.Controllers
                  })
                  .FirstOrDefaultAsync();
 
-
             if (oferta == null)
             {
-                _logger.LogError($"Error: Oferta con id {id} no existe");
                 return NotFound();
             }
 
@@ -75,35 +75,43 @@ namespace AppForSEII2526.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             if (ofertaDTO.FechaInicio < DateTime.Today)
             {
                 return BadRequest("La fecha de inicio no puede ser anterior a hoy.");
             }
+
             if (ofertaDTO.FechaFinal <= ofertaDTO.FechaInicio)
             {
                 return BadRequest("La fecha final debe ser posterior a la fecha de inicio.");
             }
 
-            // Nuevo Filtro De Examen Escrito
             if (ofertaDTO.FechaFinal <= ofertaDTO.FechaInicio.AddDays(7))
             {
                 return BadRequest("!Error¡ La oferta debe durar al menos una semana");
             }
 
-            tiposMetodosPago metodoPagoParsed;
-            if (string.IsNullOrWhiteSpace(ofertaDTO.MetodoPago) || !Enum.TryParse<tiposMetodosPago>(ofertaDTO.MetodoPago, ignoreCase: true, out metodoPagoParsed))
+            if (string.IsNullOrWhiteSpace(ofertaDTO.MetodoPago) ||
+                !Enum.TryParse<tiposMetodosPago>(ofertaDTO.MetodoPago, ignoreCase: true, out var metodoPagoParsed))
             {
                 return BadRequest("Método de pago inválido.");
             }
 
-            TiposDirigidaOferta? dirigidaA = null;
-            if (!string.IsNullOrWhiteSpace(ofertaDTO.DirigidaA) && Enum.TryParse<TiposDirigidaOferta>(ofertaDTO.DirigidaA, ignoreCase: true, out var dirigidaAParsed))
+            TiposDirigidaOferta? dirigidaAParsed = null;
+            if (!string.IsNullOrWhiteSpace(ofertaDTO.DirigidaA))
             {
-                dirigidaA = dirigidaAParsed;
+                if (Enum.TryParse<TiposDirigidaOferta>(ofertaDTO.DirigidaA, ignoreCase: true, out var parsed))
+                {
+                    dirigidaAParsed = parsed;
+                }
+                else
+                {
+                    return BadRequest("El campo 'Dirigida A' contiene un valor inválido.");
+                }
+            }
+
+            if (ofertaDTO.Items == null || !ofertaDTO.Items.Any())
+            {
+                return BadRequest("La oferta debe incluir al menos una herramienta.");
             }
 
             var newOferta = new Oferta
@@ -111,7 +119,7 @@ namespace AppForSEII2526.API.Controllers
                 FechaInicio = ofertaDTO.FechaInicio,
                 FechaFinal = ofertaDTO.FechaFinal,
                 MetodoPago = metodoPagoParsed,
-                DirigidaA = dirigidaA,
+                DirigidaA = dirigidaAParsed,
                 FechaOferta = DateTime.UtcNow,
                 OfertaItems = new List<OfertaItem>()
             };
@@ -124,7 +132,7 @@ namespace AppForSEII2526.API.Controllers
                     return BadRequest($"No se encontró la herramienta con ID {itemDTO.HerramientaId}.");
                 }
 
-                var precioFinal = herramienta.Precio * (1 - ((decimal)itemDTO.Porcentaje / 100));
+                var precioFinal = herramienta.Precio * (1 - (itemDTO.Porcentaje / 100m));
 
                 var newOfertaItem = new OfertaItem
                 {
@@ -139,39 +147,27 @@ namespace AppForSEII2526.API.Controllers
             _context.Ofertas.Add(newOferta);
             await _context.SaveChangesAsync();
 
-            _logger.LogInformation($"Nueva oferta creada con ID: {newOferta.Id}");
-
-            var ofertaCreada = await _context.Ofertas
-                 .Include(o => o.OfertaItems)
-                     .ThenInclude(oi => oi.Herramienta)
-                         .ThenInclude(h => h.Fabricante)
-                 .FirstOrDefaultAsync(o => o.Id == newOferta.Id);
-
             var ofertaToReturn = new OfertaDetailDTO
             {
-                Id = ofertaCreada.Id,
-                FechaInicio = ofertaCreada.FechaInicio,
-                FechaFinal = ofertaCreada.FechaFinal,
-                FechaOferta = ofertaCreada.FechaOferta,
-                MetodoPago = ofertaCreada.MetodoPago.ToString(),
-                DirigidaA = ofertaCreada.DirigidaA?.ToString(),
-
-
-                Items = ofertaCreada.OfertaItems.Select(oi => new OfertaItemDTO
+                Id = newOferta.Id,
+                FechaInicio = newOferta.FechaInicio,
+                FechaFinal = newOferta.FechaFinal,
+                FechaOferta = newOferta.FechaOferta,
+                MetodoPago = newOferta.MetodoPago.ToString(),
+                DirigidaA = newOferta.DirigidaA?.ToString(),
+                Items = newOferta.OfertaItems.Select(oi => new OfertaItemDTO
                 {
-                    HerramientaId = oi.Herramienta.Id,
+                    HerramientaId = oi.HerramientaId,
                     Porcentaje = oi.Porcentaje,
-                    HerramientaNombre = oi.Herramienta.Nombre,
-                    HerramientaMaterial = oi.Herramienta.Material,
-                    FabricanteNombre = oi.Herramienta.Fabricante.Nombre,
-                    PrecioOriginal = oi.Herramienta.Precio,
+                    HerramientaNombre = _context.Herramientas.Find(oi.HerramientaId)?.Nombre ?? "Unknown",
+                    HerramientaMaterial = _context.Herramientas.Find(oi.HerramientaId)?.Material ?? "Unknown",
+                    FabricanteNombre = _context.Fabricantes.Find(_context.Herramientas.Find(oi.HerramientaId)?.FabricanteId)?.Nombre ?? "Unknown",
+                    PrecioOriginal = _context.Herramientas.Find(oi.HerramientaId)?.Precio ?? 0,
                     PrecioFinal = oi.PrecioFinal
                 }).ToList()
-
             };
 
-            return CreatedAtAction(nameof(GetDetalleOferta),
-                                new { id = newOferta.Id }, ofertaToReturn);
+            return CreatedAtAction(nameof(GetDetalleOferta), new { id = newOferta.Id }, ofertaToReturn);
         }
     }
 }

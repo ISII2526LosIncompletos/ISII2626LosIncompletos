@@ -39,6 +39,7 @@ namespace AppForSEII2526.API.Controllers
                 .Include(r => r.ApplicationUser) //cargamos el usuario, evitamos null
                 .AsEnumerable() //forzar LINQ to Objects aquí
                 .Select(r => new ReparacionDetalleDTO(
+                    r.Id,
                     r.ApplicationUser.Nombre,
                     r.ApplicationUser.Apellidos,
                     r.FechaEntrega,  
@@ -159,7 +160,7 @@ namespace AppForSEII2526.API.Controllers
                 return Conflict("Error" + ex.Message);
             }
 
-            var detalleReparacion = new ReparacionDetalleDTO(usuario.Nombre, usuario.Apellidos,
+            var detalleReparacion = new ReparacionDetalleDTO(reparacion.Id, usuario.Nombre, usuario.Apellidos,
                 reparacion.FechaEntrega, reparacion.FechaRecogida, usuario.NumTelefono, reparacion.ItemsReparacion
                     .Select(ri => new ReparacionItemDTO(
                         ri.Herramienta.Id, ri.Herramienta.Nombre, ri.Precio, numDias, ri.Cantidad, ri.Descripcion)

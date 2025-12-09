@@ -5,9 +5,10 @@ namespace AppForSEII2526.API.DTOs.ReparacionDTOs
     public class ReparacionDetalleDTO : ReparacionCreacionDTO
     {
 
-        public ReparacionDetalleDTO(string nombreCliente, string apellidoCliente, DateTime fechaEntrega,
+        public ReparacionDetalleDTO(int id, string nombreCliente, string apellidoCliente, DateTime fechaEntrega,
             DateTime fechaRecogida, string? numTelefono, IList<ReparacionItemDTO> itemsReparacion)
         {
+            ReparacionId = id;
             NombreCliente = nombreCliente;
             ApellidoCliente = apellidoCliente;
             FechaEntrega = fechaEntrega;
@@ -15,6 +16,7 @@ namespace AppForSEII2526.API.DTOs.ReparacionDTOs
             NumTelefono = numTelefono;
             ItemsReparacion = itemsReparacion;
         }
+        public int ReparacionId { get; set; }
 
         public string NombreCliente { get; set; }
 

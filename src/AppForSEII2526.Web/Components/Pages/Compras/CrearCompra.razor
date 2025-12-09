@@ -16,6 +16,9 @@
         <DataAnnotationsValidator />
         <ValidationSummary />
     </div>
+    <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
+        <p id="ErrorsShown">Errores: @messageError</p>
+    </div>
     <div class="row g-3">
         <div class="col-md">
             <div class="form-floating mb-3">
@@ -95,14 +98,15 @@
 @if (DialogIsOpen)
 {
     <Dialog Caption="Comprar herramientas"
-            Message="Quieres proceder a la compra de las herramientas seleccionadas?"
+            Message="¿Quieres proceder a la compra de las herramientas seleccionadas?"
             OnClose="@OnDialogClose"
             Type=Dialog.Category.SaveNot>
     </Dialog>
 }
-
+ 
 @code {
-
+    private string messageError = "";
+    private bool hideErrors { get { return messageError.Length == 0; } }
     private bool DialogIsOpen;
 
     private decimal PrecioTotal
@@ -132,6 +136,28 @@
         if (isOk)
         {
             // Process the data introduced by the user if they are valid
+            if (compra.CompraItems.Count > 0)
+            {
+                try
+                {
+                    var comprado = await apiclient.CreateCompraAsync(compra);
+                    comprarState.FinalizarCompra();
+                    navigation.NavigateTo($"/compras/compraDetalles/?compraID={comprado.CompraId}");
+                }
+                catch(ApiException<ValidationProblemDetails> apiexceptionvalidation)
+                {
+                    if (apiexceptionvalidation.Result.Errors.Values != null)
+                    {
+                        messageError = "";
+                        foreach (var errors in apiexceptionvalidation.Result.Errors.Values)
+                        {
+                            //https://learn.microsoft.com/en-us/dotnet/api/system.string.join?view=net-7.0
+                            messageError = string.Join("(*) ", messageError, string.Join(" (*) ", errors));
+                        }
+                    }
+                }
+
+            }
 
         }
     }

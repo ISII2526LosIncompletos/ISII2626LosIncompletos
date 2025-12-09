@@ -1,5 +1,7 @@
 ﻿using AppForSEII2526.API.Controllers;
 using AppForSEII2526.API.DTOs.OfertaDTOs;
+using AppForSEII2526.API.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AppForSEII2526.UT.OfertasController_test
 {
@@ -11,70 +13,86 @@ namespace AppForSEII2526.UT.OfertasController_test
         {
             _context = CreateContext();
 
-            var fabricante = new Fabricante { Nombre = "juan" };
-            _context.Fabricantes.Add(fabricante);
-
-            var herramienta = new Herramienta
+            var fabricantes = new List<Fabricante>
             {
-                Id = 1,
-                Nombre = "Martillo",
-                Material = "acero",
-                Precio = 1.00m,
-                TiempoReparacion = 1,
-                Fabricante = fabricante
+                new Fabricante { Id = 1, Nombre = "Phillips" },
+                new Fabricante { Id = 2, Nombre = "Wurt" }
             };
-            _context.Herramientas.Add(herramienta);
+
+            var herramientas = new List<Herramienta>
+            {
+                new Herramienta { Id = 1, Nombre = "Destornillador", Material = "Acero", Precio = 12.50m, TiempoReparacion = 1, FabricanteId = 2, Fabricante = fabricantes[1] },
+                new Herramienta { Id = 2, Nombre = "Llave Inglesa", Material = "Acero", Precio = 10.30m, TiempoReparacion = 2, FabricanteId = 1, Fabricante = fabricantes[0] }
+            };
+
+            _context.Fabricantes.AddRange(fabricantes);
+            _context.Herramientas.AddRange(herramientas);
             _context.SaveChanges();
         }
 
-        [Fact]
-        public async Task CreateOferta_Success_test()
+        public static IEnumerable<object[]> TestCasesFor_CreateOferta()
         {
-            var logger = new Mock<ILogger<OfertasController>>().Object;
-            var controller = new OfertasController(_context, logger);
+            var itemsValidos = new List<OfertaItemInput> { new OfertaItemInput { HerramientaId = 1, Porcentaje = 20 } };
 
-            var inputDto = new OfertaForCreationDTO
+            var ofertaInicioInvalido = new OfertaForCreationDTO
+            {
+                FechaInicio = DateTime.Today.AddDays(-1),
+                FechaFinal = DateTime.Today.AddDays(10),
+                MetodoPago = "TarjetaCredito",
+                DirigidaA = "Clientes",
+                Items = itemsValidos
+            };
+
+            var ofertaFinInvalido = new OfertaForCreationDTO
+            {
+                FechaInicio = DateTime.Today.AddDays(10),
+                FechaFinal = DateTime.Today.AddDays(5),
+                MetodoPago = "TarjetaCredito",
+                DirigidaA = "Clientes",
+                Items = itemsValidos
+            };
+
+            var ofertaPagoInvalido = new OfertaForCreationDTO
+            {
+                FechaInicio = DateTime.Today.AddDays(1),
+                FechaFinal = DateTime.Today.AddDays(10),
+                MetodoPago = "Bizum",
+                DirigidaA = "Clientes",
+                Items = itemsValidos
+            };
+
+            var ofertaHerramientaNoExiste = new OfertaForCreationDTO
             {
                 FechaInicio = DateTime.Today.AddDays(1),
                 FechaFinal = DateTime.Today.AddDays(10),
                 MetodoPago = "TarjetaCredito",
                 DirigidaA = "Clientes",
-                Items = new List<OfertaItemDTO>
-                {
-                    new OfertaItemDTO { HerramientaId = 1, Porcentaje = 20 }
-                }
+                Items = new List<OfertaItemInput> { new OfertaItemInput { HerramientaId = 99, Porcentaje = 20 } }
             };
 
-            var expectedDto = new OfertaDetailDTO
+            var ofertaDuracionCorta = new OfertaForCreationDTO
             {
-                Id = 1,
+                FechaInicio = DateTime.Today.AddDays(5),
+                FechaFinal = DateTime.Today.AddDays(6),
                 MetodoPago = "TarjetaCredito",
                 DirigidaA = "Clientes",
-                Items = new List<OfertaItemDTO>
-                {
-
-                new OfertaItemDTO
-                {
-                    HerramientaId = 1,
-                    Porcentaje = 20m, // 20m es decimal
-                    HerramientaNombre = "Martillo",
-                    HerramientaMaterial = "acero",
-                    FabricanteNombre = "juan",
-                    PrecioOriginal = 1.00m,
-                    PrecioFinal = 0.80m
-                }
-                }
+                Items = itemsValidos
             };
 
-            var result = await controller.CreateOferta(inputDto);
-
-            var createdResult = Assert.IsType<CreatedAtActionResult>(result);
-            var actualDto = Assert.IsType<OfertaDetailDTO>(createdResult.Value);
-            Assert.Equal(expectedDto, actualDto);
+            return new List<object[]>
+            {
+                new object[] { ofertaInicioInvalido, "La fecha de inicio no puede ser anterior a hoy." },
+                new object[] { ofertaFinInvalido, "La fecha final debe ser posterior a la fecha de inicio." },
+                new object[] { ofertaPagoInvalido, "Método de pago inválido." },
+                new object[] { ofertaHerramientaNoExiste, "No se encontró la herramienta con ID 99." },
+                new object[] { ofertaDuracionCorta, "!Error¡ La oferta debe durar al menos una semana" }
+            };
         }
 
         [Theory]
-        [MemberData(nameof(TestCasesFor_CreateOferta_BadRequest))]
+        [Trait("LevelTesting", "Unit Testing")]
+        [Trait("Database", "WithoutFixture")]
+        [MemberData(nameof(TestCasesFor_CreateOferta))]
         public async Task CreateOferta_BadRequest_test(OfertaForCreationDTO dto, string expectedError)
         {
             var logger = new Mock<ILogger<OfertasController>>().Object;
@@ -86,67 +104,55 @@ namespace AppForSEII2526.UT.OfertasController_test
             Assert.Equal(expectedError, badRequestResult.Value);
         }
 
-        public static IEnumerable<object[]> TestCasesFor_CreateOferta_BadRequest()
+        [Fact]
+        [Trait("LevelTesting", "Unit Testing")]
+        [Trait("Database", "WithoutFixture")]
+        public async Task CreateOferta_Success_test()
         {
-            yield return new object[]
+            var logger = new Mock<ILogger<OfertasController>>().Object;
+            var controller = new OfertasController(_context, logger);
+
+            var inputDto = new OfertaForCreationDTO
             {
-                new OfertaForCreationDTO
+                FechaInicio = DateTime.Today.AddDays(1),
+                FechaFinal = DateTime.Today.AddDays(10),
+                MetodoPago = "TarjetaCredito",
+                DirigidaA = "Clientes",
+                Items = new List<OfertaItemInput>
                 {
-                    FechaInicio = DateTime.Today.AddDays(-1),
-                    FechaFinal = DateTime.Today.AddDays(10),
-                    MetodoPago = "TarjetaCredito",
-                    Items = new List<OfertaItemDTO> { new OfertaItemDTO { HerramientaId = 1, Porcentaje = 10 } }
-                },
-                "La fecha de inicio no puede ser anterior a hoy."
+                    new OfertaItemInput { HerramientaId = 2, Porcentaje = 50 }
+                }
             };
 
-            yield return new object[]
+            var expectedDto = new OfertaDetailDTO
             {
-                new OfertaForCreationDTO
+                Id = 1,
+                MetodoPago = "TarjetaCredito",
+                DirigidaA = "Clientes",
+                Items = new List<OfertaItemDTO>
                 {
-                    FechaInicio = DateTime.Today.AddDays(10),
-                    FechaFinal = DateTime.Today.AddDays(5),
-                    MetodoPago = "TarjetaCredito",
-                    Items = new List<OfertaItemDTO> { new OfertaItemDTO { HerramientaId = 1, Porcentaje = 10 } }
-                },
-                "La fecha final debe ser posterior a la fecha de inicio."
+                    new OfertaItemDTO
+                    {
+                        HerramientaId = 2,
+                        Porcentaje = 50,
+                        HerramientaNombre = "Llave Inglesa",
+                        HerramientaMaterial = "Acero",
+                        FabricanteNombre = "Phillips",
+                        PrecioOriginal = 10.30m,
+                        PrecioFinal = 5.15m
+                    }
+                }
             };
 
-            yield return new object[]
-            {
-                new OfertaForCreationDTO
-                {
-                    FechaInicio = DateTime.Today.AddDays(1),
-                    FechaFinal = DateTime.Today.AddDays(10),
-                    MetodoPago = "Bizum",
-                    Items = new List<OfertaItemDTO> { new OfertaItemDTO { HerramientaId = 1, Porcentaje = 10 } }
-                },
-                "Método de pago inválido."
-            };
+            var result = await controller.CreateOferta(inputDto);
 
-            yield return new object[]
-            {
-                new OfertaForCreationDTO
-                {
-                    FechaInicio = DateTime.Today.AddDays(1),
-                    FechaFinal = DateTime.Today.AddDays(10),
-                    MetodoPago = "TarjetaCredito",
-                    Items = new List<OfertaItemDTO> { new OfertaItemDTO { HerramientaId = 99, Porcentaje = 10 } } // Id 99 no existe
-                },
-                "No se encontró la herramienta con ID 99."
-            };
+            var createdResult = Assert.IsType<CreatedAtActionResult>(result);
+            var actualDto = Assert.IsType<OfertaDetailDTO>(createdResult.Value);
 
-            yield return new object[]
-            {
-                new OfertaForCreationDTO
-                {
-                    FechaInicio = DateTime.Today.AddDays(5),
-                    FechaFinal = DateTime.Today.AddDays(10),
-                    MetodoPago = "TarjetaCredito",
-                    Items = new List<OfertaItemDTO> { new OfertaItemDTO { HerramientaId = 1, Porcentaje = 10 } } 
-                },
-                "!Error¡ La oferta debe durar al menos una semana"
-            };
+            Assert.Equal(expectedDto.MetodoPago, actualDto.MetodoPago);
+            Assert.Equal(expectedDto.Items.First().HerramientaNombre, actualDto.Items.First().HerramientaNombre);
+            Assert.Equal(expectedDto.Items.First().PrecioFinal, actualDto.Items.First().PrecioFinal);
+            Assert.Equal(expectedDto.Items.First().FabricanteNombre, actualDto.Items.First().FabricanteNombre);
         }
     }
-}
+} 
