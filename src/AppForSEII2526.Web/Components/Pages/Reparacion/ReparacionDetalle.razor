@@ -1,7 +1,42 @@
 ﻿@page "/reparacion/reparaciondetalle"
 
+@using AppForSEII2526.Web.API
+@inject AppForSEII2526APIClient apiclient
+
 <h3>Reparacion Detalle</h3>
 
+<table class="table table-borderless table-sm">
+    <tr>
+        <th>Nombre y apellidos</th>
+        <td id="NombreApellidos">@reparacion.NombreCliente @reparacion.ApellidoCliente</td>
+    </tr>
+    <tr>
+        <th>Fecha de entrega</th>
+        <td id="FechaEntrega">@reparacion.FechaEntrega.ToString("dd/MM/yyyy")</td>
+    </tr>
+    <tr>
+        <th>Fecha de recogida</th>
+        <td id="FechaRecogida">@reparacion.FechaRecogida.ToString("dd/MM/yyyy")</td>
+    </tr>
+    <tr>
+        <th>Precio total</th>
+        @*Hay que calcular el precio total*@
+        <td id="PrecioTotal"> €</td>
+    </tr>
+</table>
+
+<h4>Herramientas a reparar</h4>
+
+<table class="table" id="HerramientasReparadas">
+    @*Aquí se mostrará la información de cada una de las herramientas a reparar*@
+
+</table>
+
+
 @code {
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public int ReparacionID { get; set; }
+    private ReparacionDetalleDTO reparacion;
 
 }
