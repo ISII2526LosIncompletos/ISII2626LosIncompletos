@@ -27,7 +27,25 @@
 <h4>Herramientas a reparar</h4>
 
 <table class="table" id="HerramientasReparadas">
-    @*Aquí se mostrará la información de cada una de las herramientas a reparar*@
+    <thead>
+        <tr>
+            <th scope="col">Nombre</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Descripción</th>
+            <th scope="col">Cantidad</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (ReparacionItemDTO item in reparacion.ItemsReparacion)
+        {
+            <tr id="ItemReparacion_@item.Nombre">
+                <td>@item.Nombre</td>
+                <td>@item.PrecioReparacion€</td>
+                <td>@item.Descripcion</td>
+                <td>@item.Cantidad</td>
+            </tr>
+        }
+    </tbody>
 
 </table>
 
