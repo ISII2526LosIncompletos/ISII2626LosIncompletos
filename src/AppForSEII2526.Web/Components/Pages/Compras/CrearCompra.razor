@@ -1,4 +1,4 @@
-﻿@page "/Compras/CrearCompra"
+﻿@page "/compras/crearcompra"
 
 @inject NavigationManager navigation
 @using AppForSEII2526.Web.Components.Shared
@@ -119,7 +119,7 @@
     }
     private void ModifyItemsCompra()
     {
-        navigation.NavigateTo("/compras/selectherramentasParaComprar");
+        navigation.NavigateTo("/compras/seleccionarherramientasparacomprar");
     }
 
     private CompraCreacionDTO compra => comprarState.Compra;
