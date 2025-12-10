@@ -10,11 +10,10 @@
 	<ItemGroup>
 		<None Include="OpenAPIs\swagger1.json" ClassName="AppForSEII2526APIClient" />
 	</ItemGroup>
-
 	<ItemGroup>
-		<OpenApiReference Include="OpenAPIs\swagger1.json" Namespace="AppForSEII2526.Web.API" ClassName="AppForSEII2526APIClient">
-			<SourceUri>https://appforseii2526-cvcbb6gycfacbqct.francecentral-01.azurewebsites.net/swagger/v1/swagger.json</SourceUri>
-		</OpenApiReference>
+	  <OpenApiReference Include="OpenAPIs\swagger1.json" Namespace="AppForSEII2526.Web.API" ClassName="AppForSEII2526APIClient">
+	    <SourceUri>https://localhost:7067/swagger/v1/swagger.json</SourceUri>
+	  </OpenApiReference>
 	</ItemGroup>
 
 	<ItemGroup>
