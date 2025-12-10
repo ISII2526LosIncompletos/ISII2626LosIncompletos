@@ -1,13 +1,12 @@
 ﻿@page "/reparacion/selectherramentasparareparar"
 
-@using Microsoft.AspNetCore.Authorization
+
 @using AppForSEII2526.Web.API
 @inject AppForSEII2526APIClient apiclient
 @inject ILogger<SelectHerramientasParaReparar> logger
 @inject RepararStateContainer reparacionState
 @inject NavigationManager navigation
 
-@attribute [Authorize]
 <h3>Select Herramientas Para Reparar</h3>
 
 <div class="container-fluid">
