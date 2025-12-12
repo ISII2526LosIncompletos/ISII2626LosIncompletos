@@ -16,6 +16,7 @@ namespace AppForSEII2526.API.DTOs.ReparacionDTOs
             NumTelefono = numTelefono;
             ItemsReparacion = itemsReparacion;
         }
+
         public int ReparacionId { get; set; }
 
         public string NombreCliente { get; set; }

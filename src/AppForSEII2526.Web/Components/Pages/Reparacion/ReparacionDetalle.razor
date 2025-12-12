@@ -69,7 +69,7 @@ else
         get
         {
             if (reparacion?.ItemsReparacion == null || !reparacion.ItemsReparacion.Any()) return 0m;
-            int numDias = (reparacion.FechaEntrega.DateTime - reparacion.FechaRecogida.DateTime).Days;
+            int numDias = (reparacion.FechaRecogida.DateTime - reparacion.FechaEntrega.DateTime).Days;
             double precio = reparacion.ItemsReparacion.Sum(ri => ri.PrecioReparacion * numDias);
             return Convert.ToDecimal(precio);
         }
