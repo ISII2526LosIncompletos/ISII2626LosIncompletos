@@ -1,17 +1,17 @@
-﻿@page "/Compras/SeleccionarHerramientasParaComprar"
+﻿@page "/compras/seleccionarherramientasparacomprar"
 
-@using Microsoft.AspNetCore.Authorization
+
 @using AppForSEII2526.Web.API
 @inject AppForSEII2526APIClient apiclient
 @inject ILogger<SeleccionarHerramientasParaComprar> logger
-@inject ComprarStateContainer comprarStateContainer
+@inject ComprarStateContainer comprarState
 @inject NavigationManager navigation
 
-@attribute [Authorize]
+
 <h3>SeleccionarHerramientasParaComprar</h3>
 <div class="container-fluid">
     <div class="row alert alert-danger" role="alert" hidden="@esconderErrores">
-        <p id="ErrorsShown">Errors: @errors</p>
+        <p id="ErrorsShown">Errores: @errors</p>
     </div>
     <div class="row">
         <div class="col-8">
@@ -75,7 +75,7 @@
                 }
             </div>
         </div>
-        <div class="col-2" hidden="@EsconderListaCompra">
+        <div class="col-2" hidden="@esconderHerramientasCompradas">
             <div class="row">
                 <h3>Lista de Herramientas Compradas</h3>
             </div>
@@ -102,19 +102,19 @@
     private string? Material { get; set; }
     private double? Precio { get; set; }
 
-    private CompraCreacionDTO compra => comprarStateContainer.Compra;
+    private CompraCreacionDTO compra => comprarState.Compra;
 
-    private bool EsconderListaCompra = true;
+    private bool carritoComprarOculto = true;
 
     private void AddHerramienta(HerramientasDTO herramienta)
     {
-        comprarStateContainer.AddHerramienta(herramienta);
+        comprarState.AddHerramienta(herramienta);
     }
 
     private void EliminarHerramienta(CompraItemDTO item)
     {
-        comprarStateContainer.EliminarHerramienta(item);
-        if (compra.CompraItems.Count == 0) EsconderListaCompra = true;
+        comprarState.EliminarHerramienta(item);
+        if (compra.CompraItems.Count == 0) carritoComprarOculto = true;
     }
 
     public async void BuscarHerramientas()
@@ -144,6 +144,6 @@
     }
     private void HerramientasCompradas()
     {
-        navigation.NavigateTo("/Compras/CrearCompra");
+        navigation.NavigateTo("/compras/crearcompra");
     }
 }

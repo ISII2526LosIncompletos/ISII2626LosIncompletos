@@ -870,7 +870,7 @@
             "minItems": 1,
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/OfertaItemDTO"
+              "$ref": "#/components/schemas/OfertaItemInput"
             }
           }
         },
@@ -916,6 +916,26 @@
         },
         "additionalProperties": false
       },
+      "OfertaItemInput": {
+        "required": [
+          "herramientaId",
+          "porcentaje"
+        ],
+        "type": "object",
+        "properties": {
+          "herramientaId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "porcentaje": {
+            "maximum": 100,
+            "minimum": 0.01,
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
       "ProblemDetails": {
         "type": "object",
         "properties": {
@@ -941,8 +961,7 @@
             "nullable": true
           }
         },
-        "additionalProperties": {}
-
+        "additionalProperties": { }
       },
       "ReparacionCreacionDTO": {
         "required": [
@@ -1097,8 +1116,7 @@
             "nullable": true
           }
         },
-        "additionalProperties": {}
-
+        "additionalProperties": { }
       },
       "tiposMetodosPago": {
         "enum": [
