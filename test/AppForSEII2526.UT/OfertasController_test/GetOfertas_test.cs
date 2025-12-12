@@ -1,126 +1,79 @@
 ﻿using AppForSEII2526.API.Controllers;
-using AppForSEII2526.API.Models;
 using AppForSEII2526.API.DTOs.HerramientaDTOs;
+
 
 namespace AppForSEII2526.UT.OfertasController_test
 {
-    public class GetOfertas_test : AppForSEII25264SqliteUT
+    public class GetHerramientasParaOferta_test : AppForSEII25264SqliteUT
     {
         private readonly ApplicationDbContext _context;
-        private static HerramientasDTO martilloDTO;
 
-        public GetOfertas_test()
+        public GetHerramientasParaOferta_test()
         {
             _context = CreateContext();
 
-            var fabricanteJuan = new Fabricante { Nombre = "juan" };
-            var fabricanteOtro = new Fabricante { Nombre = "Otro" };
-            _context.Fabricantes.AddRange(fabricanteJuan, fabricanteOtro);
-
-            var martillo = new Herramienta
+            var fabricantes = new List<Fabricante>
             {
-                Id = 1,
-                Nombre = "Martillo",
-                Material = "acero",
-                Precio = 1.00m,
-                TiempoReparacion = 1,
-                Fabricante = fabricanteJuan
+                new Fabricante { Id = 1, Nombre = "Phillips" },
+                new Fabricante { Id = 2, Nombre = "Wurt" }
             };
-            var destornillador = new Herramienta
-            {
-                Id = 2,
-                Nombre = "Destornillador",
-                Material = "acero",
-                Precio = 2.00m,
-                TiempoReparacion = 1,
-                Fabricante = fabricanteOtro
-            };
-            _context.Herramientas.AddRange(martillo, destornillador);
 
-            var oferta = new Oferta
+            var herramientas = new List<Herramienta>
             {
-                Id = 1,
-                FechaInicio = DateTime.UtcNow,
-                FechaFinal = DateTime.UtcNow.AddDays(5),
-                FechaOferta = DateTime.UtcNow,
-                MetodoPago = tiposMetodosPago.TarjetaCredito
+                new Herramienta { Id = 1, Nombre = "Destornillador", Material = "Acero", Precio = 12.50m, TiempoReparacion = 1, FabricanteId = 2, Fabricante = fabricantes[1] },
+                new Herramienta { Id = 2, Nombre = "Llave Inglesa", Material = "Acero", Precio = 10.30m, TiempoReparacion = 2, FabricanteId = 1, Fabricante = fabricantes[0] }
             };
-            _context.Ofertas.Add(oferta);
 
-            var ofertaItem = new OfertaItem
-            {
-                HerramientaId = 1,
-                OfertaId = 1,
-                Porcentaje = 10,
-                PrecioFinal = 0.90m
-            };
-            _context.OfertaItems.Add(ofertaItem);
-
+            _context.Fabricantes.AddRange(fabricantes);
+            _context.Herramientas.AddRange(herramientas);
             _context.SaveChanges();
+        }
 
-            martilloDTO = new HerramientasDTO(
-                martillo.Id, martillo.Nombre, martillo.Material,
-                fabricanteJuan.Nombre, martillo.Precio, martillo.TiempoReparacion
-            );
+        public static IEnumerable<object[]> TestCasesFor_GetHerramientasParaOferta_OK()
+        {
+            var dtoDestornillador = new HerramientasDTO { HerramientaID = 1, Nombre = "Destornillador", Material = "Acero", Fabricante = "Wurt", Precio = 12.50m, TiempoReparacion = 1 };
+            var dtoLlave = new HerramientasDTO { HerramientaID = 2, Nombre = "Llave Inglesa", Material = "Acero", Fabricante = "Phillips", Precio = 10.30m, TiempoReparacion = 2 };
+
+            var casoSinFiltros = new List<HerramientasDTO> { dtoDestornillador, dtoLlave };
+
+            var casoPrecioBajo = new List<HerramientasDTO> { dtoLlave };
+
+            var casoFabricante = new List<HerramientasDTO> { dtoLlave };
+
+            return new List<object[]>
+            {
+                new object[] { null, null, casoSinFiltros },
+                new object[] { 11.00m, null, casoPrecioBajo },
+                new object[] { null, "Phillips", casoFabricante }
+            };
         }
 
         [Theory]
-        [MemberData(nameof(TestCasesFor_GetOfertas))]
-        public async Task GetOfertas_ConFiltros_test(
-            string? fabricanteNombre,
-            decimal? precio,
-            List<HerramientasDTO> expectedTools)
+        [MemberData(nameof(TestCasesFor_GetHerramientasParaOferta_OK))]
+        [Trait("Database", "WithoutFixture")]
+        [Trait("LevelTesting", "Unit Testing")]
+        public async Task GetHerramientasParaOferta_OK(decimal? precio, string? fabricante, List<HerramientasDTO> ofertasEsperadas)
         {
             var logger = new Mock<ILogger<HerramientasController>>().Object;
             var controller = new HerramientasController(_context, logger);
 
-            var result = await controller.GetOfertas(fabricanteNombre, precio);
+            var result = await controller.GetOfertas(fabricante, precio);
 
             var okResult = Assert.IsType<OkObjectResult>(result);
-            var actualTools = Assert.IsType<List<HerramientasDTO>>(okResult.Value);
+            var herramientasActuales = Assert.IsType<List<HerramientasDTO>>(okResult.Value);
 
-            Assert.Equal(expectedTools, actualTools);
-        }
+            Assert.Equal(ofertasEsperadas.Count, herramientasActuales.Count);
 
-        public static IEnumerable<object[]> TestCasesFor_GetOfertas()
-        {
+            ofertasEsperadas = ofertasEsperadas.OrderBy(x => x.HerramientaID).ToList();
+            herramientasActuales = herramientasActuales.OrderBy(x => x.HerramientaID).ToList();
 
-            var martilloDtoEsperado = new HerramientasDTO(
-                id: 1,
-                nombre: "Martillo",
-                material: "acero",
-                fabricante: "juan",
-                precio: 1.00m,
-                tiempoReparacion: 1
-            );
-
-            yield return new object[]
+            for (int i = 0; i < ofertasEsperadas.Count; i++)
             {
-        null,
-        null,
-        new List<HerramientasDTO> { martilloDtoEsperado }
-            };
-
-            yield return new object[]
-            {
-        "juan",
-        null,
-        new List<HerramientasDTO> { martilloDtoEsperado }
-            };
-
-            yield return new object[]
-            {
-        "Otro",
-        null,
-        new List<HerramientasDTO>()
-            };
-
-            yield return new object[]
-            {
-        null,
-        1.00m,
-        new List<HerramientasDTO> { martilloDtoEsperado }
-            };
+                Assert.Equal(ofertasEsperadas[i].HerramientaID, herramientasActuales[i].HerramientaID);
+                Assert.Equal(ofertasEsperadas[i].Nombre, herramientasActuales[i].Nombre);
+                Assert.Equal(ofertasEsperadas[i].Precio, herramientasActuales[i].Precio);
+                Assert.Equal(ofertasEsperadas[i].Fabricante, herramientasActuales[i].Fabricante);
+            }
         }
     }
 }

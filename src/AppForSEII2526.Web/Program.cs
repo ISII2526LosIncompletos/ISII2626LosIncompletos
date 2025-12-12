@@ -19,10 +19,10 @@ builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
 
 builder.Services.AddAuthentication(options =>
-    {
-        options.DefaultScheme = IdentityConstants.ApplicationScheme;
-        options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
-    })
+{
+    options.DefaultScheme = IdentityConstants.ApplicationScheme;
+    options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+})
     .AddIdentityCookies();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -43,11 +43,13 @@ string? URI2API = builder.Configuration.GetValue(typeof(string), "AppForSEII2526
 //We creaete the service for accessing the API from where .WEB project
 builder.Services.AddScoped<AppForSEII2526APIClient>(sp => new AppForSEII2526APIClient(URI2API, new HttpClient()));
 
-
 //Agregar un servicio de contenedor (el de reparaciones) de estado en memoria
 //https://learn.microsoft.com/en-us/aspnet/core/blazor/state-management/?view=aspnetcore-8.0#in-memory-state-container-service
-builder.Services.AddScoped<RepararStateContainer>();
+builder.Services.AddScoped<ComprarStateContainer>();
 
+//Agregar un servicio de contenedor (el de compras) de estado en memoria
+//https://learn.microsoft.com/en-us/aspnet/core/blazor/state-management/?view=aspnetcore-8.0#in-memory-state-container-service
+builder.Services.AddScoped<RepararStateContainer>();
 
 var app = builder.Build();
 

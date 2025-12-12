@@ -699,6 +699,10 @@
             "format": "email",
             "nullable": true
           },
+          "compraId": {
+            "type": "integer",
+            "format": "int32"
+          },
           "nombreCliente": {
             "type": "string",
             "nullable": true
@@ -866,7 +870,7 @@
             "minItems": 1,
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/OfertaItemDTO"
+              "$ref": "#/components/schemas/OfertaItemInput"
             }
           }
         },
@@ -906,6 +910,26 @@
             "format": "double"
           },
           "precioFinal": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OfertaItemInput": {
+        "required": [
+          "herramientaId",
+          "porcentaje"
+        ],
+        "type": "object",
+        "properties": {
+          "herramientaId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "porcentaje": {
+            "maximum": 100,
+            "minimum": 0.01,
             "type": "number",
             "format": "double"
           }

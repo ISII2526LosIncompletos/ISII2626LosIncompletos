@@ -34,7 +34,7 @@ namespace AppForSEII2526.API.Controllers
                .Include(r=>r.ApplicationUser)
                .Include(r => r.CompraItems)
                   .ThenInclude(ri => ri.Herramienta)
-           .Select(r => new CompraDetalleDTO(r.ApplicationUser.Nombre,
+           .Select(r => new CompraDetalleDTO(r.Id, r.ApplicationUser.Nombre,
                   r.ApplicationUser.Apellidos, r.ApplicationUser.DireccionEnvio, r.PrecioTotal, r.FechaCompra, r.CompraItems
                       .Select(ri => new CompraItemDTO(ri.Herramienta.Id,
                               ri.Herramienta.Nombre, ri.Herramienta.Material, ri.Precio, ri.Cantidad,
@@ -156,7 +156,7 @@ namespace AppForSEII2526.API.Controllers
                 return Conflict("Error" + ex.Message);
 
             }
-            var detalleCompra = new CompraDetalleDTO(usuario.Nombre, usuario.Apellidos, usuario.DireccionEnvio, compra.PrecioTotal
+            var detalleCompra = new CompraDetalleDTO(compra.Id, usuario.Nombre, usuario.Apellidos, usuario.DireccionEnvio, compra.PrecioTotal
                 , compra.FechaCompra, compra.CompraItems.Select(ri => new CompraItemDTO(
                    ri.Herramienta.Id, ri.Herramienta.Nombre, ri.Herramienta.Material, ri.Herramienta.Precio, ri.Cantidad, ri.Descripcion)).ToList()
            );
