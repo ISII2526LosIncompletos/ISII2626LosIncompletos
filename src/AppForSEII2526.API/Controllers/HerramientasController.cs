@@ -59,12 +59,12 @@ namespace AppForSEII2526.API.Controllers
         public async Task<ActionResult> GetOfertas(string? fabricanteNombre, decimal? precio)
         {
             var herramientas = await _context.Herramientas
+                .Include(h => h.Fabricante)
                 .Where(h =>
-
-                    h.OfertaItems.Any() &&
-                    (fabricanteNombre == null || (h.Fabricante != null && h.Fabricante.Nombre.Contains(fabricanteNombre))) &&
-                    (precio == null || h.Precio == precio)
+                    (fabricanteNombre == null || (h.Fabricante != null && h.Fabricante.Nombre.Contains(fabricanteNombre))) &&            
+                    (precio == null || h.Precio <= precio)
                 )
+                .OrderBy(h => h.Nombre)
                 .Select(h => new HerramientasDTO(
                     h.Id,
                     h.Nombre,
@@ -77,7 +77,5 @@ namespace AppForSEII2526.API.Controllers
 
             return Ok(herramientas);
         }
-
-
     }
 }

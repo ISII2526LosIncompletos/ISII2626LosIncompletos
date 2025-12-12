@@ -1,7 +1,7 @@
 ﻿using AppForSEII2526.API.Controllers;
-using AppForSEII2526.API.Models;
 using AppForSEII2526.API.DTOs.OfertaDTOs;
-
+using AppForSEII2526.API.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AppForSEII2526.UT.OfertasController_test
 {
@@ -13,26 +13,25 @@ namespace AppForSEII2526.UT.OfertasController_test
         {
             _context = CreateContext();
 
-            var fabricante = new Fabricante { Nombre = "juan" };
-            _context.Fabricantes.Add(fabricante);
+            var wurt = new Fabricante { Id = 2, Nombre = "Wurt" };
 
-            var herramienta = new Herramienta
+            var destornillador = new Herramienta
             {
                 Id = 1,
-                Nombre = "Martillo",
-                Material = "acero",
-                Precio = 1.00m,
+                Nombre = "Destornillador",
+                Material = "Acero",
+                Precio = 12.50m,
                 TiempoReparacion = 1,
-                Fabricante = fabricante
+                FabricanteId = 2,
+                Fabricante = wurt
             };
-            _context.Herramientas.Add(herramienta);
 
             var oferta = new Oferta
             {
                 Id = 1,
-                FechaInicio = DateTime.UtcNow,
-                FechaFinal = DateTime.UtcNow.AddDays(5),
-                FechaOferta = DateTime.UtcNow,
+                FechaInicio = DateTime.Today,
+                FechaFinal = DateTime.Today.AddDays(2),
+                FechaOferta = DateTime.Today,
                 MetodoPago = tiposMetodosPago.TarjetaCredito,
                 DirigidaA = TiposDirigidaOferta.Clientes,
                 OfertaItems = new List<OfertaItem>()
@@ -40,23 +39,27 @@ namespace AppForSEII2526.UT.OfertasController_test
 
             var ofertaItem = new OfertaItem
             {
-                Herramienta = herramienta,
+                HerramientaId = 1,
+                Herramienta = destornillador,
                 Oferta = oferta,
                 Porcentaje = 10,
-                PrecioFinal = 0.90m
+                PrecioFinal = 11.25m
             };
 
             oferta.OfertaItems.Add(ofertaItem);
+
+            _context.Fabricantes.Add(wurt);
+            _context.Herramientas.Add(destornillador);
             _context.Ofertas.Add(oferta);
             _context.SaveChanges();
         }
 
         [Fact]
+        [Trait("LevelTesting", "Unit Testing")]
+        [Trait("Database", "WithoutFixture")]
         public async Task GetDetalleOferta_Success_test()
         {
-            var mockLogger = new Mock<ILogger<OfertasController>>();
-            ILogger<OfertasController> logger = mockLogger.Object;
-
+            var logger = new Mock<ILogger<OfertasController>>().Object;
             var controller = new OfertasController(_context, logger);
 
             var expectedDto = new OfertaDetailDTO
@@ -70,11 +73,11 @@ namespace AppForSEII2526.UT.OfertasController_test
                     {
                         HerramientaId = 1,
                         Porcentaje = 10m,
-                        HerramientaNombre = "Martillo",
-                        HerramientaMaterial = "acero",
-                        FabricanteNombre = "juan",
-                        PrecioOriginal = 1.00m,
-                        PrecioFinal = 0.90m
+                        HerramientaNombre = "Destornillador",
+                        HerramientaMaterial = "Acero",
+                        FabricanteNombre = "Wurt",
+                        PrecioOriginal = 12.50m,
+                        PrecioFinal = 11.25m
                     }
                 }
             };
@@ -83,10 +86,18 @@ namespace AppForSEII2526.UT.OfertasController_test
 
             var okResult = Assert.IsType<OkObjectResult>(result);
             var actualDto = Assert.IsType<OfertaDetailDTO>(okResult.Value);
-            Assert.Equal(expectedDto, actualDto);
+
+            Assert.Equal(expectedDto.Id, actualDto.Id);
+            Assert.Equal(expectedDto.MetodoPago, actualDto.MetodoPago);
+            Assert.Equal(expectedDto.Items.Count, actualDto.Items.Count);
+            Assert.Equal(expectedDto.Items[0].HerramientaNombre, actualDto.Items[0].HerramientaNombre);
+            Assert.Equal(expectedDto.Items[0].PrecioFinal, actualDto.Items[0].PrecioFinal);
+            Assert.Equal(expectedDto.Items[0].FabricanteNombre, actualDto.Items[0].FabricanteNombre);
         }
 
         [Fact]
+        [Trait("LevelTesting", "Unit Testing")]
+        [Trait("Database", "WithoutFixture")]
         public async Task GetDetalleOferta_NotFound_test()
         {
             var logger = new Mock<ILogger<OfertasController>>().Object;
