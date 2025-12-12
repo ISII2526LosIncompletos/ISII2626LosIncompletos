@@ -51,6 +51,10 @@ builder.Services.AddScoped<ComprarStateContainer>();
 //https://learn.microsoft.com/en-us/aspnet/core/blazor/state-management/?view=aspnetcore-8.0#in-memory-state-container-service
 builder.Services.AddScoped<RepararStateContainer>();
 
+//Agregar un servicio de contenedor (el de ofertas) de estado en memoria
+//https://learn.microsoft.com/en-us/aspnet/core/blazor/state-management/?view=aspnetcore-8.0#in-memory-state-container-service
+builder.Services.AddScoped<OfertaStateContainer>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
