@@ -6,14 +6,16 @@ namespace AppForSEII2526.Web
     {
         public OfertaForCreationDTO Oferta { get; private set; } = new OfertaForCreationDTO()
         {
-            Items = new List<OfertaItemDTO>()
+            Items = new List<OfertaItemInput>()
         };
+
+        public List<OfertaItemDTO> OfertaItems { get; private set; } = new List<OfertaItemDTO>();
 
         public float PrecioFinal
         {
             get
             {
-                return (float)Oferta.Items.Sum(oi => oi.PrecioFinal);
+                return (float)OfertaItems.Sum(oi => oi.PrecioFinal);
             }
         }
 
@@ -21,28 +23,40 @@ namespace AppForSEII2526.Web
 
         private void NotifyStateChanged() => OnChange?.Invoke();
 
-
         public void AddHerramientaToOferta(HerramientasDTO herramienta)
         {
-            if (!Oferta.Items.Any(oi => oi.HerramientaId == herramienta.HerramientaID))
-                Oferta.Items.Add(new OfertaItemDTO()
+            if (!OfertaItems.Any(oi => oi.HerramientaId == herramienta.HerramientaID))
+            {
+                var itemDto = new OfertaItemDTO()
                 {
                     HerramientaId = herramienta.HerramientaID,
                     HerramientaNombre = herramienta.Nombre,
                     HerramientaMaterial = herramienta.Material,
                     PrecioOriginal = herramienta.Precio,
                     FabricanteNombre = herramienta.Fabricante,
-                }
-            );
+                };
+                OfertaItems.Add(itemDto);
+                Oferta.Items.Add(new OfertaItemInput
+                {
+                    HerramientaId = herramienta.HerramientaID,
+                    Porcentaje = itemDto.Porcentaje
+                });
+            }
         }
 
         public void RemoveOfertaItemToOferta(OfertaItemDTO item)
         {
-            Oferta.Items.Remove(item);
+            OfertaItems.Remove(item);
+            var inputItem = Oferta.Items.FirstOrDefault(i => i.HerramientaId == item.HerramientaId);
+            if (inputItem != null)
+            {
+                Oferta.Items.Remove(inputItem);
+            }
         }
 
         public void ClearOfertaCart()
         {
+            OfertaItems.Clear();
             Oferta.Items.Clear();
         }
 
@@ -50,8 +64,9 @@ namespace AppForSEII2526.Web
         {
             Oferta = new OfertaForCreationDTO()
             {
-                Items = new List<OfertaItemDTO>()
+                Items = new List<OfertaItemInput>()
             };
+            OfertaItems.Clear();
         }
     }
 }
