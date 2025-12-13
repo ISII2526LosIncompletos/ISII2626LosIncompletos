@@ -3,19 +3,17 @@
 @inject NavigationManager navigation
 @using AppForSEII2526.Web.Components.Shared
 @using AppForSEII2526.Web.API
-@using Microsoft.AspNetCore.Authorization
 @inject AppForSEII2526APIClient apiclient
 @inject ILogger<CreateReparacion> logger
 @inject RepararStateContainer repararState
 
-@attribute [Authorize]
 <h3>Create Reparacion</h3>
 
 @* La reparación es el objeto que se editará gracias al formulario *@
 <EditForm Model="reparacion" OnValidSubmit="OpenDialog">
     <div class="row">
         <DataAnnotationsValidator />
-        <ValidationSummary class="row alert alert-danger" />
+        <ValidationSummary/>
     </div>
     <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
         <p id="ErrorsShown">Errores: @messageError</p>
@@ -62,7 +60,11 @@
         </div>
     </div>
     <h4>Detalles reparación</h4>
-    <p><b>Fecha entrega:</b> @reparacion.FechaEntrega.ToString("dd/MM/yyyy") <b>Fecha recogida:</b> @reparacion.FechaEntrega.AddDays(reparacion.ItemsReparacion.Max(r => r.TiempoReparacion)).ToString("dd/MM/yyyy")</p>
+    @{
+        var maxDias = (reparacion.ItemsReparacion != null && reparacion.ItemsReparacion.Any())
+        ? reparacion.ItemsReparacion.Max(r => r.TiempoReparacion) : 0;
+    }
+    <p><b>Fecha entrega:</b> @reparacion.FechaEntrega.ToString("dd/MM/yyyy") <b>Fecha recogida:</b> @reparacion.FechaEntrega.AddDays(maxDias).ToString("dd/MM/yyyy")</p>
     <p>
         <b>Precio total:</b> @PrecioTotal€
         <button class="btn btn-outline-primary" type="submit" @onclick="ModifyItemsReparacion" id="ModifyHerramientas">
@@ -74,6 +76,7 @@
             <thead>
                 <tr>
                     <th>Nombre</th>
+                    <th>Cantidad</th>
                     <th>Tiempo de reparación</th>
                     <th>Precio de reparación</th>
                     <th>Descripción</th>
@@ -84,6 +87,7 @@
                 {
                     <tr id="MovieData_@item.Nombre">
                         <td>@item.Nombre</td>
+                        <td><InputNumber @bind-value="item.Cantidad" class="form-control" id="@($"cantidad_{item.Cantidad}")" /></td>
                         <td>@item.TiempoReparacion</td>
                         <td>@item.PrecioReparacion</td>
                         <td><InputText @bind-Value="item.Descripcion" class="form-control" id="@($"description_{item.HerramientaID}")" /></td>
@@ -113,6 +117,7 @@
     {
         get
         {
+            if (reparacion?.ItemsReparacion == null || !reparacion.ItemsReparacion.Any()) return 0m;
             int numDias = reparacion.ItemsReparacion.Max(item => item.TiempoReparacion); //recogida
             //int numDias = (reparacion.FechaEntrega.DateTime - reparacion.FechaEntrega.AddDays(recogida).DateTime).Days;
             double precio = reparacion.ItemsReparacion.Sum(ri => ri.PrecioReparacion * numDias);
@@ -166,26 +171,5 @@
         }
     }
 
-    protected override async Task OnInitializedAsync()
-    {
-        if (authenticationState is not null)
-        {
-            var authState = await authenticationState;
-            var user = authState?.User;
-
-            if (user is not null)
-            {
-                if (user.Identity is not null && user.Identity.IsAuthenticated)
-                {
-                    reparacion.NombreCliente = user.Identity.Name;
-                }
-            }
-            reparacion.NombreCliente = reparacion.NombreCliente == null ? "" : reparacion.NombreCliente;
-            reparacion.ApellidoCliente = reparacion.ApellidoCliente == null ? "" : reparacion.ApellidoCliente;
-        }
-    }
-
-    [CascadingParameter]
-    private Task<AuthenticationState>? authenticationState { get; set; }
 
 }

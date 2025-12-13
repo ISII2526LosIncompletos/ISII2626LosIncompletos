@@ -167,7 +167,7 @@ namespace AppForSEII2526.API.Controllers
                     ).ToList()
                 );
 
-            return CreatedAtAction("CrearReparacion", new { id = reparacion.Id }, detalleReparacion);
+            return CreatedAtAction("GetDetalleReparar", new { id = reparacion.Id }, detalleReparacion);
         }
     }
 }
