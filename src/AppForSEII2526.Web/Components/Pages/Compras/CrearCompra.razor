@@ -14,7 +14,7 @@
 <EditForm Model="compra" OnValidSubmit="OpenDialog">
     <div class="row">
         <DataAnnotationsValidator />
-        <ValidationSummary class="row alert alert-danger"/>
+        <ValidationSummary/>
     </div>
     <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
         <p id="ErrorsShown">Errores: @messageError</p>
@@ -34,7 +34,7 @@
         </div>
         <div class="col-md">
             <div class="form-floating mb-3">
-                <InputDate @bind-Value="compra.DireccionEnvio" class="form-control" id="DirecciónEnvío" />
+                <InputText @bind-Value="compra.DireccionEnvio" class="form-control" id="DirecciónEnvío" />
                 <label for="FechaEntrega">Dirección de envío</label>
             </div>
         </div>
@@ -76,6 +76,7 @@
                     <th>Material</th>
                     <th>Precio de compra</th>
                     <th>Descripción</th>
+                    <th>Cantidad</th>
                 </tr>
             </thead>
             <tbody>
@@ -86,6 +87,7 @@
                         <td>@item.Material</td>
                         <td>@item.PrecioCompra</td>
                         <td><InputText @bind-Value="item.Descripcion" class="form-control" id="@($"description_{item.HerramientaID}")" /></td>
+                        <td><InputNumber @bind-Value="item.Cantidad" class="form-control" id="@($"cantidad_{item.Cantidad}")" /></td>
                     </tr>
                 }
             </tbody>
@@ -113,7 +115,8 @@
     {
         get
         {
-            double precio = compra.CompraItems.Sum(ri => ri.PrecioCompra);
+            if (compra?.CompraItems == null || !compra.CompraItems.Any()) return 0m;
+            double precio = compra.CompraItems.Sum(ri => ri.PrecioCompra* ri.Cantidad);
             return Convert.ToDecimal(precio);
         }
     }

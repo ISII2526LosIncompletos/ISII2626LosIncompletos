@@ -40,7 +40,7 @@ public class ApplicationUser : IdentityUser
     [Display(Name = "Correo electrónico")]
     [StringLength(50, ErrorMessage = "Corro electrónico no puede superar los 50 caracteres.")]
     [RegularExpression(@"^[A-Z]+[a-zA-Z''-'\s]*$")]
-    public string CorreoElectronico { get; set; }
+    public string? CorreoElectronico { get; set; }
 
     [Required]
     [Display(Name = "Número de teléfono")]
