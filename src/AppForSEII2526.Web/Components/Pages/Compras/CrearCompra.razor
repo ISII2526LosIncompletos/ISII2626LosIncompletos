@@ -4,7 +4,7 @@
 @using AppForSEII2526.Web.Components.Shared
 @using AppForSEII2526.Web.API
 @inject AppForSEII2526APIClient apiclient
-@inject ILogger<CrearCompra> Logger
+@inject ILogger<CrearCompra> logger
 @inject ComprarStateContainer comprarState
 
 
@@ -14,7 +14,7 @@
 <EditForm Model="compra" OnValidSubmit="OpenDialog">
     <div class="row">
         <DataAnnotationsValidator />
-        <ValidationSummary/>
+        <ValidationSummary class="row alert alert-danger"/>
     </div>
     <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
         <p id="ErrorsShown">Errores: @messageError</p>
@@ -39,7 +39,7 @@
             </div>
         </div>
     </div>
-    <div class=" row g-2">
+    <div class=" row g-5">
         <div class=" col-md">
             <div class="form-floating">
             @*Un menú desplegable para seleccionar el método de pago*@
@@ -51,6 +51,18 @@
             <label for="PaymentMethod">Método de Pago</label>
             </div>
          </div>
+        <div class="col-md">
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="compra.NumTelefono" class="form-control" id="Telefono" />
+                <label for="Telefono">Telefono </label>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="compra.CorreoElectronico" class="form-control" id="Email" />
+                <label for="Email">Correo Electronico </label>
+            </div>
+        </div>
         <div class="col-md">
             <div class="form-floating">
                 @*Este botón es para preguntar al usuario si quiere proceder a comprar una herramienta*@
@@ -143,6 +155,7 @@
             {
                 try
                 {
+                    compra.FechaCompra = DateTime.Today;
                     var comprado = await apiclient.CreateCompraAsync(compra);
                     comprarState.FinalizarCompra();
                     navigation.NavigateTo($"/compras/compradetalle/?compraID={comprado.CompraId}");

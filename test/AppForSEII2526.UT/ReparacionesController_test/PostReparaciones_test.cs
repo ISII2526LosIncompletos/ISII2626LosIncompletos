@@ -127,7 +127,7 @@ namespace AppForSEII2526.UT.ReparacionesController_test
             );
 
             var expectedReparacionDetalleDTO = new ReparacionDetalleDTO(
-                1, _nombreUsuario, _apellidosUsuario, entrega, recogida,
+                2, _nombreUsuario, _apellidosUsuario, entrega, recogida,
                 _numTelefono, new List<ReparacionItemDTO>()
                 {new ReparacionItemDTO(1, _herr1nombre, 13.00m, 2, 2, "Tienen arañazos")}
             );

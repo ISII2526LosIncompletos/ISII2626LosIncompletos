@@ -152,7 +152,7 @@ namespace AppForSEII2526.API.Controllers
 
             {
                 _logger.LogError(ex.Message);
-                ModelState.AddModelError("Reparacion", $"Error! Se ha producido un error al guardar su compra. Por favor, intentelo de nuevo");
+                ModelState.AddModelError("Compra", $"Error! Se ha producido un error al guardar su compra. Por favor, intentelo de nuevo");
                 return Conflict("Error" + ex.Message);
 
             }
@@ -161,7 +161,7 @@ namespace AppForSEII2526.API.Controllers
                    ri.Herramienta.Id, ri.Herramienta.Nombre, ri.Herramienta.Material, ri.Herramienta.Precio, ri.Cantidad, ri.Descripcion)).ToList()
            );
 
-            return CreatedAtAction(nameof(GetDetalleCompras), new { id = compra.Id }, detalleCompra);
+            return CreatedAtAction("GetDetalleCompras", new { id = compra.Id }, detalleCompra);
         }
     }
 }

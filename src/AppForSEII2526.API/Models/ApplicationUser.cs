@@ -7,7 +7,7 @@ public class ApplicationUser : IdentityUser
     {
     }
 
-    public ApplicationUser(string nombre, string apellidos, string direccionEnvio, string correoElectronico, string numTelefono, RolUsuario rol, DateTime fechaRegistro)
+    public ApplicationUser(string nombre, string apellidos, string direccionEnvio, string? correoElectronico, string? numTelefono, RolUsuario rol, DateTime fechaRegistro)
     {
         Nombre = nombre;
         Apellidos = apellidos;
@@ -46,7 +46,7 @@ public class ApplicationUser : IdentityUser
     [Display(Name = "Número de teléfono")]
     [StringLength(9, ErrorMessage = "Número de telefono no puede superar los 9 caracteres.")]
     [RegularExpression(@"^[0-9]*$")]
-    public string NumTelefono { get; set; }
+    public string? NumTelefono { get; set; }
 
     [Display(Name = "Rol de usuario")]
     public RolUsuario Rol { get; set; }

@@ -3,7 +3,7 @@ namespace AppForSEII2526.API.DTOs.CompraDTOs
     public class CompraCreacionDTO
     {
         public CompraCreacionDTO(string nombreCliente, string apellidoCliente, string direccionEnvio,
-            tiposMetodosPago metodoPago, string numTelefono, string? correoElectronico, DateTime fechaCompra, IList<CompraItemDTO> compraItems)
+            tiposMetodosPago metodoPago, string? numTelefono, string? correoElectronico, DateTime fechaCompra, IList<CompraItemDTO> compraItems)
         {
             NombreCliente = nombreCliente;
             ApellidoCliente = apellidoCliente;
