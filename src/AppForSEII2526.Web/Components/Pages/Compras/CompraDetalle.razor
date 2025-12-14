@@ -1,0 +1,101 @@
+﻿@page "/compras/compradetalle"
+
+@using AppForSEII2526.Web.API
+@inject AppForSEII2526APIClient apiclient
+
+<h3>CompraDetalle</h3>
+
+@if (compra == null)
+{
+    <p>@error</p>
+}
+else
+{
+    <table class="table table-borderless table-sm">
+        <tr>
+            <th>Nombre y apellidos</th>
+            <td id="NombreApellidos">@compra.NombreCliente @compra.ApellidoCliente</td>
+        </tr>
+        <tr>
+            <th>Dirección de envio</th>
+            <td id="DireccionEnvio">@compra.DireccionEnvio</td>
+        </tr>
+        <tr>
+            <th>Precio Total</th>
+            <td id="PrecioTotal">@GetPrecioTotal().ToString("0.##") €</td>
+        </tr>
+        <tr>
+            <th>Fecha Compra</th>
+            <td id="FechaCompra">@compra.FechaCompra.ToString("dd/MM/yyyy")</td>
+        </tr>
+    </table>
+<h4>Herramientas a comprar</h4>
+
+<table class="table" id="HerramientasCompradas">
+    @*Aquí se muestra la información de cada herramienta comprada*@
+        <thead>
+            <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Material</th>
+                <th scope="col">Precio</th>
+                <th scope="col">Cantidad</th>
+                <th scope="col">Descripción</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (CompraItemDTO item in compra.CompraItems)
+            {
+                <tr id="CompraItem_@item.Nombre">
+                    <td>@item.Nombre</td>
+                    <td>@item.Material</td>
+                    <td>@GetPrecioItem(item).ToString("0.##") €</td>
+                    <td>@item.Cantidad</td>
+                    <td>@item.Descripcion</td>
+                </tr>
+            }
+        </tbody>
+
+        <tfoot>
+            @*tfoot es información de resumen de la tabla*@
+            @*colspan es para indicar que hay 2 columnas colapsadas*@
+        <th scope="row" colspan="2" class="text-end">Precio Total:</th>
+        <td id="TotalPrice">@GetPrecioTotal().ToString("0.##") €</td>
+        </tfoot>
+</table>
+}
+@code {
+        [Parameter]
+        [SupplyParameterFromQuery]
+        public int CompraId { get; set; }
+    private CompraDetalleDTO compra;
+    private string error = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        try{
+            compra = await apiclient.GetDetalleComprasAsync(CompraId);
+        }
+        catch(ApiException exception)
+        {
+            compra = null;
+        }
+        if (compra == null)
+        {
+            error = $"Error! No hay ninguna reparación con ID={CompraId}";
+        }
+    }
+    private decimal GetPrecioItem(CompraItemDTO item)
+    {
+        if(item==null) return 0m;
+        double precioitem= item.Cantidad > 0 ? Math.Round(item.PrecioCompra / item.Cantidad, 2) : item.PrecioCompra;
+        return Convert.ToDecimal(precioitem);
+    }
+    private decimal GetPrecioTotal()
+    {
+        if (compra?.CompraItems == null) return 0m;
+
+        double precio= compra.CompraItems.Sum(i => i.PrecioCompra);
+        return Convert.ToDecimal(precio);
+    }
+
+}
