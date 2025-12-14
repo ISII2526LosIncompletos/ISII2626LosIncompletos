@@ -5,31 +5,62 @@
 
 <h3>CompraDetalle</h3>
 
-<table class="table table-borderless table-sm">
-    <tr>
-        <th>Nombre y apellidos</th>
-        <td id="NombreApellidos">@compra.NombreCliente @compra.ApellidoCliente</td>
-    </tr>
-    <tr>
-        <th>Direccion de envio</th>
-        <td id="DireccionEnvio">@compra.DireccionEnvio</td>
-    </tr>
-    <tr>
-        <th>Precio total</th>
-        @*Hay que calcular el precio total*@
-        <td id="PrecioTotal">@PrecioTotal €</td>
-    </tr>
-    <tr>
-        <th>Fecha de compra</th>
-        <td id="FechaCompra">@compra.FechaCompra.ToString("dd/MM/yyyy")</td>
-    </tr>
-</table>
-
+@if (compra == null)
+{
+    <p>@error</p>
+}
+else
+{
+    <table class="table table-borderless table-sm">
+        <tr>
+            <th>Nombre y apellidos</th>
+            <td id="NombreApellidos">@compra.NombreCliente @compra.ApellidoCliente</td>
+        </tr>
+        <tr>
+            <th>Dirección de envio</th>
+            <td id="DireccionEnvio">@compra.DireccionEnvio</td>
+        </tr>
+        <tr>
+            <th>Precio Total</th>
+            <td id="PrecioTotal">@GetPrecioTotal().ToString("0.##") €</td>
+        </tr>
+        <tr>
+            <th>Fecha Compra</th>
+            <td id="FechaCompra">@compra.FechaCompra.ToString("dd/MM/yyyy")</td>
+        </tr>
+    </table>
 <h4>Herramientas a comprar</h4>
 
 <table class="table" id="HerramientasCompradas">
     @*Aquí se muestra la información de cada herramienta comprada*@
+        <thead>
+            <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Material</th>
+                <th scope="col">Precio</th>
+                <th scope="col">Cantidad</th>
+                <th scope="col">Descripción</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (CompraItemDTO item in compra.CompraItems)
+            {
+                <tr id="CompraItem_@item.Nombre">
+                    <td>@item.Nombre</td>
+                    <td>@item.Material</td>
+                    <td>@GetPrecioItem(item).ToString("0.##") €</td>
+                    <td>@item.Cantidad</td>
+                    <td>@item.Descripcion</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            @*colspan is used to state that TWO columns are collapsed*@
+        <th scope="row" colspan="2" class="text-end">Precio Total</th>
+        <td id="TotalPrice">@GetPrecioTotal().ToString("0.##") €</td>
+        </tfoot>
 </table>
+}
 @code {
     [Parameter]
     [SupplyParameterFromQuery]
@@ -37,15 +68,6 @@
     private CompraDetalleDTO compra;
     private string error = "";
 
-    private decimal PrecioTotal
-    {
-        get
-        {
-            if (compra?.CompraItems == null || !compra.CompraItems.Any()) return 0m;
-            double precio = compra.CompraItems.Sum(ri => ri.PrecioCompra * ri.Cantidad);
-            return Convert.ToDecimal(precio);
-        }
-    }
     protected override async Task OnInitializedAsync()
     {
         try{
@@ -55,6 +77,19 @@
         {
             compra = null;
         }
+    }
+    private decimal GetPrecioItem(CompraItemDTO item)
+    {
+        if(item==null) return 0m;
+        double precioitem= item.Cantidad > 0 ? Math.Round(item.PrecioCompra / item.Cantidad, 2) : item.PrecioCompra;
+        return Convert.ToDecimal(precioitem);
+    }
+    private decimal GetPrecioTotal()
+    {
+        if (compra?.CompraItems == null) return 0m;
+
+        double precio= compra.CompraItems.Sum(i => i.PrecioCompra);
+        return Convert.ToDecimal(precio);
     }
 
 }
