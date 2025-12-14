@@ -54,17 +54,19 @@ else
                 </tr>
             }
         </tbody>
+
         <tfoot>
-            @*colspan is used to state that TWO columns are collapsed*@
+            @*tfoot es información de resumen de la tabla*@
+            @*colspan es para indicar que hay 2 columnas colapsadas*@
         <th scope="row" colspan="2" class="text-end">Precio Total</th>
         <td id="TotalPrice">@GetPrecioTotal().ToString("0.##") €</td>
         </tfoot>
 </table>
 }
 @code {
-    [Parameter]
-    [SupplyParameterFromQuery]
-    public int CompraId { get; set; }
+        [Parameter]
+        [SupplyParameterFromQuery]
+        public int CompraId { get; set; }
     private CompraDetalleDTO compra;
     private string error = "";
 
@@ -76,6 +78,10 @@ else
         catch(ApiException exception)
         {
             compra = null;
+        }
+        if (compra == null)
+        {
+            error = $"Error! No hay ninguna reparación con ID={CompraId}";
         }
     }
     private decimal GetPrecioItem(CompraItemDTO item)
