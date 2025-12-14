@@ -8,8 +8,8 @@ namespace AppForSEII2526.UIT.UC_Reparacion
 {
     internal class SelectHerramientasParaReparar_PO : PageObject
     {
-        By inputNombre = By.Id("herrNombre");
-        By inputTiempoRep = By.Id("herrTiempoRep");
+        By inputNombre = By.Id("inputNombre");
+        By inputTiempoRep = By.Id("inputTiempoReparacion");
         By buttonSearchHerramienta = By.Id("SearchHerramienta");
         public SelectHerramientasParaReparar_PO(IWebDriver driver, ITestOutputHelper output) : base(driver, output)
         {
@@ -19,8 +19,8 @@ namespace AppForSEII2526.UIT.UC_Reparacion
             //Espera a que se pueda hacer clic en el elemento web
             WaitForBeingClickable(inputNombre);
             _driver.FindElement(inputNombre).SendKeys(nombre);
-            WaitForBeingClickable(inputTiempoRep);
-            _driver.FindElement(inputTiempoRep).SendKeys(tiempoRep);
+            if (tiempoRep != null) 
+                _driver.FindElement(inputTiempoRep).SendKeys(tiempoRep);
             _driver.FindElement(buttonSearchHerramienta).Click();
 
 

@@ -96,7 +96,7 @@
     private bool hideErrors { get { return errors.Length == 0; } }
     private string errors = "";
     private string herrNombre { get; set; }
-    private int herrTiempoRep { get; set; }
+    private int? herrTiempoRep { get; set; }
     private ReparacionCreacionDTO reparacion => reparacionState.Reparacion;
     private bool carritoRepararOculto = true;
 
