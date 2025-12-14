@@ -1,7 +1,41 @@
 ﻿@page "/compras/compradetalle"
 
+@using AppForSEII2526.Web.API
+@inject AppForSEII2526APIClient apiclient
+
 <h3>CompraDetalle</h3>
 
+<table class="table table-borderless table-sm">
+    <tr>
+        <th>Nombre y apellidos</th>
+        <td id="NombreApellidos">@compra.NombreCliente @compra.ApellidoCliente</td>
+    </tr>
+    <tr>
+        <th>Direccion de envio</th>
+        <td id="DireccionEnvio">@compra.DireccionEnvio</td>
+    </tr>
+    <tr>
+        <th>Precio total</th>
+        @*Hay que calcular el precio total*@
+        <td id="PrecioTotal">@compra.PrecioTotal €</td>
+    </tr>
+    <tr>
+        <th>Fecha de compra</th>
+        <td id="FechaCompra">@compra.FechaCompra.ToString("dd/MM/yyyy")</td>
+    </tr>
+</table>
+
+<h4>Herramientas a comprar</h4>
+
+<table class="table" id="HerramientasCompradas">
+    @*Aquí se muestra la información de cada herramienta comprada*@
+</table>
 @code {
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public int CompraId { get; set; }
+    private CompraDetalleDTO compraDetalle;
+    private string error = "";
+
 
 }
