@@ -17,7 +17,7 @@
     <tr>
         <th>Precio total</th>
         @*Hay que calcular el precio total*@
-        <td id="PrecioTotal">@compra.PrecioTotal €</td>
+        <td id="PrecioTotal">@PrecioTotal €</td>
     </tr>
     <tr>
         <th>Fecha de compra</th>
@@ -34,8 +34,27 @@
     [Parameter]
     [SupplyParameterFromQuery]
     public int CompraId { get; set; }
-    private CompraDetalleDTO compraDetalle;
+    private CompraDetalleDTO compra;
     private string error = "";
 
+    private decimal PrecioTotal
+    {
+        get
+        {
+            if (compra?.CompraItems == null || !compra.CompraItems.Any()) return 0m;
+            double precio = compra.CompraItems.Sum(ri => ri.PrecioCompra * ri.Cantidad);
+            return Convert.ToDecimal(precio);
+        }
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        try{
+            compra = await apiclient.GetDetalleComprasAsync(CompraId);
+        }
+        catch(ApiException exception)
+        {
+            compra = null;
+        }
+    }
 
 }
