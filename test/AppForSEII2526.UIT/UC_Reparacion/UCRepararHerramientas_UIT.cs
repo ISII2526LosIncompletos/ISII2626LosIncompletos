@@ -30,16 +30,18 @@ namespace AppForSEII2526.UIT.UC_Reparacion
             _driver.FindElement(By.Id("CreateReparacion")).Click();
         }
 
-        [Fact]
+        [Theory]
+        [InlineData(herrNombre1, herrMaterial1, herrFabricante1, herrPrecio1, herrTiempoRep1, "Desto", "")]
         [Trait("LevelTesting", "Funcional Testing")]
-        public void UC2_1_2_3_AF0_filtering()
+        public void UC2_1_2_3_AF0_filtering(string herrNombre, string herrMaterial, string herrFabricante, string herrPrecio,
+            string herrTiempoRep, string filtroNombre, string filtroTiempoRep)
         {
             //Arrange
             InitialStepsParaRepararHerramientas();
-            var expectedHerramientas = new List<string[]> { new string[] { herrNombre1, herrMaterial1, herrFabricante1, herrPrecio1, herrTiempoRep1 }, };
+            var expectedHerramientas = new List<string[]> { new string[] { herrNombre, herrMaterial, herrFabricante, herrPrecio, herrTiempoRep }, };
 
             //Act
-            selectHerramientasParaReparar_PO.SearchHerramienta("Desto", "");
+            selectHerramientasParaReparar_PO.SearchHerramienta(filtroNombre, filtroTiempoRep);
 
             //Assert
             Assert.True(selectHerramientasParaReparar_PO.CheckListaHerramientas(expectedHerramientas));
