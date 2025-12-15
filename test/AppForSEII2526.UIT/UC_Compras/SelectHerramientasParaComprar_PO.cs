@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OpenQA.Selenium.Support.UI;
 
 namespace AppForSEII2526.UIT.UC_Compras
 {
@@ -19,6 +20,10 @@ namespace AppForSEII2526.UIT.UC_Compras
             //Espera a que el elemento sea clickable
             WaitForBeingClickable(inputPrecio);
             _driver.FindElement(inputPrecio).SendKeys(precio);
+
+            WaitForBeingClickable(inputMaterial);
+            _driver.FindElement(inputMaterial).SendKeys(material);
+
             _driver.FindElement(buttonSearchHerramienta).Click();
 
 
