@@ -35,6 +35,21 @@ namespace AppForSEII2526.UIT.UC_Reparacion
 
             return CheckBodyTable(expectedHerramientas, tablaHerramientasBy);
         }
-        
+
+        public bool BotonRepararHerramientasOculto()
+        {
+            try
+            {
+                //Si el botón está oculto (no visible), devolvemos true
+                return !_driver.FindElement(buttonRepararHerramientas).Displayed;
+            }
+            catch (Exception ex)
+            {
+                //Si hay alguna excepción, como que el botón no existe, es porque está oculto
+                return true;
+            }
+        }
+
+
     }
 }
