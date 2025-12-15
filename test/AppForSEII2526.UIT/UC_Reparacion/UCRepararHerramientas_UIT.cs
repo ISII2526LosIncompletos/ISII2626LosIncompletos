@@ -77,5 +77,26 @@ namespace AppForSEII2526.UIT.UC_Reparacion
             Assert.True(selectHerramientasParaReparar_PO.BotonRepararHerramientasOculto());
         }
 
+        [Fact]
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void UC2_5_AF2_modificarBorrando()
+        {
+            //Arrange
+            InitialStepsParaRepararHerramientas();
+            selectHerramientasParaReparar_PO.SearchHerramienta("", "");
+            Thread.Sleep(500);
+
+            //Act
+            //Añadimos una herramienta al carrito de reparación
+            selectHerramientasParaReparar_PO.AddHerramienta(herrNombre1);
+            Thread.Sleep(500);
+            //Ahora quitamos esa herramienta
+            selectHerramientasParaReparar_PO.RemoveHerramienta(herrNombre1);
+            Thread.Sleep(500);
+
+            //Assert
+            Assert.True(selectHerramientasParaReparar_PO.BotonRepararHerramientasOculto());
+        }
+
     }
 }
