@@ -50,6 +50,12 @@ namespace AppForSEII2526.UIT.UC_Reparacion
             }
         }
 
+        public void AddHerramienta(string nombre)
+        {
+            By buttomAdd = By.Id("herramientaReparar_" + nombre);
+            WaitForBeingClickable(buttomAdd);
+            _driver.FindElement(buttomAdd).Click();
+        }
 
     }
 }
