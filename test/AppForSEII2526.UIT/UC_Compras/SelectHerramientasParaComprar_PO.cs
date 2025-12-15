@@ -11,6 +11,7 @@ namespace AppForSEII2526.UIT.UC_Compras
     {
         By inputPrecio = By.Id("precioHerramienta");
         By inputMaterial= By.Id("materialHerramienta");
+        By tableHerramientasBy = By.Id("tablaHerramientas");
         By buttonSearchHerramienta = By.Id("buscarHerramientas");
         public SelectHerramientasParaComprar_PO(IWebDriver driver, ITestOutputHelper output) : base(driver, output)
         { 
@@ -27,6 +28,11 @@ namespace AppForSEII2526.UIT.UC_Compras
             _driver.FindElement(buttonSearchHerramienta).Click();
 
 
+        }
+        public bool CheckListaDeHerramientas(List<string[]> expectedHerramientas)
+        {
+
+            return CheckBodyTable(expectedHerramientas, tableHerramientasBy);
         }
     }
 }
