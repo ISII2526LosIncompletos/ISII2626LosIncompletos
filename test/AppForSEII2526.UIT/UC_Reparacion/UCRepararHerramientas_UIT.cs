@@ -12,6 +12,7 @@ namespace AppForSEII2526.UIT.UC_Reparacion
     public class UCRepararHerramientas_UIT : UC_UIT
     {
         private SelectHerramientasParaReparar_PO selectHerramientasParaReparar_PO;
+        private CrearReparacion_PO crearReparacion_PO;
 
         private const string herrNombre1 = "Destornillador";
         private const string herrMaterial1 = "Acero";
@@ -25,9 +26,13 @@ namespace AppForSEII2526.UIT.UC_Reparacion
         private const string herrPrecio2 = "10,3";
         private const string herrTiempoRep2 = "2";
 
+        private const string nombreC = "Lucia";
+        private const string apellidoC = "Martinez";
+
         public UCRepararHerramientas_UIT(ITestOutputHelper output) : base(output)
         {
             selectHerramientasParaReparar_PO = new SelectHerramientasParaReparar_PO(_driver, _output);
+            crearReparacion_PO = new CrearReparacion_PO(_driver, _output);
         }
 
         private void InitialStepsParaRepararHerramientas()
@@ -110,8 +115,8 @@ namespace AppForSEII2526.UIT.UC_Reparacion
             Thread.Sleep(500);
 
             //Act
-            DateTime fecha = DateTime.Now.AddDays(-1); //Fecha anterior a hoy
-            
+            DateTime fechaAntes = DateTime.Now.AddDays(-1); //Fecha anterior a hoy
+            crearReparacion_PO.RellenarFormulario(nombreC, apellidoC, fechaAntes);
 
             //Assert
             
