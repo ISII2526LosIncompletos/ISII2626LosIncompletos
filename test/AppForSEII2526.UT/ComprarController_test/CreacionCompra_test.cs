@@ -99,7 +99,7 @@ namespace AppForSEII2526.UT.ComprarController_test
                 new object[] {compraSinDescripcion, "La descripcion no puede estar vacia"},
                 new object[] {compraCantidad, "La cantidad debe ser mayor que cero."},
                 new object[] {compraErronea, $"La herramienta '{compraErronea.CompraItems[0].Nombre}' no existe." },
-                new object[] {compraPagoEfectivo, "No aceptamos compras pagadas en efectivo" }
+                new object[] {compraPagoEfectivo, "Error! No aceptamos compras pagadas en efectivo" }
             };
 
             return allTest;
