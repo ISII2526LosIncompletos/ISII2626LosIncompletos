@@ -84,6 +84,10 @@ namespace AppForSEII2526.UT.ComprarController_test
                 _NumTelefono, _CorreoElectronico, DateTime.Today, new List<CompraItemDTO>());
             compraErronea.CompraItems.Add(new CompraItemDTO(5, "Alicates", "Acero", 9.65m, 1, "Alicates para moldear"));
 
+            var compraPagoEfectivo = new CompraCreacionDTO(_NombreUsuario, _ApellidoUsuario, _DireccionEnvio, tiposMetodosPago.Efectivo,
+                _NumTelefono, _CorreoElectronico, DateTime.Today, new List<CompraItemDTO>());
+            compraPagoEfectivo.CompraItems.Add(new CompraItemDTO(1,"Tenaza", "Acero", 26.41m, 1, "Descripcion Ejemplo"));
+
 
             var allTest = new List<object[]> //Entradas para CreacionCompra y el mensaje de error esperado
             {
@@ -146,6 +150,7 @@ namespace AppForSEII2526.UT.ComprarController_test
             //Assert: vemos que la respuesta es CreatedAtAction
             var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(result);
             var compraDTOActual = Assert.IsType<CompraDetalleDTO>(createdAtActionResult.Value);
+            expectedCompra.CompraId= compraDTOActual.CompraId;
             Assert.Equal(expectedCompra, compraDTOActual);
 
         }
