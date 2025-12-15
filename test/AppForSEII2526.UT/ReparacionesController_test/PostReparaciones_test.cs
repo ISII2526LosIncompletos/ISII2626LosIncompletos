@@ -60,6 +60,9 @@ namespace AppForSEII2526.UT.ReparacionesController_test
             var reparacionEntregaAntesHoy = new ReparacionCreacionDTO(_nombreUsuario, _apellidosUsuario,
                 _numTelefono, new DateTime(2025, 10, 01), tiposMetodosPago.TarjetaCredito, reparacionItems);
 
+            var reparacionEntregaSemana = new ReparacionCreacionDTO(_nombreUsuario, _apellidosUsuario,
+                _numTelefono, DateTime.Today.AddDays(10), tiposMetodosPago.TarjetaCredito, reparacionItems);
+
             var reparacionApplicationUser = new ReparacionCreacionDTO("Pepito", "Diaz",
                 "987654321", DateTime.Today, tiposMetodosPago.TarjetaCredito, reparacionItems);
 
@@ -72,6 +75,7 @@ namespace AppForSEII2526.UT.ReparacionesController_test
             {
                 new object[] { reparacionNoItem, "Error! Debe incluir al menos una herramienta para reparar", },
                 new object[] { reparacionEntregaAntesHoy, "Error! La fecha en la que se entrega la herramienta debe ser, como mínimo, hoy", },
+                new object[] { reparacionEntregaSemana, "Error! Debes entregar tus herramientas antes de que pase una semana", },
                 new object[] { reparacionApplicationUser, "Error! El usuario Pepito Diaz no está registrado", },
                 new object[] { reparacionHerramNoExiste, "Error! La herramienta Sierra no existe", },
             };

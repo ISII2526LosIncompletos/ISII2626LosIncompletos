@@ -77,6 +77,11 @@ namespace AppForSEII2526.API.Controllers
                 ModelState.AddModelError("FechaEntrega", "Error! La fecha en la que se entrega la herramienta debe ser, como mínimo, hoy");
             }
 
+            if (creacionReparacion.FechaEntrega > DateTime.Today.AddDays(7))
+            {
+                ModelState.AddModelError("FechaEntregaSemana", "Error! Debes entregar tus herramientas antes de que pase una semana");
+            }
+
             if (creacionReparacion.ItemsReparacion.Count == 0)
             {
                 ModelState.AddModelError("ItemsReparacion", "Error! Debe incluir al menos una herramienta para reparar");
