@@ -1,5 +1,197 @@
-﻿<h3>CreateOferta</h3>
+﻿@page "/ofertas/createoferta"
+
+@inject NavigationManager navigation
+@using AppForSEII2526.Web.Components.Shared
+@using AppForSEII2526.Web.API
+@inject AppForSEII2526APIClient apiclient
+@inject ILogger<CreateOferta> logger
+@inject OfertaStateContainer ofertaState
+
+@* @attribute [Authorize] *@
+
+<h3>CrearOferta</h3>
+
+<EditForm Model="oferta" OnValidSubmit="OpenDialog">
+    <div class="row">
+        <DataAnnotationsValidator />
+        <ValidationSummary class="row alert alert-danger" />
+    </div>
+    <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
+        <p id="ErrorsShown">Errors: @messageError</p>
+    </div>
+    <h4>Detalle Oferta</h4>
+    <div class="row g-2 mb-3">
+        <div class="col-md">
+            <div class="form-floating">
+                <InputDate @bind-Value="oferta.FechaInicio" class="form-control" id="FechaInicio" />
+                <label for="FechaInicio">Fecha Inicio</label>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="form-floating">
+                <InputDate @bind-Value="oferta.FechaFinal" class="form-control" id="FechaFinal" />
+                <label for="FechaFinal">FechaFinal</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-2">
+        <div class="col-md">
+            <div class="form-floating">
+                <InputSelect class="form-select" @bind-Value="@oferta.MetodoPago" id="MetodoPago">
+                    <option value="TarjetaCredito" selected>TarjetaCredito</option>
+                    <option value="PayPal">PayPal</option>
+                    <option value="Efectivo">Efectivo</option>
+                </InputSelect>
+                <label for="MetodoPago">Metodo de Pago</label>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="form-floating">
+                <InputSelect class="form-select" @bind-Value="dirigidaA" id="DirigidaOferta">
+                    <option value="@TiposDirigdaOferta.Clientes">Clientes</option>
+                    <option value="@TiposDirigdaOferta.Socios">Socios</option>
+                </InputSelect>
+                <label for="TipoDirigidaOferta">Dirigida a</label>
+            </div>
+        </div>
+        <div class="col-md mb-3">
+            <div class="form-floating">
+                <button class="btn btn-primary" type="submit" id="Submit">
+                    Crea ofertas de tus herramientas
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <p>
+        <b>Precio Total:</b> @CosteTotal €
+        <button class="btn btn-outline-primary" type="submit" @onclick="ModificarOfertaItems" id="ModificarHerramientas">
+            Modificar herramientas
+        </button>
+    </p>
+
+    <div class="mh-100 table-responsive">
+        <table class="table table-condensed table-hover" id="TablaOfertaHerramientas">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Material</th>
+                    <th>Precio</th>
+                    <th>Porcentaje</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                @foreach (var item in ofertaState.OfertaItems)
+                {
+                    <tr id="HerramientaData_@item.HerramientaId">
+                        <td>@item.HerramientaNombre</td>
+                        <td>@item.HerramientaMaterial</td>
+                        <td>@item.PrecioOriginal</td>
+                        <td><InputNumber @bind-Value="item.Porcentaje" class="form-control" id="@($"porcentaje_{item.HerramientaId}")" /></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</EditForm>
+
+@if (DialogIsOpen)
+{
+    <Dialog Caption="Oferta herramientas"
+            Message="¿Quieres continuar para crear ofertas de las herramientas seleccionadas?"
+            OnClose="@OnDialogClose"
+            Type=Dialog.Category.SaveNot>
+    </Dialog>
+}
 
 @code {
 
+    public enum TiposDirigdaOferta
+    {
+        Clientes,
+        Socios
+    }
+
+    private string messageError = "";
+    private bool hideErrors { get { return messageError.Length == 0; } }
+    private bool DialogIsOpen;
+    private decimal CosteTotal
+    {
+        get
+        {
+            return ofertaState.OfertaItems.Sum(oi => (decimal)oi.PrecioOriginal * (100m - (decimal)oi.Porcentaje) / 100m);
+        }
+    }
+    private void ModificarOfertaItems()
+    {
+        navigation.NavigateTo("/Oferta/SelectHerramientaParaOferta");
+    }
+    private OfertaForCreationDTO oferta =>
+    ofertaState.Oferta;
+
+    private TiposDirigdaOferta dirigidaA
+    {
+        get
+        {
+            if (oferta.DirigidaA == nameof(TiposDirigdaOferta.Socios))
+                return TiposDirigdaOferta.Socios;
+            return TiposDirigdaOferta.Clientes;
+        }
+        set
+        {
+            oferta.DirigidaA = value.ToString();
+        }
+    }
+
+    private void OpenDialog()
+    {
+        DialogIsOpen = true;
+    }
+
+    private async Task OnDialogClose(bool isOk)
+    {
+        DialogIsOpen = false;
+        if (isOk)
+        {
+            if (oferta.Items.Count > 0)
+            {
+                try
+                {
+                    var ofertado = await apiclient.CreateOfertaAsync(oferta);
+                    ofertaState.OfertaProcessed();
+                    navigation.NavigateTo($"/Oferta/DetallesOferta/?ofertaID={ofertado.Id}");
+                }
+                catch (ApiException<ValidationProblemDetails> apiexceptionvalidation)
+                {
+                    if (apiexceptionvalidation.Result.Errors.Values != null)
+                    {
+                        messageError = "";
+                        foreach (var errors in apiexceptionvalidation.Result.Errors.Values)
+                            //https://learn.microsoft.com/en-us/dotnet/api/system.string.join?view=net-7.0
+                            messageError = string.Join("(*) ", messageError, string.Join(" (*) ", errors));
+                    }
+                }
+                catch (ApiException apiexception)
+                {
+                    messageError = "Error mientras se procesaba tu oferta, por favor intentelo mas tarde";
+
+                }
+
+            }
+
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        oferta.FechaInicio = DateTimeOffset.Now;
+        oferta.FechaFinal = DateTimeOffset.Now;
+    }
+
+
+
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationState { get; set; }
 }
