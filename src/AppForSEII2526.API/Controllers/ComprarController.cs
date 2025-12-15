@@ -81,6 +81,10 @@ namespace AppForSEII2526.API.Controllers
             if (usuario == null)
                 ModelState.AddModelError("CompraApplicationUser", "El usuario no existe.");
 
+            if (compraCreacion.MetodoPago.Equals(tiposMetodosPago.Efectivo))
+            {
+                ModelState.AddModelError("Método de Pago", "Error! No aceptamos compras pagadas en efectivo");
+            }
             if (ModelState.ErrorCount > 0)
                 return BadRequest(new ValidationProblemDetails(ModelState));
 
@@ -105,6 +109,7 @@ namespace AppForSEII2526.API.Controllers
 
             foreach (var item in compraCreacion.CompraItems)
             {
+                
                 if (item.Cantidad <= 0)
                 {
                     ModelState.AddModelError("Cantidad", "La cantidad debe ser mayor que cero.");
