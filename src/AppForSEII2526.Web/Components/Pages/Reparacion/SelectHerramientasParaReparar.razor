@@ -43,7 +43,6 @@
                             <table class="table table-condensed table-hover" id="TablaHerramientas">
                                 <thead>
                                     <tr>
-                                        <th>ID herramienta</th>
                                         <th>Nombre</th>
                                         <th>Material</th>
                                         <th>Fabricante</th>
@@ -55,7 +54,6 @@
                                     @foreach (var herr in herramientas)
                                     {
                                         <tr id="HerramientaData_@herr.Nombre">
-                                            <td>@herr.HerramientaID</td>
                                             <td>@herr.Nombre</td>
                                             <td>@herr.Material</td>
                                             <td>@herr.Fabricante</td>
@@ -83,7 +81,7 @@
                     </div>
                 }
                 <div class="row">
-                    <button type="button" class="btn btn-primary" id="compraHerramientaButton" @onclick=@RepararHerramienta>Reparar herramienta</button>
+                    <button type="button" class="btn btn-primary" id="repararHerramientaButton" @onclick=@RepararHerramienta>Reparar herramienta</button>
                 </div>
             </div>
         </div>
