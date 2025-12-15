@@ -98,5 +98,24 @@ namespace AppForSEII2526.UIT.UC_Reparacion
             Assert.True(selectHerramientasParaReparar_PO.BotonRepararHerramientasOculto());
         }
 
+        public void UC2_6_AF1_fechaAnteriorHoy()
+        {
+            //Arrange
+            InitialStepsParaRepararHerramientas();
+            selectHerramientasParaReparar_PO.SearchHerramienta("", ""); //Seleccionamos
+            Thread.Sleep(500);
+            selectHerramientasParaReparar_PO.AddHerramienta(herrNombre1); //Añadimos
+            Thread.Sleep(500);
+            selectHerramientasParaReparar_PO.RepararHerrBotonClick(); //Pasamos al post
+            Thread.Sleep(500);
+
+            //Act
+            DateTime fecha = DateTime.Now.AddDays(-1); //Fecha anterior a hoy
+            
+
+            //Assert
+            
+        }
+
     }
 }

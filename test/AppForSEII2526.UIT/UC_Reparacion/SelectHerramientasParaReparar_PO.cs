@@ -64,5 +64,10 @@ namespace AppForSEII2526.UIT.UC_Reparacion
             _driver.FindElement(buttomRemove).Click();
         }
 
+        public void RepararHerrBotonClick()
+        {
+            WaitForBeingClickable(buttonRepararHerramientas);
+            _driver.FindElement(buttonRepararHerramientas).Click();
+        }
     }
 }
