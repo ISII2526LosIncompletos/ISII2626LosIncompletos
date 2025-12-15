@@ -3,7 +3,7 @@ namespace AppForSEII2526.API.DTOs.CompraDTOs
     public class CompraCreacionDTO
     {
         public CompraCreacionDTO(string nombreCliente, string apellidoCliente, string direccionEnvio,
-            tiposMetodosPago metodoPago, string numTelefono, string correoElectronico, DateTime fechaCompra, IList<CompraItemDTO> compraItems)
+            tiposMetodosPago metodoPago, string? numTelefono, string? correoElectronico, DateTime fechaCompra, IList<CompraItemDTO> compraItems)
         {
             NombreCliente = nombreCliente;
             ApellidoCliente = apellidoCliente;
@@ -45,7 +45,7 @@ namespace AppForSEII2526.API.DTOs.CompraDTOs
         [Display(Name = "Correo electrónico")]
         [StringLength(50, ErrorMessage = "Correo electrónico no puede superar los 50 caracteres.")]
         [EmailAddress(ErrorMessage = "Correo electrónico inválido.")]
-        public string CorreoElectronico { get; set; }
+        public string? CorreoElectronico { get; set; }
 
         [Required]
         [DataType(System.ComponentModel.DataAnnotations.DataType.Date), Display(Name = "Fecha de Compra")]
