@@ -50,7 +50,7 @@ namespace AppForSEII2526.UIT.UC_Reparacion
             string herrPrecio, string herrTiempoRep, string filtroNombre, string filtroTiempoRep)
         {
             //Arrange
-            InitialStepsParaRepararHerramientas();
+            InitialStepsParaRepararHerramientas(); //MUY IMPORTANTE
             var expectedHerramientas = new List<string[]> { new string[] { herrNombre, herrMaterial, herrFabricante, herrPrecio, herrTiempoRep }, };
 
             //Act
@@ -60,6 +60,21 @@ namespace AppForSEII2526.UIT.UC_Reparacion
             //Assert
             Assert.True(selectHerramientasParaReparar_PO.CheckListaHerramientas(expectedHerramientas));
 
+        }
+
+        [Fact]
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void UC2_4_AF3_carritoVacio()
+        {
+            //Arrange
+            InitialStepsParaRepararHerramientas();
+            selectHerramientasParaReparar_PO.SearchHerramienta("", "");
+            Thread.Sleep(500);
+
+            //Act: No añadimos ninguna herramienta al carrito de reparación
+
+            //Assert
+            Assert.True(selectHerramientasParaReparar_PO.BotonRepararHerramientasOculto());
         }
 
     }
