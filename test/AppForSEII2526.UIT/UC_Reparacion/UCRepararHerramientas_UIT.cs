@@ -105,7 +105,7 @@ namespace AppForSEII2526.UIT.UC_Reparacion
 
         [Fact]
         [Trait("LevelTesting", "Funcional Testing")]
-        public void UC2_6_AF1_fechaAnteriorHoy()
+        public void UC2_5_AF1_fechaAnteriorHoy()
         {
             //Arrange
             InitialStepsParaRepararHerramientas();
@@ -131,7 +131,7 @@ namespace AppForSEII2526.UIT.UC_Reparacion
 
         [Fact]
         [Trait("LevelTesting", "Funcional Testing")]
-        public void UC2_6_AF1_fechaMasSemana()
+        public void UC2_5_AF1_fechaMasSemana()
         {
             //Arrange
             InitialStepsParaRepararHerramientas();
@@ -153,6 +153,34 @@ namespace AppForSEII2526.UIT.UC_Reparacion
 
             //Assert
             Assert.True(crearReparacion_PO.CompararMensajeError("(*) Error! Debes entregar tus herramientas antes de que pase una semana"));
+        }
+
+        [Theory]
+        [InlineData("", apellidoC, "NombreCliente")]
+        [InlineData(nombreC, "", "ApellidoCliente")]
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void UC2_6_AF4_datosObligatoriosNombre(string nombre, string apellido, string expectedError)
+        {
+            //Arrange
+            InitialStepsParaRepararHerramientas();
+            selectHerramientasParaReparar_PO.SearchHerramienta("", ""); //Seleccionamos
+            Thread.Sleep(500);
+            selectHerramientasParaReparar_PO.AddHerramienta(herrNombre1); //Añadimos
+            Thread.Sleep(500);
+            selectHerramientasParaReparar_PO.RepararHerrBotonClick(); //Pasamos al post
+            Thread.Sleep(500);
+
+            //Act
+            crearReparacion_PO.RellenarFormulario(nombre, apellido, DateTime.Today);
+            Thread.Sleep(500);
+            crearReparacion_PO.SubmitReparacionClick();
+            Thread.Sleep(500);
+            //No hace falta confirmar la reparación, el mensaje aparece antes
+            //crearReparacion_PO.ConfirmarReparacion();
+            //Thread.Sleep(500);
+
+            //Assert
+            Assert.True(crearReparacion_PO.CompararMensajeError(expectedError));
         }
 
     }
