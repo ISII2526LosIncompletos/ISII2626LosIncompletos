@@ -28,6 +28,8 @@ namespace AppForSEII2526.UIT.UC_Reparacion
 
         private const string nombreC = "Lucia";
         private const string apellidoC = "Martinez";
+        private const string nombreMal = "John";
+        private const string apellidoMal = "Doe";
 
         public UCRepararHerramientas_UIT(ITestOutputHelper output) : base(output)
         {
@@ -159,7 +161,7 @@ namespace AppForSEII2526.UIT.UC_Reparacion
         [InlineData("", apellidoC, "NombreCliente")]
         [InlineData(nombreC, "", "ApellidoCliente")]
         [Trait("LevelTesting", "Funcional Testing")]
-        public void UC2_6_AF4_datosObligatoriosNombre(string nombre, string apellido, string expectedError)
+        public void UC2_6_AF4_datosObligatorios(string nombre, string apellido, string expectedError)
         {
             //Arrange
             InitialStepsParaRepararHerramientas();
@@ -182,6 +184,32 @@ namespace AppForSEII2526.UIT.UC_Reparacion
             //Assert
             Assert.True(crearReparacion_PO.CompararMensajeError(expectedError));
         }
+
+        [Fact]
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void UC2_6_AF4_usuarioNoRegistrado()
+        {
+            //Arrange
+            InitialStepsParaRepararHerramientas();
+            selectHerramientasParaReparar_PO.SearchHerramienta("", ""); //Seleccionamos
+            Thread.Sleep(500);
+            selectHerramientasParaReparar_PO.AddHerramienta(herrNombre1); //Añadimos
+            Thread.Sleep(500);
+            selectHerramientasParaReparar_PO.RepararHerrBotonClick(); //Pasamos al post
+            Thread.Sleep(500);
+
+            //Act
+            crearReparacion_PO.RellenarFormulario(nombreMal, apellidoMal, DateTime.Today);
+            Thread.Sleep(500);
+            crearReparacion_PO.SubmitReparacionClick();
+            Thread.Sleep(500);
+            crearReparacion_PO.ConfirmarReparacion();
+            Thread.Sleep(500);
+
+            //Assert
+            Assert.True(crearReparacion_PO.CompararMensajeError($"(*) Error! El usuario {nombreMal} {apellidoMal} no está registrado"));
+        }
+
 
     }
 }
