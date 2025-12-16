@@ -69,19 +69,19 @@
                     }
                 </div>
             </div>
-            <div class="col-2" hidden="@ocultarCarritoReparar">
+        </div>
+        <div class="col-2" hidden="@ocultarCarritoReparar">
+            <div class="row">
+                <h3>Carrito de la compra</h3>
+            </div>
+            @foreach (ReparacionItemDTO item in reparacion.ItemsReparacion)
+            {
                 <div class="row">
-                    <h3>Carrito de la compra</h3>
+                    <button type="button" class="btn btn-light" id="removeHerramienta_@item.Nombre" @onclick="@(() => RemoveReparacionItem(item))">x @item.Nombre - @item.PrecioReparacion€</button>
                 </div>
-                @foreach (ReparacionItemDTO item in reparacion.ItemsReparacion)
-                {
-                    <div class="row">
-                        <button type="button" class="btn btn-light" id="removeHerramienta_@item.Nombre" @onclick="@(() => RemoveReparacionItem(item))">x @item.Nombre - @item.PrecioReparacion€</button>
-                    </div>
-                }
-                <div class="row">
-                    <button type="button" class="btn btn-primary" id="repararHerramientaButton" @onclick=@RepararHerramienta>Reparar herramienta</button>
-                </div>
+            }
+            <div class="row">
+                <button type="button" class="btn btn-primary" id="repararHerramientaButton" @onclick=@RepararHerramienta>Reparar herramienta</button>
             </div>
         </div>
     </div>

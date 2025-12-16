@@ -63,12 +63,16 @@ namespace AppForSEII2526.UT.ReparacionesController_test
             var reparacionEntregaSemana = new ReparacionCreacionDTO(_nombreUsuario, _apellidosUsuario,
                 _numTelefono, DateTime.Today.AddDays(10), tiposMetodosPago.TarjetaCredito, reparacionItems);
 
-            var reparacionApplicationUser = new ReparacionCreacionDTO("Pepito", "Diaz",
+            var reparacionApplicationUser = new ReparacionCreacionDTO("John", "Doe",
                 "987654321", DateTime.Today, tiposMetodosPago.TarjetaCredito, reparacionItems);
 
             var reparacionHerramNoExiste = new ReparacionCreacionDTO(_nombreUsuario, _apellidosUsuario,
                 _numTelefono, DateTime.Today.AddDays(2), tiposMetodosPago.PayPal,
                 new List<ReparacionItemDTO>() { new ReparacionItemDTO(11, "Sierra", 12.25m, 3, 1) });
+
+            var reparacionHerramCantidad = new ReparacionCreacionDTO(_nombreUsuario, _apellidosUsuario,
+                _numTelefono, DateTime.Today.AddDays(2), tiposMetodosPago.PayPal,
+                new List<ReparacionItemDTO>() { new ReparacionItemDTO(1, "Destornillador", 12.25m, 3, 0) });
 
 
             var allTests = new List<object[]> //entradas para CearReparacion y error esperado
@@ -76,8 +80,9 @@ namespace AppForSEII2526.UT.ReparacionesController_test
                 new object[] { reparacionNoItem, "Error! Debe incluir al menos una herramienta para reparar", },
                 new object[] { reparacionEntregaAntesHoy, "Error! La fecha en la que se entrega la herramienta debe ser, como mínimo, hoy", },
                 new object[] { reparacionEntregaSemana, "Error! Debes entregar tus herramientas antes de que pase una semana", },
-                new object[] { reparacionApplicationUser, "Error! El usuario Pepito Diaz no está registrado", },
+                new object[] { reparacionApplicationUser, "Error! El usuario John Doe no está registrado", },
                 new object[] { reparacionHerramNoExiste, "Error! La herramienta Sierra no existe", },
+                new object[] { reparacionHerramCantidad, "Error! Para reparar herramientas la cantidad de ellas debe ser superior a 0", }
             };
 
             return allTests;

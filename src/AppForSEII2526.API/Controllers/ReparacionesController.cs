@@ -86,6 +86,13 @@ namespace AppForSEII2526.API.Controllers
             {
                 ModelState.AddModelError("ItemsReparacion", "Error! Debe incluir al menos una herramienta para reparar");
             }
+            foreach (var item in creacionReparacion.ItemsReparacion)
+            {
+                if (item.Cantidad <= 0)
+                {
+                    ModelState.AddModelError("Cantidad", "Error! Para reparar herramientas la cantidad de ellas debe ser superior a 0");
+                }
+            }
 
             var usuario = _context.ApplicationUsers.FirstOrDefault(au => au.Nombre == creacionReparacion.NombreCliente
                         && au.Apellidos == creacionReparacion.ApellidoCliente);
