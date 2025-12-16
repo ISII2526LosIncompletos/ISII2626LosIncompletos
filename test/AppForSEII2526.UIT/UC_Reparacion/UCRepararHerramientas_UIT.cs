@@ -13,6 +13,7 @@ namespace AppForSEII2526.UIT.UC_Reparacion
     {
         private SelectHerramientasParaReparar_PO selectHerramientasParaReparar_PO;
         private CrearReparacion_PO crearReparacion_PO;
+        private DetalleReparacion_PO detalleReparacion_PO;
 
         private const string herrNombre1 = "Destornillador";
         private const string herrMaterial1 = "Acero";
@@ -35,6 +36,7 @@ namespace AppForSEII2526.UIT.UC_Reparacion
         {
             selectHerramientasParaReparar_PO = new SelectHerramientasParaReparar_PO(_driver, _output);
             crearReparacion_PO = new CrearReparacion_PO(_driver, _output);
+            detalleReparacion_PO = new DetalleReparacion_PO(_driver, _output);
         }
 
         private void InitialStepsParaRepararHerramientas()
@@ -235,6 +237,31 @@ namespace AppForSEII2526.UIT.UC_Reparacion
 
             //Assert
             Assert.True(crearReparacion_PO.CompararMensajeError("(*) Error! Para reparar herramientas la cantidad de ellas debe ser superior a 0"));
+        }
+
+        [Fact]
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void UC2_FB_procesoCompleto()
+        {
+            //Pasos en la pantalla de select
+            InitialStepsParaRepararHerramientas();
+            selectHerramientasParaReparar_PO.SearchHerramienta("", ""); //Seleccionamos
+            Thread.Sleep(500);
+            selectHerramientasParaReparar_PO.AddHerramienta(herrNombre1); //Añadimos
+            Thread.Sleep(500);
+            selectHerramientasParaReparar_PO.RepararHerrBotonClick(); //Pasamos al post
+            Thread.Sleep(500);
+
+            //Pasos en la pantalla de post
+            crearReparacion_PO.RellenarFormulario(nombreC, apellidoC, DateTime.Today);
+            Thread.Sleep(500);
+            crearReparacion_PO.SubmitReparacionClick();
+            Thread.Sleep(500);
+            crearReparacion_PO.ConfirmarReparacion();
+            Thread.Sleep(500);
+
+            //Pasos en la pantalla de detail
+            
         }
 
     }
