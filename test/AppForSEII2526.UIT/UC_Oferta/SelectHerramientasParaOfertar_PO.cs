@@ -25,6 +25,8 @@ namespace AppForSEII2526.UIT.CU_Ofertas
 
         private By buttonCrearOfertaCarrito = By.Id("purchaseMovieButton");
 
+        private By botonCrearOfertaCarrito = By.Id("purchaseMovieButton");
+
         public SelectHerramientasParaOfertar_PO(IWebDriver driver, ITestOutputHelper output) : base(driver, output)
         {
         }
@@ -100,6 +102,12 @@ namespace AppForSEII2526.UIT.CU_Ofertas
             By removeBtn = By.Id("removeMovie_" + herramientaId);
             WaitForBeingClickable(removeBtn);
             _driver.FindElement(removeBtn).Click();
+        }
+
+        public void crearOfertaCarrito()
+        {
+            WaitForBeingClickable(botonCrearOfertaCarrito);
+            _driver.FindElement(botonCrearOfertaCarrito).Click();
         }
 
         public bool OfertaNotAvailable()
