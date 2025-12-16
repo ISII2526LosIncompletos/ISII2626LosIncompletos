@@ -40,7 +40,7 @@ namespace AppForSEII2526.UIT.UC_Compras
         }
         [Fact]
         [Trait("LevelTesting", "Funcional Testing")]
-        public void UC2_1_2_3_AF0_filtroPrecio()
+        public void UC2_5_AF0_filtroPrecio()
         {
             //Arrange
             InitialStepsParaComprarHerramientas();
@@ -58,7 +58,7 @@ namespace AppForSEII2526.UIT.UC_Compras
 
         [Fact]
         [Trait("LevelTesting", "Funcional Testing")]
-        public void UC2_1_2_3_AF0_filtroMaterial()
+        public void UC2_6_AF0_filtroMaterial()
         {
             //Arrange
             InitialStepsParaComprarHerramientas();
