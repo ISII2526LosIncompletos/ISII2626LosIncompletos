@@ -31,26 +31,48 @@ namespace AppForSEII2526.UIT.UC_Compras
         {
             Initial_step_opening_the_web_page();
             //Esperamos a que la opción del menú esté visible
+            selectHerramientasParaComprar_PO.WaitForBeingVisibleIgnoringExeptionTypes(By.Id("CreateCompra"));
             selectHerramientasParaComprar_PO.WaitForBeingVisible(By.Id("CreateCompra"));
+            Thread.Sleep(500);
+
             //Damos click en el menú
             _driver.FindElement(By.Id("CreateCompra")).Click();
         }
         [Fact]
         [Trait("LevelTesting", "Funcional Testing")]
-        public void UC2_1_2_3_AF0_filtering()
+        public void UC2_1_2_3_AF0_filtroPrecio()
         {
             //Arrange
             InitialStepsParaComprarHerramientas();
-            var expectedHerramientas = new List<string[]> { new string[] { herrMaterial1, herrPrecio1, herrNombre1, herrTiempoRep1, herrFabricante1 }, 
-                new string[]{ herrMaterial2, herrPrecio2, herrNombre2, herrTiempoRep2, herrFabricante2 } 
+            var expectedHerramientas = new List<string[]> { new string[] { herrMaterial1, herrPrecio1, herrNombre1, herrTiempoRep1, herrFabricante1 },
             };
+            
 
             //Act
-            selectHerramientasParaComprar_PO.BuscarHerramientas("12", "");
+            selectHerramientasParaComprar_PO.BuscarHerramientas("12,5", "");
 
             //Assert
             Assert.True(selectHerramientasParaComprar_PO.CheckListaDeHerramientas(expectedHerramientas));
 
         }
+
+        [Fact]
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void UC2_1_2_3_AF0_filtroMaterial()
+        {
+            //Arrange
+            InitialStepsParaComprarHerramientas();
+            var expectedHerramientas = new List<string[]> { new string[] { herrMaterial1, herrPrecio1, herrNombre1, herrTiempoRep1, herrFabricante1 },
+                new string[]{ herrMaterial2, herrPrecio2, herrNombre2, herrTiempoRep2, herrFabricante2 }
+            };
+
+            //Act
+            selectHerramientasParaComprar_PO.BuscarHerramientas("", "Ace");
+
+            //Assert
+            Assert.True(selectHerramientasParaComprar_PO.CheckListaDeHerramientas(expectedHerramientas));
+
+        }
+
     }
 }
