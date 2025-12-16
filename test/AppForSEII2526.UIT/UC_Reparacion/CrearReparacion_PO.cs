@@ -57,13 +57,13 @@ namespace AppForSEII2526.UIT.UC_Reparacion
             inputElem.Clear(); //Borramos el valor por defecto
             inputElem.SendKeys(cantidad); //Escribimos la cantidad deseada
         }
-
-        public void AddDescripcion(string herram, string descripcion)
+        
+        /*public void AddDescripcion(string herram, string descripcion)
         {
             By inputDescripcion = By.Id("descripcion_" + herram);
             WaitForBeingClickable(inputDescripcion);
             _driver.FindElement(inputDescripcion).SendKeys(descripcion);
-        }
+        }*/
 
     }
 }

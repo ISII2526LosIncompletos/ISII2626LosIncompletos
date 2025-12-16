@@ -257,10 +257,11 @@ namespace AppForSEII2526.UIT.UC_Reparacion
             Thread.Sleep(500);
 
             //Pasos en la pantalla de post
-            crearReparacion_PO.RellenarFormulario(nombreC, apellidoC, DateTime.Today);
-            Thread.Sleep(500);
-            //Añadimos una descripción, no lo hemos hecho hasta ahora
-            crearReparacion_PO.AddDescripcion(herrNombre1, herrDescripcion1);
+            //Añadimos una descripción, no lo habíamos hecho antes
+            //crearReparacion_PO.AddDescripcion(herrNombre1, herrDescripcion1);
+            //Thread.Sleep(500);
+            DateTime fechaEntrega = DateTime.Today;
+            crearReparacion_PO.RellenarFormulario(nombreC, apellidoC, fechaEntrega);
             Thread.Sleep(500);
             crearReparacion_PO.SubmitReparacionClick();
             Thread.Sleep(500);
@@ -268,8 +269,12 @@ namespace AppForSEII2526.UIT.UC_Reparacion
             Thread.Sleep(500);
 
             //Pasos en la pantalla de detail
-            detalleReparacion_PO.CheckDatosReparacion(nombreC, apellidoC, herrNombre1,
-                herrMaterial1, herrFabricante1, herrPrecio1, herrTiempoRep1, herrCantidad1, herrDescripcion1);            
+            double herrPrecio = double.Parse(herrPrecio1);
+            int herrCantidad = int.Parse(herrCantidad1);
+            string precioTotal = (herrPrecio * herrCantidad).ToString("0.##"); //Solo queremos dos decimales
+            Assert.True(detalleReparacion_PO.CheckDatosPersonales(nombreC, apellidoC, fechaEntrega, herrTiempoRep1, precioTotal));
+            var expectedHerramienta = new List<string[]> { new string[] { herrNombre1, herrPrecio.ToString("0.##")+"€", herrCantidad1 }, };
+            Assert.True(detalleReparacion_PO.CheckTablaHerramientasReparar(expectedHerramienta));
         }
 
     }
