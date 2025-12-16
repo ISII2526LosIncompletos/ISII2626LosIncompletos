@@ -9,10 +9,10 @@ namespace AppForSEII2526.UIT.UC_Compras
 {
     public class SelectHerramientasParaComprar_PO: PageObject
     {
-        By inputPrecio = By.Id("precioHerramienta");
-        By inputMaterial= By.Id("materialHerramienta");
-        By tableHerramientasBy = By.Id("tablaHerramientas");
-        By buttonSearchHerramienta = By.Id("buscarHerramientas");
+        By inputPrecio = By.Id("inputPrecio");
+        By inputMaterial= By.Id("inputMaterial");
+        By tableHerramientasBy = By.Id("TablaHerramientas");
+        By buttonSearchHerramienta = By.Id("BuscarHerramientas");
         public SelectHerramientasParaComprar_PO(IWebDriver driver, ITestOutputHelper output) : base(driver, output)
         { 
         }
