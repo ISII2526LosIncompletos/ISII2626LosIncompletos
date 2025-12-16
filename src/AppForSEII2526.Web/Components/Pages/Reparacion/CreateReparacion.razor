@@ -87,10 +87,10 @@
                 {
                     <tr id="MovieData_@item.Nombre">
                         <td>@item.Nombre</td>
-                        <td><InputNumber @bind-value="item.Cantidad" class="form-control" id="@($"cantidad_{item.Cantidad}")" /></td>
+                        <td><InputNumber @bind-value="item.Cantidad" class="form-control" id="@($"cantidad_{item.Nombre}")" /></td>
                         <td>@item.TiempoReparacion</td>
                         <td>@item.PrecioReparacion</td>
-                        <td><InputText @bind-Value="item.Descripcion" class="form-control" id="@($"description_{item.HerramientaID}")" /></td>
+                        <td><InputText @bind-Value="item.Descripcion" class="form-control" id="@($"description_{item.Nombre}")" /></td>
                     </tr>
                 }
             </tbody>
