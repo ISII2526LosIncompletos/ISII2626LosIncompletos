@@ -20,6 +20,8 @@ namespace AppForSEII2526.UIT.UC_Reparacion
         private const string herrFabricante1 = "Wurt";
         private const string herrPrecio1 = "12,5";
         private const string herrTiempoRep1 = "1";
+        private const string herrCantidad1 = "1";
+        private const string herrDescripcion1 = "Se ha partido";
 
         private const string herrNombre2 = "Llave Inglesa";
         private const string herrMaterial2 = "Acero";
@@ -29,6 +31,8 @@ namespace AppForSEII2526.UIT.UC_Reparacion
 
         private const string nombreC = "Lucia";
         private const string apellidoC = "Martinez";
+
+        private const string herrCantidadMal = "0";
         private const string nombreMal = "John";
         private const string apellidoMal = "Doe";
 
@@ -228,7 +232,7 @@ namespace AppForSEII2526.UIT.UC_Reparacion
             //Act
             crearReparacion_PO.RellenarFormulario(nombreC, apellidoC, DateTime.Today);
             Thread.Sleep(500);
-            crearReparacion_PO.CambiarCantidadHerramienta(herrNombre1, "0");
+            crearReparacion_PO.CambiarCantidadHerramienta(herrNombre1, herrCantidadMal);
             Thread.Sleep(500);
             crearReparacion_PO.SubmitReparacionClick();
             Thread.Sleep(500);
@@ -255,13 +259,17 @@ namespace AppForSEII2526.UIT.UC_Reparacion
             //Pasos en la pantalla de post
             crearReparacion_PO.RellenarFormulario(nombreC, apellidoC, DateTime.Today);
             Thread.Sleep(500);
+            //Añadimos una descripción, no lo hemos hecho hasta ahora
+            crearReparacion_PO.AddDescripcion(herrNombre1, herrDescripcion1);
+            Thread.Sleep(500);
             crearReparacion_PO.SubmitReparacionClick();
             Thread.Sleep(500);
             crearReparacion_PO.ConfirmarReparacion();
             Thread.Sleep(500);
 
             //Pasos en la pantalla de detail
-            
+            detalleReparacion_PO.CheckDatosReparacion(nombreC, apellidoC, herrNombre1,
+                herrMaterial1, herrFabricante1, herrPrecio1, herrTiempoRep1, herrCantidad1, herrDescripcion1);            
         }
 
     }
