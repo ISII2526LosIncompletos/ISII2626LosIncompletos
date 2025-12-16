@@ -38,10 +38,9 @@ namespace AppForSEII2526.Web
                     Nombre = herramienta.Nombre,
                     PrecioReparacion = herramienta.Precio,
                     TiempoReparacion = herramienta.TiempoReparacion,
-                    Cantidad = herramienta.Cantidad,
-                    Descripcion = herramienta.Descripcion
-                }
-                );
+                    Cantidad = 1,
+                    Descripcion = ""
+                });
         }
 
         //Para borrar una herramienta de la lista de herramientas seleccionadas
