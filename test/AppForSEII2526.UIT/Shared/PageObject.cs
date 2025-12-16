@@ -46,38 +46,49 @@ namespace AppForSEII2526.UIT.Shared {
 
 
         public bool CheckBodyTable(List<string[]> expectedRows, By IdTable) {
-            string expectedRow, actualRow;
-            int i, j;
-            bool result = true;
             WaitForBeingVisible(IdTable);
 
-            IList<IWebElement> actualrows = _driver
+            var actualRows = _driver
                 .FindElement(IdTable)
                 .FindElement(By.TagName("tbody"))
-                //.FindElements(By.XPath(".//tr"))
-                .FindElements(By.TagName("tr"))//we obtain just the rows of the body of the table
+                .FindElements(By.TagName("tr"))
                 .ToList();
 
-            if (actualrows.Count != expectedRows.Count) {
-                _output.WriteLine($"Error: \n Expected number of rows:{expectedRows.Count} \n Actual number of rows:{actualrows.Count}");
+            if (actualRows.Count != expectedRows.Count)
+            {
+                _output.WriteLine($"Error: \n Expected number of rows:{expectedRows.Count} \n Actual number of rows:{actualRows.Count}");
                 return false;
             }
 
-            for (i = 0; i < expectedRows.Count; i++) {
-                expectedRow = expectedRows[i][0];
-                for (j = 1; j < expectedRows[i].Count(); j++)
-                    expectedRow = expectedRow + " " + expectedRows[i][j];
-                actualRow = actualrows
-                    .Select(m => m.Text) //we return the text of the row
-                    .ToList()[i];
+            for (int i = 0; i < expectedRows.Count; i++)
+            {
+                var expectedCells = expectedRows[i];
+                var cells = actualRows[i].FindElements(By.TagName("td")).ToList();
 
-                if (!actualRow.StartsWith(expectedRow)) {
-                    _output.WriteLine($"Error: \n \t expected row:{expectedRow} \n \t actual row:{actualRow}");
-                    result = false;
+                if (cells.Count < expectedCells.Length)
+                {
+                    _output.WriteLine($"Error: fila {i} tiene menos celdas de las esperadas. Esperadas:{expectedCells.Length} Reales:{cells.Count}");
+                    return false;
+                }
 
+                for (int j = 0; j < expectedCells.Length; j++)
+                {
+                    string actualCellText = cells[j].Text.Trim();
+                    string expectedCellText = expectedCells[j].Trim();
+
+                    // Normalizar separador decimal (si procede)
+                    actualCellText = actualCellText.Replace(',', '.');
+                    expectedCellText = expectedCellText.Replace(',', '.');
+
+                    if (!actualCellText.StartsWith(expectedCellText))
+                    {
+                        _output.WriteLine($"Error: \n \t expected cell[{i},{j}]:{expectedCellText} \n \t actual cell[{i},{j}]:{actualCellText}");
+                        return false;
+                    }
                 }
             }
-            return result;
+
+            return true;
 
         }
 
