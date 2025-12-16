@@ -210,6 +210,32 @@ namespace AppForSEII2526.UIT.UC_Reparacion
             Assert.True(crearReparacion_PO.CompararMensajeError($"(*) Error! El usuario {nombreMal} {apellidoMal} no está registrado"));
         }
 
+        [Fact]
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void UC2_6_AF5_cantidadCero()
+        {
+            //Arrange
+            InitialStepsParaRepararHerramientas();
+            selectHerramientasParaReparar_PO.SearchHerramienta("", ""); //Seleccionamos
+            Thread.Sleep(500);
+            selectHerramientasParaReparar_PO.AddHerramienta(herrNombre1); //Añadimos
+            Thread.Sleep(500);
+            selectHerramientasParaReparar_PO.RepararHerrBotonClick(); //Pasamos al post
+            Thread.Sleep(500);
+
+            //Act
+            crearReparacion_PO.RellenarFormulario(nombreC, apellidoC, DateTime.Today);
+            Thread.Sleep(500);
+            crearReparacion_PO.CambiarCantidadHerramienta(0);
+            Thread.Sleep(500);
+            crearReparacion_PO.SubmitReparacionClick();
+            Thread.Sleep(500);
+            crearReparacion_PO.ConfirmarReparacion();
+            Thread.Sleep(500);
+
+            //Assert
+            Assert.True(crearReparacion_PO.CompararMensajeError($"(*) Error! Para reparar herramientas la cantidad de ellas debe ser superior a 0"));
+        }
 
     }
 }
