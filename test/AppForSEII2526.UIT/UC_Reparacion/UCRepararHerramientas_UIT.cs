@@ -103,6 +103,8 @@ namespace AppForSEII2526.UIT.UC_Reparacion
             Assert.True(selectHerramientasParaReparar_PO.BotonRepararHerramientasOculto());
         }
 
+        [Fact]
+        [Trait("LevelTesting", "Funcional Testing")]
         public void UC2_6_AF1_fechaAnteriorHoy()
         {
             //Arrange
@@ -115,11 +117,16 @@ namespace AppForSEII2526.UIT.UC_Reparacion
             Thread.Sleep(500);
 
             //Act
-            DateTime fechaAntes = DateTime.Now.AddDays(-1); //Fecha anterior a hoy
+            DateTime fechaAntes = DateTime.Today.AddDays(-1); //Fecha anterior a hoy
             crearReparacion_PO.RellenarFormulario(nombreC, apellidoC, fechaAntes);
+            Thread.Sleep(500);
+            crearReparacion_PO.SubmitReparacionClick();
+            Thread.Sleep(500);
+            crearReparacion_PO.ConfirmarReparacion();
+            Thread.Sleep(500);
 
             //Assert
-            
+            Assert.True(crearReparacion_PO.CompararMensajeError("(*) Error! La fecha en la que se entrega la herramienta debe ser, como mínimo, hoy"));
         }
 
     }
