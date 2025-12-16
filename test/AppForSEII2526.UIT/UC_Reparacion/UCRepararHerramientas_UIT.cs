@@ -226,7 +226,7 @@ namespace AppForSEII2526.UIT.UC_Reparacion
             //Act
             crearReparacion_PO.RellenarFormulario(nombreC, apellidoC, DateTime.Today);
             Thread.Sleep(500);
-            crearReparacion_PO.CambiarCantidadHerramienta(0);
+            crearReparacion_PO.CambiarCantidadHerramienta(herrNombre1, "0");
             Thread.Sleep(500);
             crearReparacion_PO.SubmitReparacionClick();
             Thread.Sleep(500);
@@ -234,7 +234,7 @@ namespace AppForSEII2526.UIT.UC_Reparacion
             Thread.Sleep(500);
 
             //Assert
-            Assert.True(crearReparacion_PO.CompararMensajeError($"(*) Error! Para reparar herramientas la cantidad de ellas debe ser superior a 0"));
+            Assert.True(crearReparacion_PO.CompararMensajeError("(*) Error! Para reparar herramientas la cantidad de ellas debe ser superior a 0"));
         }
 
     }

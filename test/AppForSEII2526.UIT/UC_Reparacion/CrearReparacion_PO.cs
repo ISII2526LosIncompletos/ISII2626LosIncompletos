@@ -49,5 +49,14 @@ namespace AppForSEII2526.UIT.UC_Reparacion
             return _driver.PageSource.Contains(error);
         }
 
+        public void CambiarCantidadHerramienta(string herram, string cantidad)
+        {
+            By inputCantidad = By.Id("cantidad_" + herram);
+            WaitForBeingClickable(inputCantidad);
+            var inputElem = _driver.FindElement(inputCantidad);
+            inputElem.Clear(); //Borramos el valor por defecto
+            inputElem.SendKeys(cantidad); //Escribimos la cantidad deseada
+        }
+
     }
 }
