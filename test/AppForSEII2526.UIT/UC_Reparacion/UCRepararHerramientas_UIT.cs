@@ -129,5 +129,31 @@ namespace AppForSEII2526.UIT.UC_Reparacion
             Assert.True(crearReparacion_PO.CompararMensajeError("(*) Error! La fecha en la que se entrega la herramienta debe ser, como mínimo, hoy"));
         }
 
+        [Fact]
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void UC2_6_AF1_fechaMasSemana()
+        {
+            //Arrange
+            InitialStepsParaRepararHerramientas();
+            selectHerramientasParaReparar_PO.SearchHerramienta("", ""); //Seleccionamos
+            Thread.Sleep(500);
+            selectHerramientasParaReparar_PO.AddHerramienta(herrNombre1); //Añadimos
+            Thread.Sleep(500);
+            selectHerramientasParaReparar_PO.RepararHerrBotonClick(); //Pasamos al post
+            Thread.Sleep(500);
+
+            //Act
+            DateTime fechaSemana = DateTime.Today.AddDays(8); //Fecha dentro de más de una semana
+            crearReparacion_PO.RellenarFormulario(nombreC, apellidoC, fechaSemana);
+            Thread.Sleep(500);
+            crearReparacion_PO.SubmitReparacionClick();
+            Thread.Sleep(500);
+            crearReparacion_PO.ConfirmarReparacion();
+            Thread.Sleep(500);
+
+            //Assert
+            Assert.True(crearReparacion_PO.CompararMensajeError("(*) Error! Debes entregar tus herramientas antes de que pase una semana"));
+        }
+
     }
 }
