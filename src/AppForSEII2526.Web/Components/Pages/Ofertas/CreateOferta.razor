@@ -66,7 +66,7 @@
 
     <p>
         <b>Precio Total:</b> @CosteTotal €
-        <button class="btn btn-outline-primary" type="submit" @onclick="ModificarOfertaItems" id="ModificarHerramientas">
+        <button class="btn btn-outline-primary" type="button" @onclick="ModificarOfertaItems" id="ModificarHerramientas">
             Modificar herramientas
         </button>
     </p>
@@ -124,10 +124,12 @@
             return ofertaState.OfertaItems.Sum(oi => (decimal)oi.PrecioOriginal * (100m - (decimal)oi.Porcentaje) / 100m);
         }
     }
+
     private void ModificarOfertaItems()
     {
-        navigation.NavigateTo("/Oferta/SelectHerramientaParaOferta");
+        navigation.NavigateTo("/ofertas/SeleccionarHerramientasParaOfertar");
     }
+
     private OfertaForCreationDTO oferta =>
     ofertaState.Oferta;
 
@@ -150,39 +152,46 @@
         DialogIsOpen = true;
     }
 
-    private async Task OnDialogClose(bool isOk)
+   private async Task OnDialogClose(bool isOk)
+{
+    DialogIsOpen = false;
+
+    if (isOk)
     {
-        DialogIsOpen = false;
-        if (isOk)
+       
+        if (oferta.Items.Count == 0)
         {
-            if (oferta.Items.Count > 0)
+            messageError = "No hay herramientas en la oferta.";
+            return;
+        }
+
+        foreach (var itemVisual in ofertaState.OfertaItems)
+        {
+            var itemParaEnviar = oferta.Items.FirstOrDefault(i => i.HerramientaId == itemVisual.HerramientaId);
+            if (itemParaEnviar != null)
             {
-                try
-                {
-                    var ofertado = await apiclient.CreateOfertaAsync(oferta);
-                    ofertaState.OfertaProcessed();
-                    navigation.NavigateTo($"/Oferta/DetallesOferta/?ofertaID={ofertado.Id}");
-                }
-                catch (ApiException<ValidationProblemDetails> apiexceptionvalidation)
-                {
-                    if (apiexceptionvalidation.Result.Errors.Values != null)
-                    {
-                        messageError = "";
-                        foreach (var errors in apiexceptionvalidation.Result.Errors.Values)
-                            //https://learn.microsoft.com/en-us/dotnet/api/system.string.join?view=net-7.0
-                            messageError = string.Join("(*) ", messageError, string.Join(" (*) ", errors));
-                    }
-                }
-                catch (ApiException apiexception)
-                {
-                    messageError = "Error mientras se procesaba tu oferta, por favor intentelo mas tarde";
-
-                }
-
+                itemParaEnviar.Porcentaje = itemVisual.Porcentaje;
             }
+        }
 
+        try
+        {
+            var ofertado = await apiclient.CreateOfertaAsync(oferta);
+            ofertaState.OfertaProcessed();
+            navigation.NavigateTo($"/oferta/OfertasDetalle?ofertaID={ofertado.Id}");
+        }
+        catch (ApiException ex)
+        {
+            Console.WriteLine("ERROR API: " + ex.Response);
+            
+            messageError = "Error de validación (400). Revisa que el porcentaje sea mayor a 0 y las fechas correctas.";
+        }
+        catch (Exception ex)
+        {
+            messageError = "Error inesperado: " + ex.Message;
         }
     }
+}
 
     protected override async Task OnInitializedAsync()
     {
