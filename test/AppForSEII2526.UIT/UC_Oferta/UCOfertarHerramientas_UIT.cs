@@ -23,7 +23,7 @@ namespace AppForSEII2526.UIT.CU_Ofertas
         private const string herrPrecio1 = "12,5"; 
 
         // Herramienta 2: Llave Inglesa 
-        private const string herrId2 = "19";
+        private const string herrId2 = "2";
         private const string herrNombre2 = "Llave Inglesa";
         private const string herrMaterial2 = "Acero";
         private const string herrFabricante2 = "Phillips";
