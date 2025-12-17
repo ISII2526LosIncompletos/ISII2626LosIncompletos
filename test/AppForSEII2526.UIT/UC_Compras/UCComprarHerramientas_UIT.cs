@@ -40,10 +40,10 @@ namespace AppForSEII2526.UIT.UC_Compras
         }
         [Fact]
         [Trait("LevelTesting", "Funcional Testing")]
-        public void UC2_5_AF0_filtroPrecio()
+        public void UC1_5_AF0_filtroPrecio()
         {
             //Arrange
-            InitialStepsParaComprarHerramientas();
+            InitialStepsParaComprarHerramientas();//Muy importante
             var expectedHerramientas = new List<string[]> { new string[] { herrMaterial1, herrPrecio1, herrNombre1, herrTiempoRep1, herrFabricante1 },
             };
             
@@ -58,10 +58,10 @@ namespace AppForSEII2526.UIT.UC_Compras
 
         [Fact]
         [Trait("LevelTesting", "Funcional Testing")]
-        public void UC2_6_AF0_filtroMaterial()
+        public void UC1_6_AF0_filtroMaterial()
         {
             //Arrange
-            InitialStepsParaComprarHerramientas();
+            InitialStepsParaComprarHerramientas();//Muy importante
             var expectedHerramientas = new List<string[]> { new string[] { herrMaterial1, herrPrecio1, herrNombre1, herrTiempoRep1, herrFabricante1 },
                 new string[]{ herrMaterial2, herrPrecio2, herrNombre2, herrTiempoRep2, herrFabricante2 }
             };
@@ -72,6 +72,21 @@ namespace AppForSEII2526.UIT.UC_Compras
             //Assert
             Assert.True(selectHerramientasParaComprar_PO.CheckListaDeHerramientas(expectedHerramientas));
 
+        }
+
+        [Fact]
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void UC1_8_AF3_carritoVacio()
+        {
+            //Arrange
+            InitialStepsParaComprarHerramientas();
+            selectHerramientasParaComprar_PO.BuscarHerramientas("", "");
+            Thread.Sleep(500);
+            //Act
+            //No se añade ninguna herramienta
+
+            //Assert
+            Assert.True(selectHerramientasParaComprar_PO.BotonComprarHerramientasOculto());
         }
 
     }
