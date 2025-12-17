@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AppForSEII2526.UIT.UC_Reparacion
 {
@@ -68,6 +69,13 @@ namespace AppForSEII2526.UIT.UC_Reparacion
         {
             WaitForBeingClickable(buttonRepararHerramientas);
             _driver.FindElement(buttonRepararHerramientas).Click();
+        }
+
+        public void QuitarFiltro(string filtro)
+        {
+            By inputFiltro = By.Id("input" + filtro);
+            WaitForBeingClickable(inputNombre);
+            _driver.FindElement(inputNombre).Clear();
         }
     }
 }

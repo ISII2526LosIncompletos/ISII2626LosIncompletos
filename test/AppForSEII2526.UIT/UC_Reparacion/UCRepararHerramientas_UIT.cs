@@ -273,7 +273,58 @@ namespace AppForSEII2526.UIT.UC_Reparacion
             int herrCantidad = int.Parse(herrCantidad1);
             string precioTotal = (herrPrecio * herrCantidad).ToString("0.##"); //Solo queremos dos decimales
             Assert.True(detalleReparacion_PO.CheckDatosPersonales(nombreC, apellidoC, fechaEntrega, herrTiempoRep1, precioTotal));
-            var expectedHerramienta = new List<string[]> { new string[] { herrNombre1, herrPrecio.ToString("0.##")+"€", herrCantidad1 }, };
+            var expectedHerramienta = new List<string[]> { new string[] { herrNombre1, herrPrecio.ToString("0.##")+"€", "", herrCantidad1 }, };
+            Assert.True(detalleReparacion_PO.CheckTablaHerramientasReparar(expectedHerramienta));
+        }
+
+        [Fact]
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void UC2_FB_FA002_examenSprint3()
+        {
+            //Pasos en la pantalla de select
+            InitialStepsParaRepararHerramientas();
+
+            //Filtramos por nombre
+            selectHerramientasParaReparar_PO.SearchHerramienta("Llave", ""); //Seleccionamos
+            Thread.Sleep(500);
+            selectHerramientasParaReparar_PO.AddHerramienta(herrNombre2); //Añadimos
+            Thread.Sleep(500);
+            //Borramos lo que hay escrito en el filtro del nombre
+            selectHerramientasParaReparar_PO.QuitarFiltro("Nombre");
+            Thread.Sleep(500);
+            //Filtramos por tiempo
+            selectHerramientasParaReparar_PO.SearchHerramienta("", "1"); //Seleccionamos
+            Thread.Sleep(500);
+            selectHerramientasParaReparar_PO.AddHerramienta(herrNombre1); //Añadimos
+            Thread.Sleep(500);
+
+            selectHerramientasParaReparar_PO.RepararHerrBotonClick(); //Pasamos al post
+            Thread.Sleep(500);
+
+            //Pasos para modificar las herramientas seleccionadas (quitar la primera)
+            crearReparacion_PO.BotonModificar();
+            Thread.Sleep(500);
+            //Volvemos al select y quitamos la primera herramienta (la llave inglesa)
+            selectHerramientasParaReparar_PO.RemoveHerramienta(herrNombre2);
+            Thread.Sleep(500);
+            selectHerramientasParaReparar_PO.RepararHerrBotonClick(); //Volvemos al post
+            Thread.Sleep(500);
+
+            //Pasos en la pantalla de post
+            DateTime fechaEntrega = DateTime.Today;
+            crearReparacion_PO.RellenarFormulario(nombreC, apellidoC, fechaEntrega);
+            Thread.Sleep(500);
+            crearReparacion_PO.SubmitReparacionClick();
+            Thread.Sleep(500);
+            crearReparacion_PO.ConfirmarReparacion();
+            Thread.Sleep(500);
+
+            //Pasos en la pantalla de detail
+            double herrPrecio = double.Parse(herrPrecio1);
+            int herrCantidad = int.Parse(herrCantidad1);
+            string precioTotal = (herrPrecio * herrCantidad).ToString("0.##"); //Solo queremos dos decimales
+            Assert.True(detalleReparacion_PO.CheckDatosPersonales(nombreC, apellidoC, fechaEntrega, herrTiempoRep1, precioTotal));
+            var expectedHerramienta = new List<string[]> { new string[] { herrNombre1, herrPrecio.ToString("0.##") + "€", "", herrCantidad1 }, };
             Assert.True(detalleReparacion_PO.CheckTablaHerramientasReparar(expectedHerramienta));
         }
 
