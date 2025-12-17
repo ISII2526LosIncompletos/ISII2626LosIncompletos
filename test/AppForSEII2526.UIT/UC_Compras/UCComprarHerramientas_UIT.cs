@@ -13,6 +13,7 @@ namespace AppForSEII2526.UIT.UC_Compras
 
         private SelectHerramientasParaComprar_PO selectHerramientasParaComprar_PO;
         private CrearCompra_PO crearHerramientasParaComprar_PO;
+        private DetallesCompra_PO detalleHerramientasParaComprar_PO;
         private const string herrNombre1 = "Destornillador";
         private const string herrMaterial1 = "Acero";
         private const string herrFabricante1 = "Wurt";
@@ -35,6 +36,7 @@ namespace AppForSEII2526.UIT.UC_Compras
         {
             selectHerramientasParaComprar_PO = new SelectHerramientasParaComprar_PO(_driver, _output);
             crearHerramientasParaComprar_PO = new CrearCompra_PO(_driver, _output);
+            detalleHerramientasParaComprar_PO = new DetallesCompra_PO(_driver, _output);
         }
         private void InitialStepsParaComprarHerramientas()
         {
@@ -194,7 +196,8 @@ namespace AppForSEII2526.UIT.UC_Compras
 
         }
 
-       
+        
+
 
     }
 }
