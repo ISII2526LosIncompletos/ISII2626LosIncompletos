@@ -12,6 +12,7 @@ namespace AppForSEII2526.UIT.UC_Compras
     {
 
         private SelectHerramientasParaComprar_PO selectHerramientasParaComprar_PO;
+        private CrearCompra_PO crearHerramientasParaComprar_PO;
         private const string herrNombre1 = "Destornillador";
         private const string herrMaterial1 = "Acero";
         private const string herrFabricante1 = "Wurt";
@@ -26,6 +27,7 @@ namespace AppForSEII2526.UIT.UC_Compras
         public UCComprarHerramientas_UIT(ITestOutputHelper output) : base(output)
         {
             selectHerramientasParaComprar_PO = new SelectHerramientasParaComprar_PO(_driver, _output);
+            crearHerramientasParaComprar_PO = new CrearCompra_PO(_driver, _output);
         }
         private void InitialStepsParaComprarHerramientas()
         {
@@ -87,6 +89,42 @@ namespace AppForSEII2526.UIT.UC_Compras
 
             //Assert
             Assert.True(selectHerramientasParaComprar_PO.BotonComprarHerramientasOculto());
+        }
+
+        [Fact]
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void UC1_7_AF2_modificarHerramientas()
+        {
+            //Arrange
+            InitialStepsParaComprarHerramientas();
+            selectHerramientasParaComprar_PO.BuscarHerramientas("", "");
+            Thread.Sleep(500);
+
+            //Act
+            
+            //Añadimos una herramienta al carrito de compras
+            selectHerramientasParaComprar_PO.AddHerramienta(herrNombre1);
+            selectHerramientasParaComprar_PO.AddHerramienta(herrNombre2);
+            Thread.Sleep(500);
+            selectHerramientasParaComprar_PO.PulsarComprarHerramienta();
+                        Thread.Sleep(500);
+            //Ahora estamos en la página de crear compra, donde podemos modificar el carrito
+            crearHerramientasParaComprar_PO.modificarCarrito();
+            //Ahora quitamos esa herramienta
+            selectHerramientasParaComprar_PO.RemoveHerramienta(herrNombre1);
+            Thread.Sleep(500);
+            selectHerramientasParaComprar_PO.PulsarComprarHerramienta();
+            Thread.Sleep(500);
+
+            var expectedHerramientas = new List<string[]> { new string[] { herrNombre2, herrMaterial2 },
+            };
+            Thread.Sleep(500);
+
+
+
+
+            //Assert
+            Assert.True(crearHerramientasParaComprar_PO.checkListaHerramientasItems(expectedHerramientas));
         }
 
     }

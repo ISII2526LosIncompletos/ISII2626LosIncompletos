@@ -52,9 +52,23 @@ namespace AppForSEII2526.UIT.UC_Compras
         }
         public void AddHerramienta(string nombre)
         {
-            By buttonAdd = By.Id("herramientaParaComprar_" + nombre);
+            // Esperar a que la tabla esté visible y cargada
+            WaitForBeingVisible(tableHerramientasBy);
+
+            // Localizar la fila cuya columna "Nombre" (tercera columna) coincide con el nombre pasado
+            string xpath = $"//table[@id='TablaHerramientas']//tr[td[3][normalize-space()='{nombre}']]//button[contains(@id,'herramientaParaComprar_')]";
+            var buttonAdd = By.XPath(xpath);
+
+            // Esperar y hacer click en el botón encontrado
             WaitForBeingClickable(buttonAdd);
-            _driver.FindElement(buttonAdd).Click();
+            try
+            {
+                _driver.FindElement(buttonAdd).Click();
+            }
+            catch (NoSuchElementException)
+            {
+                throw new InvalidOperationException($"No se encontró el botón de añadir para la herramienta con nombre '{nombre}'. Comprueba que la tabla contiene ese nombre.");
+            }
         }
 
         public void RemoveHerramienta(string nombre)
@@ -62,6 +76,11 @@ namespace AppForSEII2526.UIT.UC_Compras
             By buttonRemove = By.Id("eliminarherramientas_" + nombre);
             WaitForBeingClickable(buttonRemove);
             _driver.FindElement(buttonRemove).Click();
+        }
+        public void PulsarComprarHerramienta()
+        {
+            WaitForBeingClickable(comprarHerramientaButton);
+            _driver.FindElement(comprarHerramientaButton).Click();
         }
     }
 }
