@@ -14,7 +14,7 @@ namespace AppForSEII2526.UIT.UC_Reparacion
         By inputFechaEntega = By.Id("FechaEntrega");
         By buttomSubmit = By.Id("Submit");
         By buttomGuardarDialog = By.Id("Button_DialogOK"); //Este botón está en WEB.Shared.Dialog.razor
-        
+        By buttomModificar = By.Id("ModifyHerramientas");
 
         public CrearReparacion_PO(IWebDriver driver, ITestOutputHelper output) : base(driver, output)
         {
@@ -64,6 +64,12 @@ namespace AppForSEII2526.UIT.UC_Reparacion
             WaitForBeingClickable(inputDescripcion);
             _driver.FindElement(inputDescripcion).SendKeys(descripcion);
         }*/
+
+        public void BotonModificar()
+        {
+            WaitForBeingClickable(buttomModificar);
+            _driver.FindElement(buttomModificar).Click();
+        }
 
     }
 }
