@@ -40,18 +40,34 @@ namespace AppForSEII2526.UIT.UC_Compras
             WaitForBeingClickable(inputEmail);
             _driver.FindElement(inputEmail).SendKeys(email);
         }
-        public void rellenarDescripcionHerramienta(string descripcion, string herramienta)
+        public void rellenarDescripcionHerramienta(string descripcion, string herramientaNombre)
         {
-            By inputDescripcion = By.Id("descripcion_" + herramienta);
-            WaitForBeingClickable(inputDescripcion);
-            _driver.FindElement(inputDescripcion).SendKeys(descripcion);
+            // Esperar tabla cargada
+            WaitForBeingVisible(tablaItems);
+
+            // Buscar la fila cuya primera columna (Nombre) coincide con herramientaNombre y tomar el input de descripción
+            string xpath = $"//table[@id='TableOfItemsCompras']//tr[td[normalize-space()='{herramientaNombre}']]//input[contains(@id,'description') or contains(@id,'descripcion')]";
+            var by = By.XPath(xpath);
+
+            WaitForBeingClickable(by);
+            var element = _driver.FindElement(by);
+            element.Clear();
+            element.SendKeys(descripcion);
         }
-        public void rellenarCantidad(int cantidad, string nombre)
+        public void rellenarCantidad(int cantidad, string herramientaNombre)
         {
-            By inputCantidad = By.Id("cantidad_" + nombre);
-            WaitForBeingClickable(inputCantidad);
-            _driver.FindElement(inputCantidad).Clear();
-            _driver.FindElement(inputCantidad).SendKeys(cantidad.ToString());
+            // Esperar tabla cargada
+            WaitForBeingVisible(tablaItems);
+
+            // Buscar la fila por nombre y tomar el input de cantidad (cualquier id que contenga 'cantidad')
+            string xpath = $"//table[@id='TableOfItemsCompras']//tr[td[normalize-space()='{herramientaNombre}']]//input[contains(@id,'cantidad')]";
+            var by = By.XPath(xpath);
+
+            WaitForBeingClickable(by);
+            var element = _driver.FindElement(by);
+            element.Clear();
+            element.SendKeys(cantidad.ToString(CultureInfo.InvariantCulture));
+
         }
         public void modificarCarrito()
         {

@@ -49,7 +49,7 @@ namespace AppForSEII2526.UIT.UC_Compras
         }
         [Fact]
         [Trait("LevelTesting", "Funcional Testing")]
-        public void UC1_5_AF0_filtroPrecio()
+        public void UC1_5_AF1_filtroPrecio()
         {
             //Arrange
             InitialStepsParaComprarHerramientas();//Muy importante
@@ -67,7 +67,7 @@ namespace AppForSEII2526.UIT.UC_Compras
 
         [Fact]
         [Trait("LevelTesting", "Funcional Testing")]
-        public void UC1_6_AF0_filtroMaterial()
+        public void UC1_6_AF1_filtroMaterial()
         {
             //Arrange
             InitialStepsParaComprarHerramientas();//Muy importante
@@ -159,6 +159,42 @@ namespace AppForSEII2526.UIT.UC_Compras
             Assert.True(crearHerramientasParaComprar_PO.CompararMensajeError(expectedError));
 
         }
+
+        [Fact]
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void UC1_10_AF5_CantidadErronea()
+        {
+            //Arrange
+            InitialStepsParaComprarHerramientas();
+            selectHerramientasParaComprar_PO.BuscarHerramientas("", "");
+            Thread.Sleep(500);
+
+            //Act
+            //Añadimos una herramienta al carrito de compras
+            selectHerramientasParaComprar_PO.AddHerramienta(herrNombre1);
+            Thread.Sleep(500);
+            selectHerramientasParaComprar_PO.PulsarComprarHerramienta();
+            Thread.Sleep(500);
+            //Dentro de crear compra, rellenamos los datos del cliente
+            crearHerramientasParaComprar_PO.RellenarFormularioCompra("Miguel", "Ruiz", "C Calle 11", "Tarjeta de crédito", "123456789", "miguel.ruiz@example.com");
+            Thread.Sleep(500);
+            //Rellenamos la descripción de la herramienta
+            crearHerramientasParaComprar_PO.rellenarDescripcionHerramienta("Para arreglar cosas", herrNombre1);
+            Thread.Sleep(500);
+            //Rellenamos una cantidad errónea
+            crearHerramientasParaComprar_PO.rellenarCantidad(0, herrNombre1);
+            Thread.Sleep(500);
+            crearHerramientasParaComprar_PO.SubmitCompraClick();
+            Thread.Sleep(500);
+            crearHerramientasParaComprar_PO.ConfirmarCompra();
+                        Thread.Sleep(500);
+
+            //Assert
+            Assert.True(crearHerramientasParaComprar_PO.CompararMensajeError("Cantidad"));
+
+        }
+
+       
 
     }
 }
