@@ -24,6 +24,13 @@ namespace AppForSEII2526.UIT.UC_Compras
         private const string herrPrecio2 = "10.3";
         private const string herrTiempoRep2 = "2";
 
+        private const string nombreC = "Miguel";
+        private const string apellidoC = "Ruiz";
+        private const string direccionEnvio = "C Calle 11";
+        private const string metodoPago = "Tarjeta de crédito";
+        private const string numTelefono = "123456789";
+        private const string email = "miguel.ruiz@example.com";
+
         public UCComprarHerramientas_UIT(ITestOutputHelper output) : base(output)
         {
             selectHerramientasParaComprar_PO = new SelectHerramientasParaComprar_PO(_driver, _output);
@@ -125,6 +132,32 @@ namespace AppForSEII2526.UIT.UC_Compras
 
             //Assert
             Assert.True(crearHerramientasParaComprar_PO.checkListaHerramientasItems(expectedHerramientas));
+        }
+        //Post
+        [Theory]
+        [InlineData("", "Ruiz", "C Calle 11", "Tarjeta de crédito", "123456789", "miguel.ruiz@example.com", "NombreCliente")]
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void UC1_9_AF4_datosObligatoriosnorellenos(string nombreC, string apellidoC, string DireccionEnvio, string metodoPago, string telefono, string email, string expectedError )
+        {
+            //Arrange
+            InitialStepsParaComprarHerramientas();
+            selectHerramientasParaComprar_PO.BuscarHerramientas("", "");
+            Thread.Sleep(500);
+            //Añadimos una herramienta al carrito de compras
+            selectHerramientasParaComprar_PO.AddHerramienta(herrNombre1);
+            Thread.Sleep(500);
+            selectHerramientasParaComprar_PO.PulsarComprarHerramienta();
+            Thread.Sleep(500);
+
+            //Act
+            crearHerramientasParaComprar_PO.RellenarFormularioCompra(nombreC, apellidoC, DireccionEnvio, metodoPago, telefono, email);
+            Thread.Sleep(500);
+            crearHerramientasParaComprar_PO.SubmitCompraClick();
+            Thread.Sleep(500);
+
+            //Assert
+            Assert.True(crearHerramientasParaComprar_PO.CompararMensajeError(expectedError));
+
         }
 
     }
