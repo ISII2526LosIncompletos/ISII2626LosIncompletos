@@ -1,5 +1,5 @@
 ﻿using AppForSEII2526.UIT.Shared;
-using AppForSEII2526.UIT.UC_Reparacion;
+using AppForSEII2526.UIT.UC_Compras;
 using System;
 using System.Collections.Generic;
 using System.Linq;
