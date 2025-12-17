@@ -23,7 +23,7 @@ namespace AppForSEII2526.UIT.CU_Ofertas
         private const string herrPrecio1 = "12,5"; 
 
         // Herramienta 2: Llave Inglesa 
-        private const string herrId2 = "19";
+        private const string herrId2 = "2";
         private const string herrNombre2 = "Llave Inglesa";
         private const string herrMaterial2 = "Acero";
         private const string herrFabricante2 = "Phillips";
@@ -205,6 +205,7 @@ namespace AppForSEII2526.UIT.CU_Ofertas
 
             selectHerramientasParaOfertar_PO.AddHerramientaToOfertaCart(herramientaId);
             Thread.Sleep(500);
+
             selectHerramientasParaOfertar_PO.crearOfertaCarrito();
             Thread.Sleep(1000);
 
@@ -220,6 +221,63 @@ namespace AppForSEII2526.UIT.CU_Ofertas
 
             Assert.True(errorEncontrado,
                 $"Fallo: Se esperaba el texto '{expectedError}' pero no apareció.");
+        }
+
+        [Theory]
+        [InlineData(herrId1, herrNombre1, herrMaterial1, herrPrecio1, herrFabricante1, "Wurt", "10,30")]
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void UC3_1_BF_Examen(string hId, string hNombre, string hMat, string hPrecio, string hFab,
+            string filtroFab, string filtroPrecio)
+        {
+            InitialStepsParaOfertarHerramientas();
+            var expectedHerramientas = new List<string[]>
+            {
+                new string[] { hNombre, hFab, hMat, hPrecio }
+            };
+
+            string hNombreVacio = "";
+            string hPrecioVacio = "";
+
+            selectHerramientasParaOfertar_PO.SearchHerramientas(filtroFab, hPrecioVacio);
+            Thread.Sleep(500);
+
+            selectHerramientasParaOfertar_PO.AddHerramientaToOfertaCart(hId);
+            Thread.Sleep(500);
+
+            selectHerramientasParaOfertar_PO.crearOfertaCarrito();
+            Thread.Sleep(1000);
+
+            crearOferta_PO.modificarHerramientas();
+            Thread.Sleep(500);
+
+            selectHerramientasParaOfertar_PO.SearchHerramientas(hNombreVacio, filtroPrecio);
+            Thread.Sleep(500);
+
+            selectHerramientasParaOfertar_PO.AddHerramientaToOfertaCart(herrId2);
+            Thread.Sleep(500);
+
+            selectHerramientasParaOfertar_PO.crearOfertaCarrito();
+            Thread.Sleep(1000);
+
+            crearOferta_PO.modificarHerramientas();
+            Thread.Sleep(500);
+
+            selectHerramientasParaOfertar_PO.RemoveHerramientaFromOfertaCart(hId);
+            Thread.Sleep(500);
+
+            selectHerramientasParaOfertar_PO.crearOfertaCarrito();
+            Thread.Sleep(1000);
+
+            string fechaInicio = DateTime.Today.AddDays(3).ToString("dd/MM/yyyy");
+            string fechaFin = DateTime.Today.AddDays(11).ToString("dd/MM/yyyy");
+
+            crearOferta_PO.addAtributosOferta("2", fechaInicio, fechaFin, "PayPal", "Socios", porcentajeCorrecto);
+            Thread.Sleep(1000);
+
+            crearOferta_PO.guardarOfertaDialog();
+            Thread.Sleep(1000);
+
+            Assert.True(detailOferta_PO.CheckOfertaDetail(DateTime.Today.AddDays(3), DateTime.Today.AddDays(11), DateTime.Today, "PayPal", "Socios", 1));
         }
     }
 }
